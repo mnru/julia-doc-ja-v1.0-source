@@ -1,6 +1,6 @@
 # The Julia Manual
 
-  * [Introduction](@ref man-introduction)
+  * [紹介](@ref man-introduction)
   * [Getting Started](@ref man-getting-started)
   * [Variables](@ref)
   * [Integers and Floating-Point Numbers](@ref)
