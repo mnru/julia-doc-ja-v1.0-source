@@ -53,7 +53,7 @@ with performance comparable to traditional statically-typed languages.
 -->
 ```
 
-従来、科学的な計算には高パフォーマンスが求められてきましたが、各領域の専門家が日常的な作業を行う際は、
+従来、科学的な計算には高パフォーマンスが求められてきましたが、各領域の専門家が日常的な作業を行う場合は、
 ずっと遅い動的言語におおかた移行してしまいました。
 そうした用途には動的言語が好まれる理由が数多くあるので、利用が減ることはないでしょう。
 幸い、現代的な言語設計とコンパイラ技術を使えば、パフォーマンスのトレードオフをほとんど解消できるので、
@@ -124,11 +124,16 @@ The most significant departures of Julia from typical dynamic languages are:
 
 典型的な動的言語とJuliaとの著しい違いは
 
-  *
+  * コア言語の責務は極めて小さく、Base・StandardライブラリはJulia自身で書かれています。整数の算術演算などの原始的な演算がそうです。
+  * オブジェクトを構成・記述するための豊富な型があり、必要に応じて型宣言することもできます。
+  * [多重ディスパッチ](https://en.wikipedia.org/wiki/Multiple_dispatch)を使って、関数を多くの引数の型の組み合わせに対して
+    定義することができます。
+  * 異なる引数の型に対して効率的で特化されたコードが自動生成されます。
+  * パフォーマンスが高く、C言語のような静的なコンパイル言語に迫るほどです。
 
 
-
-
+```@raw html
+<!--
 Although one sometimes speaks of dynamic languages as being "typeless", they are definitely not:
 every object, whether primitive or user-defined, has a type. The lack of type declarations in
 most dynamic languages, however, means that one cannot instruct the compiler about the types of
@@ -137,6 +142,19 @@ hand, while one can -- and usually must -- annotate types for the compiler, type
 compile time and cannot be manipulated or expressed at run time. In Julia, types are themselves
 run-time objects, and can also be used to convey information to the compiler.
 
+-->
+```
+動的言語には「型がない」という人もいますが、そんなことはありません。
+すべてのオブジェクトは、原始的であれ、ユーザー定義型であれ、型があります。
+しかしたいていの動的言語では、型宣言をしなければコンパイラに値の型を伝えることができません。
+まったく、明示的に宣言することのできないものも多数あります。
+一方、静的言語ではコンパイラに対して型宣言することが可能--たいていは必須--です。
+型はコンパイル時にのみ存在し、実行時には操作・表現することができません。
+Juliaでは、型は実行時のオブジェクトであり、コンパイラに情報を伝えることができます。
+
+
+```@raw html
+<!--
 While the casual programmer need not explicitly use types or multiple dispatch, they are the core
 unifying features of Julia: functions are defined on different combinations of argument types,
 and applied by dispatching to the most specific matching definition. This model is a good fit
@@ -144,7 +162,22 @@ for mathematical programming, where it is unnatural for the first argument to "o
 as in traditional object-oriented dispatch. Operators are just functions with special notation
 -- to extend addition to new user-defined data types, you define new methods for the `+` function.
 Existing code then seamlessly applies to the new data types.
+-->
+```
 
+ちょっとプログラムを書きたいだけなら、わざわざ型や多重ディスパッチを使う必要はありませんが、
+これらはJuliaを統合する核となる特徴です。
+関数を異なる引数の型の組み合わせに対して定義したうえで、最も特化・適合した定義を選択して適用します。
+こうした方式は数学的なプログラミングによく合います。
+1番目の引数が演算を「所有」するという従来のオブジェクト指向的なディスパッチは不自然です。
+演算子は特殊の記法の単なる関数です。
+--足し算を新しいユーザー定義のデータ型に拡張するには、`+`に対して新しいメソッドを定義します。
+すると既存のコードはシームレスに新しいデータ型に適用します。
+
+
+
+```@raw html
+<!--
 Partly because of run-time type inference (augmented by optional type annotations), and partly
 because of a strong focus on performance from the inception of the project, Julia's computational
 efficiency exceeds that of other dynamic languages, and even rivals that of statically-compiled
@@ -152,6 +185,8 @@ languages. For large scale numerical problems, speed always has been, continues 
 always will be crucial: the amount of data being processed has easily kept pace with Moore's Law
 over the past decades.
 
+-->
+```
 Julia aims to create an unprecedented combination of ease-of-use, power, and efficiency in a single
 language. In addition to the above, some advantages of Julia over comparable systems include:
 
