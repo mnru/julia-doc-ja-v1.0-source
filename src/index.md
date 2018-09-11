@@ -187,6 +187,16 @@ over the past decades.
 
 -->
 ```
+
+(必要に応じて型表記を補った)実行時の型推論や、プロジェクト発足以来のパフォーマンスに対する集中のおかげで、
+Juliaの計算効率は他の動的言語、さらにライバルの静的コンパイル言語を勝るほどです。
+大規模な数値問題において、スピードは現在まで、おそらくは今後とも常に重要です。
+処理すべきデータの量は過去数十年間ムーアの法則に従う速さでやすやすと増加しています。
+
+
+
+```@raw html
+<!--
 Julia aims to create an unprecedented combination of ease-of-use, power, and efficiency in a single
 language. In addition to the above, some advantages of Julia over comparable systems include:
 
@@ -202,3 +212,22 @@ language. In addition to the above, some advantages of Julia over comparable sys
   * Call C functions directly (no wrappers or special APIs needed)
   * Powerful shell-like capabilities for managing other processes
   * Lisp-like macros and other metaprogramming facilities
+
+-->
+```
+
+Juliaは単一の言語で、使いやすさ・力・効率という前例のない組み合わせの創りだすことをねらっています。
+さらに、他の言語に対する長所をあげてみます。
+
+  * フリーでオープンソース ([MIT ライセンス](https://github.com/JuliaLang/julia/blob/master/LICENSE.md))
+  * ユーザー定義型が組み込み型のように速くてコンパクト
+  * パフォーマンスを求めてベクトル化する必要がない。ベクトル化しないコードも速い
+  * 並列・分散計算を考慮した設計
+  * 軽量の "グリーン" スレッディング ([コルーチン](https://en.wikipedia.org/wiki/Coroutine))
+  * 控え目ながら強力な型システム
+  * 数値その他の型に対する、エレガントで拡張可能な型変換・型昇格
+  *  [ユニコード](https://en.wikipedia.org/wiki/Unicode)を効率的に利用可能、 
+    [UTF-8](https://en.wikipedia.org/wiki/UTF-8)も利用可能だがこれだけではない。
+  * C言語の関数を直接呼び出せる(ラッパーや特殊なAPIを必要としない)
+  * 他のプロセスをシェルのように強力に管理できる
+  * Lispのようにマクロやメタプログラミングを利用できる
