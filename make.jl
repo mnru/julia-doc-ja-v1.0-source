@@ -162,7 +162,7 @@ makedocs(
     analytics = "UA-125166476-1", # mnru's github
     pages     = PAGES,
     html_prettyurls = ("deploy" in ARGS),
-    html_canonical = ("deploy" in ARGS) ? "https://docs.julialang.org/en/stable/" : nothing,
+    html_canonical = ("deploy" in ARGS) ? "https://mnru.github.io/julia-doc-ja-v1.0/" : nothing,
     assets = ["assets/julia-manual.css", ]
 )
 
@@ -174,8 +174,8 @@ if "deploy" in ARGS && Sys.ARCH === :x86_64 && Sys.KERNEL === :Linux
     ENV["TRAVIS_JULIA_VERSION"] = "nightly"
 
     deploydocs(
-        julia = "nightly",
-        repo = "github.com/JuliaLang/julia.git",
+        julia = "1.0",
+        repo = "mnru.github.io/julia-doc-ja-v1.0.git",
         target = "_build/html/ja",
         dirname = "ja",
         deps = nothing,
