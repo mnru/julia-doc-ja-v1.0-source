@@ -175,7 +175,7 @@ if "deploy" in ARGS && Sys.ARCH === :x86_64 && Sys.KERNEL === :Linux
 
     deploydocs(
         julia = "1.0",
-        repo = "mnru.github.io/julia-doc-ja-v1.0.git",
+        repo = "github.com/mnru/julia-doc-ja-v1.0.git",
         target = "_build/html/ja",
         dirname = "ja",
         deps = nothing,
