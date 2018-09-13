@@ -1,5 +1,5 @@
 `[](# [Getting Started](@id man-getting-started))
-# [動かせてみよう](@id man-getting-started)
+# [動かそう](@id man-getting-started)
 
 ```@raw html
 <!--
@@ -12,7 +12,7 @@ known as a read-eval-print loop or "REPL") by double-clicking the Julia executab
 
 -->
 ```
-コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、uliaのインストールは素直です。
+コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、Juliaのインストールは素直です。
 [https://julialang.org/downloads/](https://julialang.org/downloads/)
 の指示に従ってダウンロードとインストールを行いましょう。
 
