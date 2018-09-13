@@ -38,7 +38,7 @@ juliaの概要をつかみ、v0.6との違いを知りましょう。
 
 
 `[](### [Introduction](@id man-introduction))
-### [はじめに](@id man-introduction)
+### [まえおき]](@id man-introduction)
 
 ```@raw html
 <!--
