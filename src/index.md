@@ -44,7 +44,6 @@ juliaの概要をつかみ、v0.6との違いを知りましょう。
 0.6との相違点すべての完全なリストは [バージョン0.7のリリースノート](https://docs.julialang.org/en/v0.7.0/NEWS/)
 をみて下さい。
 
-### [Introduction](@id man-introduction)
 
 `[](### [Introduction](@id man-introduction))
 ### [まえおき]](@id man-introduction)
@@ -181,7 +180,7 @@ Existing code then seamlessly applies to the new data types.
 1番目の引数が演算を「所有」するという従来のオブジェクト指向的なディスパッチは不自然でしょう。
 演算子は記法の特殊な単なる関数です。
 足し算を新しいユーザー定義のデータ型に拡張するには、関数`+`に対して新しいメソッドを定義します。
-すると既存のコードは自然と新しいデータ型に適用されます。
+すると既存のコードは自然に新しいデータ型にも適用されます。
 
 
 
