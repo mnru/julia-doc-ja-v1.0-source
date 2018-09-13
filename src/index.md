@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-# Julia 1.0 Documentation
-
-Welcome to the documentation for Julia 1.0.
-
-
-=======
 ```@eval
 io = IOBuffer()
 release = isempty(VERSION.prerelease)
@@ -25,7 +18,7 @@ end
 import Markdown
 Markdown.parse(String(take!(io)))
 ```
->>>>>>> tmp
+
 
 ```@raw html
 <!--
