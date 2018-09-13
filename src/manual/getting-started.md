@@ -1,11 +1,23 @@
-# [Getting Started](@id man-getting-started)
+`[](# [Getting Started](@id man-getting-started))
+# [動かせてみよう](@id man-getting-started)
 
+```@raw html
+<!--
 Julia installation is straightforward, whether using precompiled binaries or compiling from source.
 Download and install Julia by following the instructions at [https://julialang.org/downloads/](https://julialang.org/downloads/).
 
 The easiest way to learn and experiment with Julia is by starting an interactive session (also
 known as a read-eval-print loop or "REPL") by double-clicking the Julia executable or running
 `julia` from the command line:
+
+-->
+```
+コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、uliaのインストールは素直です。
+[https://julialang.org/downloads/](https://julialang.org/downloads/)
+の指示に従ってダウンロードとインストールを行いましょう。
+
+Juliaを学習・体験する手っ取り早い方法は対話セッション(read-eval-print loop や "REPL"と呼ばれます)を使ってみることです。
+Juliaの実行ファイルをダブルクリックするか、コマンドラインに`julia`と入力してください。
 
 ```@eval
 io = IOBuffer()
@@ -15,6 +27,8 @@ import Markdown
 Markdown.parse("```\n\$ julia\n\n$(banner)\njulia> 1 + 2\n3\n\njulia> ans\n3\n```")
 ```
 
+```@raw html
+<!--
 To exit the interactive session, type `CTRL-D` (press the Control/`^` key together with the `d` key), or type
 `exit()`. When run in interactive mode, `julia` displays a banner and prompts the user for input.
 Once the user has entered a complete expression, such as `1 + 2`, and hits enter, the interactive
@@ -27,6 +41,13 @@ To evaluate expressions written in a source file `file.jl`, write `include("file
 
 To run code in a file non-interactively, you can give it as the first argument to the `julia`
 command:
+
+-->
+```
+
+対話セッションを終了するには、
+
+
 
 ```
 $ julia script.jl arg1 arg2...
