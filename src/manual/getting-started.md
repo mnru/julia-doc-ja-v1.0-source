@@ -77,10 +77,7 @@ arguments given to a script, you could do this:
 スクリプトファイル自体の名前は、グローバル変数``PROGRAM_FILE``に渡されます。
 コマンドラインでJuliaに`-e`オプションによって式を指定した場合も、`ARGS`は設定されますが、
 `PROGRAM_FILE`は空になります(後述の`julia`のヘルプを参照)。
-
-
-
-
+例を挙げると、単にスクリプトに与えられた引数を表示するだけなら、このようにできます。
 
 
 ```
@@ -132,6 +129,7 @@ should use to connect to this worker.
 
 If you have code that you want executed whenever Julia is run, you can put it in
 `~/.julia/config/startup.jl`:
+
 -->
 ```
 Juliaを並列モードで起動するには、`-p` や `--machine-file`などのオプションを使います。
@@ -158,8 +156,16 @@ Greetings! 你好! 안녕하세요?
 ...
 ```
 
+```@raw html
+<!--
 There are various ways to run Julia code and provide options, similar to those available for the
 `perl` and `ruby` programs:
+
+-->
+```
+
+Juliaのコードには、様々なオプションをつけて実行する方法があり、`perl`や`ruby`で使えるものに似ています。
+
 
 ```
 julia [switches] -- [programfile] [args...]
