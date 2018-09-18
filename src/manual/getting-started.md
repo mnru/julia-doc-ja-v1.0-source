@@ -12,7 +12,7 @@ known as a read-eval-print loop or "REPL") by double-clicking the Julia executab
 
 -->
 ```
-コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、Juliaのインストールは素直です。
+コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、Juliaのインストールは簡単です。
 [https://julialang.org/downloads/](https://julialang.org/downloads/)
 の指示に従ってダウンロードとインストールを行いましょう。
 
@@ -45,20 +45,43 @@ command:
 -->
 ```
 
-対話セッションを終了するには、
+対話セッションを終了するには、`CTRL-D` (コントロールキー`^`と`d`の同時押し)、または、`exit()`を入力してください。
+対話モードの時は、`julia`のバナーや入力を促すプロンプトが表示されます。
+ユーザーが`1 + 2`のように式全体を入力してからエンターを打つと、対話セッションでは、式が評価され、その値が表示されます。
+対話セッションでは、式に続けてセミコロンを打つと、値は表示されません。
+変数`ans`には、表示非表示にかかわらず、番最後に評価された式の値が、束縛されます。
+変数`ans`が束縛されるのは対話セッション中のみで、他の方法で実行される場合は、束縛されません。
 
+ソースファイル`file.jl`中に書かれた式をを評価するには、`include("file.jl")`と書きます。
 
+ファイル中のコードを非対話的に実行するには、そのファイルをコマンド`julia`の第1引数として指定します。
 
 ```
 $ julia script.jl arg1 arg2...
 ```
 
+```@raw html
+<!--
 As the example implies, the following command-line arguments to `julia` are interpreted as
 command-line arguments to the program `script.jl`, passed in the global constant `ARGS`. The
 name of the script itself is passed in as the global `PROGRAM_FILE`. Note that `ARGS` is
 also set when a Julia expression is given using the `-e` option on the command line (see the
 `julia` help output below) but `PROGRAM_FILE` will be empty. For example, to just print the
 arguments given to a script, you could do this:
+
+-->
+```
+
+例からわかるように、``julia``に続くコマンドライン引数は、プログラム``script.jl``に対するコマンドライン引数として解釈され、
+グローバル定数``ARGS``に渡されます。
+スクリプトファイル自体の名前は、グローバル変数``PROGRAM_FILE``に渡されます。
+コマンドラインでJuliaに`-e`オプションによって式を指定した場合も、`ARGS`は設定されますが、
+`PROGRAM_FILE`は空になります(後述の`julia`のヘルプを参照)。
+
+
+
+
+
 
 ```
 $ julia -e 'println(PROGRAM_FILE); for x in ARGS; println(x); end' foo bar
@@ -67,7 +90,13 @@ foo
 bar
 ```
 
+```@raw html
+<!--
 Or you could put that code into a script and run it:
+-->
+```
+
+こうしたコードをスクリプトに書き込んで実行することもできます。
 
 ```
 $ echo 'println(PROGRAM_FILE); for x in ARGS; println(x); end' > script.jl
@@ -77,12 +106,21 @@ foo
 bar
 ```
 
+```@raw html
+<!--
 The `--` delimiter can be used to separate command-line arguments intended for the script file from arguments intended for Julia:
+-->
+```
+
+区切り文字の`--`を使うと、スクリプトファイルに対するコマンドライン引数と、Juliaに対する引数を分けることができます。
+
 
 ```
 $ julia --color=yes -O -- foo.jl arg1 arg2..
 ```
 
+```@raw html
+<!--
 Julia can be started in parallel mode with either the `-p` or the `--machine-file` options. `-p n`
 will launch an additional `n` worker processes, while `--machine-file file` will launch a worker
 for each line in file `file`. The machines defined in `file` must be accessible via a password-less
@@ -94,6 +132,23 @@ should use to connect to this worker.
 
 If you have code that you want executed whenever Julia is run, you can put it in
 `~/.julia/config/startup.jl`:
+-->
+```
+Juliaを並列モードで起動するには、`-p` や `--machine-file`などのオプションを使います。
+`-p n`を指定すると、 `n`個のワーカープロセスが別途起動しますが、
+`--machine-₊file file`を指定すると`file`というファイルの各行に対するワーカーが起動します。
+`file`で定義されている各マシンは、パスワードなしの`ssh`でログイン可能で、
+現在のホストと同じ場所にJuliaがインストールされている必要があります。
+各マシンの定義は`[count*][user@]host[:port] [bind_addr[:port]]`という形で行われます。
+`user`のデフォルトは現在のユーザー、`port`のデフォルトはsshの標準ポートです。
+`count`各ノードで生成されるワーカーの数で、デフォルトは1です。
+`bind-to bind_addr[:port]`は省略可能で、他のワーカーが当該ワーカーに接続する際に使わるIPアドレスとポートを指定します。
+
+Juliaが実行される際、常に実行したいコードがある場合、`~/.julia/config/startup.jl`に書き込んで、指定できます。
+
+
+
+
 
 ```
 $ echo 'println("Greetings! 你好! 안녕하세요?")' > ~/.julia/config/startup.jl
