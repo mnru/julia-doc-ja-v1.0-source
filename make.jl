@@ -150,7 +150,7 @@ const render_pdf = "html" in ARGS
 makedocs(
     build     = joinpath(@__DIR__, "_build", (render_pdf ? "pdf" : "html"), "ja"),
     modules   = [Base, Core, BuildSysImg, [Base.root_module(Base, stdlib.stdlib) for stdlib in STDLIB_DOCS]...],
-    clean     = true,
+    clean     = false,
     doctest   = ("doctest=fix" in ARGS) ? (:fix) : ("doctest=true" in ARGS) ? true : false,
     linkcheck = "linkcheck=true" in ARGS,
     linkcheck_ignore = ["https://bugs.kde.org/show_bug.cgi?id=136779"], # fails to load from nanosoldier?
