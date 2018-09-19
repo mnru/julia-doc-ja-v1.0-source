@@ -134,6 +134,7 @@ If you have code that you want executed whenever Julia is run, you can put it in
 `~/.julia/config/startup.jl`:
 -->
 ```
+
 Juliaを並列モードで起動するには、`-p` や `--machine-file`などのオプションを使います。
 `-p n`を指定すると、 `n`個のワーカープロセスが別途起動しますが、
 `--machine-₊file file`を指定すると`file`というファイルの各行に対するワーカーが起動します。
@@ -158,13 +159,22 @@ Greetings! 你好! 안녕하세요?
 ...
 ```
 
+```@raw html
+<!--
 There are various ways to run Julia code and provide options, similar to those available for the
 `perl` and `ruby` programs:
+-->
+```
+
+Juliaの実行時に指定できるオプションは様々なものがあり、`perl` や `ruby` で利用可能なものに似ています。
+
 
 ```
 julia [switches] -- [programfile] [args...]
 ```
 
+```@raw html
+<!--
 |Switch                                 |Description|
 |:---                                   |:---|
 |`-v`, `--version`                      |Display version information|
@@ -190,6 +200,41 @@ julia [switches] -- [programfile] [args...]
 |`-C`, `--cpu-target <target>`          |Limit usage of cpu features up to <target>; set to `help` to see the available options|
 |`-O`, `--optimize={0,1,2,3}`           |Set the optimization level (default level is 2 if unspecified or 3 if used without a level)|
 |`-g`, `-g <level>`                     |Enable / Set the level of debug info generation (default level is 1 if unspecified or 2 if used without a level)|
+|`--inline={yes\|no}`                   |Control whether inlining is permitted, including overriding `@inline` declarations|
+|`--check-bounds={yes\|no}`             |Emit bounds checks always or never (ignoring declarations)|
+|`--math-mode={ieee,fast}`              |Disallow or enable unsafe floating point optimizations (overrides @fastmath declaration)|
+|`--code-coverage={none\|user\|all}`    |Count executions of source lines|
+|`--code-coverage`                      |equivalent to `--code-coverage=user`|
+|`--track-allocation={none\|user\|all}` |Count bytes allocated by each source line|
+|`--track-allocation`                   |equivalent to `--track-allocation=user`|
+-->
+```
+
+|スイッチ                                |説明|
+|:---                                   |:---|
+|`-v`, `--version`                      |バージョン情報を表示|
+|`-h`, `--help`                         |このメッセージを表示|
+|`-J`, `--sysimage <file>`              |指定したシステムイメージファイルを使って開始|
+|`-H`, `--home <dir>`                   |`julia` の実行ファイルの位置を設定|
+|`--startup-file={yes\|no}`             | `~/.julia/config/startup.jl`を読み込む|
+|`--handle-signals={yes\|no}`           |デフォオルトのJulia'のシグナルハンドラーを有効/無効にする|
+|`--sysimage-native-code={yes\|no}`     |可能ならシステムイメージのネイティブコードを利用する|
+|`--compiled-modules={yes\|no}`         |モジュールの逐次プリコンパイルを有効/無効にする|
+|`-e`, `--eval <expr>`                  |`<expr>`を評価する|
+|`-E`, `--print <expr>`                 |`<expr>`を評価し、結果を表示する|
+|`-L`, `--load <file>`                  |すべてのプロセスで `<file>`を直ちに読み込む|
+|`-p`, `--procs {N\|auto`}              |整数値Nの時 、N個のローカルワーカープロセスを別途起動する; `auto`の時、ローカルのCPUスレッド(論理コア) の数だけワーカーを起動する|
+|`--machine-file <file>`                |`<file>`で列挙されたホスト上で、プロセスを実行する|
+|`-i`                                   |対話モード; REPLが動作し、 関数`isinteractive()`は真を返す|
+|`-q`, `--quiet`                        |沈黙起動: バナーはなく、REPLの警告も抑制される|
+|`--banner={yes\|no\|auto}`             |起動時のバナーを有効/無効にする|
+|`--color={yes\|no\|auto}`              |テキストの色付けの有無|
+|`--history-file={yes\|no}`             |履歴の読み込み・保存|
+|`--depwarn={yes\|no\|error}`           |文法・メソッドに対して非推奨の警告を有効/無効にする (`error`にすると警告がエラーに変わる)|
+|`--warn-overwrite={yes\|no}`           |メソッドの上書き警告を有効/無効にする|
+|`-C`, `--cpu-target <target>`          |<target>に対して利用できるCPUの特徴を制限する記法。利用可能なオプションを見る場合あ`help`に設定する|
+|`-O`, `--optimize={0,1,2,3}`           |最適化のレベルを設定 (何も指定しない時のデフォルトはレベル2,数字なしで指定した時のデフォルトはレベル3 )|
+|`-g`, `-g <level>`                     |デバッグ情報の生成を有効にし、レベルを設定する (何も指定しない時のデフォルトはレベル1,数字なしで指定した時のデフォルトはレベル2)|
 |`--inline={yes\|no}`                   |Control whether inlining is permitted, including overriding `@inline` declarations|
 |`--check-bounds={yes\|no}`             |Emit bounds checks always or never (ignoring declarations)|
 |`--math-mode={ieee,fast}`              |Disallow or enable unsafe floating point optimizations (overrides @fastmath declaration)|
