@@ -14,7 +14,7 @@ known as a read-eval-print loop or "REPL") by double-clicking the Julia executab
 ```
 
 
-コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、Juliaのインストールは簡単です。
+コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場合も、Juliaのインストールは簡単です。
 [https://julialang.org/downloads/](https://julialang.org/downloads/)
 の指示に従ってダウンロードとインストールを行いましょう。
 
