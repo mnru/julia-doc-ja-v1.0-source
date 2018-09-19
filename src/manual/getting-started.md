@@ -12,6 +12,8 @@ known as a read-eval-print loop or "REPL") by double-clicking the Julia executab
 
 -->
 ```
+
+
 コンパイル済みのバイナリを使う場合も、ソースからコンパイルする場Jも、Juliaのインストールは簡単です。
 [https://julialang.org/downloads/](https://julialang.org/downloads/)
 の指示に従ってダウンロードとインストールを行いましょう。
@@ -165,12 +167,6 @@ There are various ways to run Julia code and provide options, similar to those a
 ```
 
 Juliaの実行時に指定できるオプションは様々なものがあり、`perl` や `ruby` で利用可能なものに似ています。
-
-
--->
-```
-
-Juliaのコードには、様々なオプションをつけて実行する方法があり、`perl`や`ruby`で使えるものに似ています。
 
 
 ```
