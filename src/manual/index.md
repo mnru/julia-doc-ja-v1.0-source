@@ -1,7 +1,7 @@
 # The Julia Manual
 
   * [まえがき](@ref man-introduction)
-  * [動かそう](@ref man-getting-started)
+  * [始めよう](@ref man-getting-started)
   * [Variables](@ref)
   * [Integers and Floating-Point Numbers](@ref)
   * [Mathematical Operations and Elementary Functions](@ref)

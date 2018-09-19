@@ -1,5 +1,5 @@
 `[](# [Getting Started](@id man-getting-started))
-# [動かそう](@id man-getting-started)
+# [始めよう](@id man-getting-started)
 
 ```@raw html
 <!--
@@ -236,17 +236,25 @@ julia [switches] -- [programfile] [args...]
 |`--history-file={yes\|no}`             |履歴の読み込み・保存|
 |`--depwarn={yes\|no\|error}`           |文法・メソッドに対して非推奨の警告を有効/無効にする (`error`にすると警告がエラーに変わる)|
 |`--warn-overwrite={yes\|no}`           |メソッドの上書き警告を有効/無効にする|
-|`-C`, `--cpu-target <target>`          |<target>に対して利用できるCPUの特徴を制限する記法。利用可能なオプションを見る場合あ`help`に設定する|
+|`-C`, `--cpu-target <target>`          |<target>に対して利用できるCPUの特徴を制限する記法。利用可能なオプションを見る場合は`help`に設定する|
 |`-O`, `--optimize={0,1,2,3}`           |最適化のレベルを設定 (何も指定しない時のデフォルトはレベル2,数字なしで指定した時のデフォルトはレベル3 )|
 |`-g`, `-g <level>`                     |デバッグ情報の生成を有効にし、レベルを設定する (何も指定しない時のデフォルトはレベル1,数字なしで指定した時のデフォルトはレベル2)|
-|`--inline={yes\|no}`                   |Control whether inlining is permitted, including overriding `@inline` declarations|
-|`--check-bounds={yes\|no}`             |Emit bounds checks always or never (ignoring declarations)|
-|`--math-mode={ieee,fast}`              |Disallow or enable unsafe floating point optimizations (overrides @fastmath declaration)|
-|`--code-coverage={none\|user\|all}`    |Count executions of source lines|
-|`--code-coverage`                      |equivalent to `--code-coverage=user`|
-|`--track-allocation={none\|user\|all}` |Count bytes allocated by each source line|
-|`--track-allocation`                   |equivalent to `--track-allocation=user`|
+|`--inline={yes\|no}`                   |`@inline`宣言を上書きするなど、インラインを許可するかどうかを制御する|
+|`--check-bounds={yes\|no}`             |境界チェックを常に行う・全くしない(宣言は無視される)|
+|`--math-mode={ieee,fast}`              |安全ではない浮動小数点数の最適化を禁止・許可する(@fastmath 宣言を上書きする)|
+|`--code-coverage={none\|user\|all}`    |実行するソースの行数を数える|
+|`--code-coverage`                      |`--code-coverage=user`と同等|
+|`--track-allocation={none\|user\|all}` |ソースの各行に割り当てられたバイト数を数える|
+|`--track-allocation`                   |`--track-allocation=user`と同等|
 
-## Resources
+`[](## Resources)
+## 資料
 
+```@raw html
+<!--
 A curated list of useful learning resources to help new users get started can be found on the [learning](https://julialang.org/learning/) page of the main Julia web site.
+-->
+```
+
+ 新規ユーザーが初めて見るのに役立つ精選された学習資料のリストが、
+ JuliaのWebサイトの[学習](https://julialang.org/learning/)ページにあります。
