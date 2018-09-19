@@ -63,7 +63,7 @@ on their names).
 -->
 ```
 Juliaの変数の命名システムは非常に柔軟です。
-大文字と小文字が違うと別の変数とみなされますが、意味論的には変わりません。（つまり名前によって変数の扱いが変わることはありません。)
+大文字と小文字が違うと別の変数とみなされますが、意味論的には変わりません。（つまり名前の文字種によって変数の解釈が変わることはありません。)
 
 
 ```jldoctest
@@ -178,9 +178,12 @@ primes, and a few other characters.
 では、Lu/Ll/Lt/Lm/Lo/Nl (文字), Sc/So (通貨その他の記号),その他、アルファベットのような文字のいくつか
 (例:数学記号Smの一部) が利用可能です。
 二文字目以降は、`!`や数字(0-9やカテゴリーNd/Noの文字)が混在可能で、
-他の符号位置のユニコードでは、発音区別記号などの修飾記号（カテゴリーMn/Mc/Me/Sk）、
+他の符号位置のユニコードでは、発音区別記号などの修飾記号（カテゴリーMn/Mc/Me/Sk）、接続用の約物のいくつか(カテゴリーPc)、
+プライムやその他いくつかの文字が利用可能です。
 
 
+```@raw html
+<!--
 Operators like `+` are also valid identifiers, but are parsed specially. In some contexts, operators
 can be used just like variables; for example `(+)` refers to the addition function, and `(+) = f`
 will reassign it. Most of the Unicode infix operators (in category Sm), such as `⊕`, are parsed
@@ -190,6 +193,20 @@ primes, and sub/superscripts, e.g. `+̂ₐ″` is parsed as an infix operator wi
 
 The only explicitly disallowed names for variables are the names of built-in statements:
 
+-->
+```
+
+`+`のような演算子は妥当な識別子ですが、構文解析のされ方が特殊です。
+ 演算子が単なる変数のように扱われることもあります。例えば、`(+)`は加法の関数を表しますが、
+`(+) = f`のように再代入することができます。
+`⊕`のような(カテゴリーSmに属する)ユニコードの中置演算子のほとんどは、中置演算子として解析されて、ユーザー定義のメソッドを
+利用できます。（例えば、`const ⊗ = kron`とすると`⊗`に中置記法のクロネッカ積を定義できます）。
+また演算子の後に修飾記号、プライム、下付・上付文字をつけることもできます。
+例えば、`+̂ₐ″`は前述の`+`と同じく、中置演算子として解析されます。
+
+明示的に禁止されている変数名は唯一、組み込みの予約語のみです。
+
+
 ```julia-repl
 julia> else = false
 ERROR: syntax: unexpected "else"
@@ -198,6 +215,8 @@ julia> try = "No"
 ERROR: syntax: unexpected "="
 ```
 
+```@raw html
+<!--
 Some Unicode characters are considered to be equivalent in identifiers.
 Different ways of entering Unicode combining characters (e.g., accents)
 are treated as equivalent (specifically, Julia identifiers are NFC-normalized).
@@ -205,8 +224,22 @@ The Unicode characters `ɛ` (U+025B: Latin small letter open e)
 and `µ` (U+00B5: micro sign) are treated as equivalent to the corresponding
 Greek letters, because the former are easily accessible via some input methods.
 
-## Stylistic Conventions
+-->
+```
 
+ユニコード文字のなかには識別子として同等に考えられるものがあります。
+ユニコードの結合文字（アクセントなど）にたいする異なる入力方法は同一視されます。
+（具体的にはJuliaの識別子はNFC正規化されます）
+ユニコード文字の `ɛ` (U+025B: Latin small letter open e)
+and `µ` (U+00B5: micro sign) は対応するギリシャ文字と同一視されます。
+というのも、入力法の中には前者のほうが入力しやすいものもあるからです。
+
+
+`[](## Stylistic Conventions)
+## 文体上の慣習
+
+```@raw html
+<!--
 While Julia imposes few restrictions on valid names, it has become useful to adopt the following
 conventions:
 
@@ -221,3 +254,20 @@ conventions:
     after the function is called, not just return a value.
 
 For more information about stylistic conventions, see the [Style Guide](@ref).
+
+-->
+```
+
+Juliaの妥当な名前にはほとんど制限がありませんが、以下のような慣習に従うと役立つでしょう。
+
+
+  * 変数名を小文字にする
+  * 語句の区切るときに、アンダースコア(`'_'`)を利用できる。
+  しかし他の方法では読みづらい時以外は、使わないほうがいい。
+  * `型`や`モジュール`の名前は大文字ではじめ、語句の区切りにはアンダースコアを使わずに、アッパーキャメルケースを使う。
+  * `関数`や`マクロ`の名前は小文字にして、アンダースコアを使わない
+  * 引数に対して書き込みを行う関数は名前の最後に`!`をつける。
+  こういった関数は時折、「変異(mutating)」「上書き(in-place)」関数とよばれます。
+  これは，関数が呼び出された後、単に値を返すだけでなく、引数に対して変化を起こそうとするからです。
+
+文体上の慣習に関するさらなる情報は [Style Guide](@ref)を参照してください。
