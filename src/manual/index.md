@@ -2,7 +2,7 @@
 
   * [まえがき](@ref man-introduction)
   * [始めよう](@ref man-getting-started)
-  * [Variables](@ref)
+  * [変数](@ref)
   * [Integers and Floating-Point Numbers](@ref)
   * [Mathematical Operations and Elementary Functions](@ref)
   * [Complex and Rational Numbers](@ref)
