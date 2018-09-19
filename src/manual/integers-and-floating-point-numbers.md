@@ -1,11 +1,25 @@
-# Integers and Floating-Point Numbers
+`[](# Integers and Floating-Point Numbers)
+# 整数と浮動小数点数
 
+```@raw html
+<!--
 Integers and floating-point values are the basic building blocks of arithmetic and computation.
 Built-in representations of such values are called numeric primitives, while representations of
 integers and floating-point numbers as immediate values in code are known as numeric literals.
 For example, `1` is an integer literal, while `1.0` is a floating-point literal; their binary
 in-memory representations as objects are numeric primitives.
+-->
+```
 
+整数と浮動小数点数は計算処理の基本要素です。
+これらの組み込みの表現は、数値プリミティブと呼ばれますが、
+コード中に書かれる具体的なデータの表現は数値リテラルと知られています。
+例えば、`1`は整数リテラルで`1.0`は浮動小数点数リテラルです。
+これらのオブジェクトのメモリ中でのバイナリ表現が数値プリミティブです。
+
+
+```@raw html
+<!--
 Julia provides a broad range of primitive numeric types, and a full complement of arithmetic and
 bitwise operators as well as standard mathematical functions are defined over them. These map
 directly onto numeric types and operations that are natively supported on modern computers, thus
@@ -13,11 +27,30 @@ allowing Julia to take full advantage of computational resources. Additionally, 
 software support for [Arbitrary Precision Arithmetic](@ref), which can handle operations on numeric
 values that cannot be represented effectively in native hardware representations, but at the cost
 of relatively slower performance.
+-->
+```
 
+Juliaにはさまざまな種類・範囲の数値プリミティブ型がありますが、
+それぞれに対してすべて算術演算やビット演算が通常の数学関数と同様に定義されています。
+こうした型や演算子は今日的なコンピュータではネイティブにサポートされている型や演算子と直接対応しているので、
+Juliaを使うと計算資源を最大限に活用することができます。
+さらに、Juliaでは[任意精度演算](@ref)がソフトウェアで利用可能なので、ネイティブなハードウェア表現は事実上不可能な値も扱えますが、
+パフォーマンスは比較的遅くなってしまいます。
+
+
+
+```@raw html
+<!--
 The following are Julia's primitive numeric types:
+-->
+```
+以下にJuliaのプリミティブ数値型を挙げていきます。
 
-  * **Integer types:**
+`[](  * **Integer types:**)
+  * **整数型:**
 
+```@raw html
+<!--
 | Type              | Signed? | Number of bits | Smallest value | Largest value |
 |:----------------- |:------- |:-------------- |:-------------- |:------------- |
 | [`Int8`](@ref)    | ✓       | 8              | -2^7           | 2^7 - 1       |
@@ -32,17 +65,53 @@ The following are Julia's primitive numeric types:
 | [`UInt128`](@ref) |         | 128            | 0              | 2^128 - 1     |
 | [`Bool`](@ref)    | N/A     | 8              | `false` (0)    | `true` (1)    |
 
-  * **Floating-point types:**
+-->
+```
 
+| 型　              | 符号付? | ビット数         | 最小値 　　　　| 最大値　　　　　|
+|:----------------- |:------- |:-------------- |:-------------- |:------------- |
+| [`Int8`](@ref)    | ✓       | 8              | -2^7           | 2^7 - 1       |
+| [`UInt8`](@ref)   |         | 8              | 0              | 2^8 - 1       |
+| [`Int16`](@ref)   | ✓       | 16             | -2^15          | 2^15 - 1      |
+| [`UInt16`](@ref)  |         | 16             | 0              | 2^16 - 1      |
+| [`Int32`](@ref)   | ✓       | 32             | -2^31          | 2^31 - 1      |
+| [`UInt32`](@ref)  |         | 32             | 0              | 2^32 - 1      |
+| [`Int64`](@ref)   | ✓       | 64             | -2^63          | 2^63 - 1      |
+| [`UInt64`](@ref)  |         | 64             | 0              | 2^64 - 1      |
+| [`Int128`](@ref)  | ✓       | 128            | -2^127         | 2^127 - 1     |
+| [`UInt128`](@ref) |         | 128            | 0              | 2^128 - 1     |
+| [`Bool`](@ref)    | N/A     | 8              | `false` (0)    | `true` (1)    |
+
+
+`[](  * **Floating-point types:**)
+  * **浮動小数点数型:**
+
+```@raw html
+<!--
 | Type              | Precision                                                                      | Number of bits |
 |:----------------- |:------------------------------------------------------------------------------ |:-------------- |
 | [`Float16`](@ref) | [half](https://en.wikipedia.org/wiki/Half-precision_floating-point_format)     | 16             |
 | [`Float32`](@ref) | [single](https://en.wikipedia.org/wiki/Single_precision_floating-point_format) | 32             |
 | [`Float64`](@ref) | [double](https://en.wikipedia.org/wiki/Double_precision_floating-point_format) | 64             |
 
+-->
+```
+
+| 型                | 精度                                                                           | ビット数       |
+|:----------------- |:------------------------------------------------------------------------------ |:-------------- |
+| [`Float16`](@ref) | [半精度](https://en.wikipedia.org/wiki/Half-precision_floating-point_format)   | 16             |
+| [`Float32`](@ref) | [単精度](https://en.wikipedia.org/wiki/Single_precision_floating-point_format) | 32             |
+| [`Float64`](@ref) | [倍精度](https://en.wikipedia.org/wiki/Double_precision_floating-point_format) | 64             |
+
+
+```@raw html
+<!--
 Additionally, full support for [Complex and Rational Numbers](@ref) is built on top of these primitive
 numeric types. All numeric types interoperate naturally without explicit casting, thanks to a
 flexible, user-extensible [type promotion system](@ref conversion-and-promotion).
+-->
+```
+
 
 ## Integers
 
