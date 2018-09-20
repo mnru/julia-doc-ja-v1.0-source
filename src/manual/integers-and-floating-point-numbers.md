@@ -376,8 +376,9 @@ type. (The above expression uses several features we have yet to introduce, incl
 with some existing programming experience.)
 -->
 ```
- [`typemin`](@ref) や [`typemax`](@ref)といった関数の返す値の型は、常に引数が表している型と等しくなります。
-()
+ [`typemin`](@ref) や [`typemax`](@ref)といった関数の返す値は、常に引数の示す型になります。
+(上記の式ではまだ紹介していない特徴である [for ループ](@ref man-loops),
+[文字列](@ref man-strings),[式展開](@ref))などを使っていますが、他のプログラミング経験のある人なら簡単に理解できるでしょう。)
 
 
 `[](### Overflow behavior)
@@ -388,7 +389,7 @@ with some existing programming experience.)
 In Julia, exceeding the maximum representable value of a given type results in a wraparound behavior:
 -->
 ```
-
+Juliaでは、値がその型の表現可能な上限を超えるとラップアラウンド(循環)がおこります。
 
 ```jldoctest
 julia> x = typemax(Int64)
@@ -411,8 +412,15 @@ is recommended instead.
 -->
 ```
 
+このように、Juliaの整数演算は実質的に[合同算術](https://en.wikipedia.org/wiki/Modular_arithmetic)を行っています。
+これは現代のコンピュータでの整数算術の実装方法の特徴を反映しています。
+オーバーフローの起こりうるアプリケーションでは、オーバーフローによってラップアラウンドが起こっていないかの、明示的な検査が不可欠です。
+別の方法としては[`BigInt`](@ref)を使った[任意精度演算](@ref)がお薦めです。
+
+
+
 `[](### Division errors)
-### Division errors
+### 除算エラー
 
 ```@raw html
 <!--
