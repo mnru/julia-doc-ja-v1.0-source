@@ -2,3 +2,6 @@
 dipatch	選択する					support	対応する
 multiple dispatch	多重ディスパッチ					effectively	事実上
                                                        					                                                	a full complement of 	全ての
+						Interpolation	式展開
+						wraparound	循環する
+							合同算術
