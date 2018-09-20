@@ -112,10 +112,20 @@ flexible, user-extensible [type promotion system](@ref conversion-and-promotion)
 -->
 ```
 
+さらに、Juliaは[複素数と有理数](@ref)に完全対応していますが、こういったプリミティブ数値型のもとに構築されています。
+すべての数値型はわざわざキャストしなくても自然に変換されます。
+これは柔軟でユーザーも拡張可能な[型昇格システム](@ref conversion-and-promotion)のおかげです。
 
-## Integers
+`[](## Integers)
+## 整数
 
+```@raw html
+<!--
 Literal integers are represented in the standard manner:
+-->
+```
+
+整数リテラルは標準的な方法で表現できます。
 
 ```jldoctest
 julia> 1
@@ -125,8 +135,17 @@ julia> 1234
 1234
 ```
 
+
+```@raw html
+<!--
 The default type for an integer literal depends on whether the target system has a 32-bit architecture
 or a 64-bit architecture:
+-->
+```
+
+整数リテラルのデフォルトの型はターゲットシステムのアーキテクチャが32bitか64bitかで変わります。
+
+
 
 ```julia-repl
 # 32-bit system:
@@ -138,8 +157,14 @@ julia> typeof(1)
 Int64
 ```
 
+```@raw html
+<!--
 The Julia internal variable [`Sys.WORD_SIZE`](@ref) indicates whether the target system is 32-bit
 or 64-bit:
+-->
+```
+
+Juliaの内部変数[`Sys.WORD_SIZE`](@ref)からターゲットシステムが32bitと64bitのどちらなのかが分かります。
 
 ```julia-repl
 # 32-bit system:
@@ -151,8 +176,15 @@ julia> Sys.WORD_SIZE
 64
 ```
 
+```@raw html
+<!--
 Julia also defines the types `Int` and `UInt`, which are aliases for the system's signed and unsigned
 native integer types respectively:
+-->
+```
+Juliaでは`Int` や `UInt` といった型も定義されていますが、それぞれシステムネイティブの符号付整数・符号無整数の型の別称です。
+
+
 
 ```julia-repl
 # 32-bit system:
