@@ -15,7 +15,7 @@ in-memory representations as objects are numeric primitives.
 これらの組み込みの表現は、数値プリミティブと呼ばれますが、
 コード中に書かれる具体的なデータの表現は数値リテラルと知られています。
 例えば、`1`は整数リテラルで`1.0`は浮動小数点数リテラルです。
-これらのオブジェクトのメモリ中でのバイナリ表現が数値プリミティブです。
+これらのオブジェクトのメモリ上のバイナリ表現が数値プリミティブです。
 
 
 ```@raw html
@@ -31,12 +31,12 @@ of relatively slower performance.
 ```
 
 Juliaにはさまざまな種類・範囲の数値プリミティブ型がありますが、
-それぞれに対してすべて算術演算やビット演算が通常の数学関数と同様に定義されています。
-こうした型や演算子は今日的なコンピュータではネイティブにサポートされている型や演算子と直接対応しているので、
-Juliaを使うと計算資源を最大限に活用することができます。
-さらに、Juliaでは[任意精度演算](@ref)がソフトウェアで利用可能なので、ネイティブなハードウェア表現は事実上不可能な値も扱えますが、
+それぞれの型に対して算術演算やビット演算がすべて通常の数学関数と同様に定義されています。
+こうした型や演算子は今時のコンピュータならネイティブに利用できる型や演算子と直接対応しているので、
+Juliaでは計算資源を最大限に活用することができます。
+さらに、Juliaではソフトウェアによる[任意精度演算](@ref)が利用可能なので、
+ネイティブなハードウェア表現の事実上不可能な値も扱えますが、
 パフォーマンスは比較的遅くなってしまいます。
-
 
 
 ```@raw html
@@ -182,7 +182,7 @@ Julia also defines the types `Int` and `UInt`, which are aliases for the system'
 native integer types respectively:
 -->
 ```
-Juliaでは`Int` や `UInt` といった型も定義されていますが、それぞれシステムネイティブの符号付整数・符号無整数の型の別称です。
+Juliaでは`Int` や `UInt` といった型も定義されていますが、それぞれシステムネイティブの符号付き整数・符号なし整数の型のエイリアスです。
 
 
 
@@ -200,8 +200,16 @@ julia> UInt
 UInt64
 ```
 
+```@raw html
+<!--
 Larger integer literals that cannot be represented using only 32 bits but can be represented in
 64 bits always create 64-bit integers, regardless of the system type:
+-->
+```
+大きな整数リテラルで、32bitでは表現できないけれども、64bitなら可能なものは、システムの整数型にかかわらず、常に64bitの整数が
+生成されます。
+
+
 
 ```jldoctest
 # 32-bit or 64-bit system:
@@ -209,9 +217,18 @@ julia> typeof(3000000000)
 Int64
 ```
 
+```@raw html
+<!--
 Unsigned integers are input and output using the `0x` prefix and hexadecimal (base 16) digits
 `0-9a-f` (the capitalized digits `A-F` also work for input). The size of the unsigned value is
 determined by the number of hex digits used:
+-->
+```
+
+符号なし整数の入出力には、`0x`を頭につけた16進数の数字`0-9a-f`(入力には大文字の`A-F`も利用可能)を使います。
+符号なしの値のサイズは、使っている16進数の数字の数で決まります。
+
+
 
 ```jldoctest
 julia> 0x1
@@ -245,6 +262,8 @@ julia> typeof(ans)
 UInt128
 ```
 
+```@raw html
+<!--
 This behavior is based on the observation that when one uses unsigned hex literals for integer
 values, one typically is using them to represent a fixed numeric byte sequence, rather than just
 an integer value.
@@ -253,6 +272,17 @@ Recall that the variable [`ans`](@ref) is set to the value of the last expressio
 an interactive session. This does not occur when Julia code is run in other ways.
 
 Binary and octal literals are also supported:
+-->
+```
+
+こうした挙動は、符号なしの16進リテラルを使うときは、通常、単なる整数値としてよりも長さの決まったバイト列として使うだろう
+という考察に基づいています。
+
+ 変数[`ans`](@ref)には、対話セッションで最後に評価された式の値が代入されることを、思い出してください。
+ Juliaのコードを別の方法で実行しても、何もだいにゅうされません。
+
+ 2進・8進のリテラルにも対応しています。
+ 
 
 ```jldoctest
 julia> 0b10
@@ -274,6 +304,8 @@ julia> typeof(ans)
 UInt128
 ```
 
+```@raw html
+<!--
 As for hexadecimal literals, binary and octal literals produce unsigned integer types. The size
 of the binary data item is the minimal needed size, if the leading digit of the literal is not
 `0`. In the case of leading zeros, the size is determined by the minimal needed size for a
@@ -284,6 +316,19 @@ Values, which cannot be stored in `UInt128` cannot be written as such literals.
 Binary, octal, and hexadecimal literals may be signed by a `-` immediately preceding the
 unsigned literal. They produce an unsigned integer of the same size as the unsigned literal
 would do, with the two's complement of the value:
+-->
+```
+
+2進・8進・16進リテラルに対しては、符号なし整数型が生成されます。
+リテラルの先頭の桁が`0`ではない場合、バイナリデータのサイズは必要最低限のものになります。
+先頭の桁が`0`の場合のサイズは、その数と同じ長さで先頭が`1`のリテラルに必要最低限のサイズになります。
+値が`UInt128`に収まらないものは、リテラルを使って書くことができません。
+
+2進・8進・16進リテラルの直前に`-`をつけて、符号をつけることができます。
+この場合生成されるのは、元の数とサイズの等しい符号なしの整数で、元の数の2の補数表現となるものです。
+
+
+
 
 ```jldoctest
 julia> -0x2
@@ -293,8 +338,16 @@ julia> -0x0002
 0xfffe
 ```
 
+```@raw html
+<!--
 The minimum and maximum representable values of primitive numeric types such as integers are given
 by the [`typemin`](@ref) and [`typemax`](@ref) functions:
+-->
+```
+
+ [`typemin`](@ref) や [`typemax`](@ref)　といった関数を使うと、
+ 整数などのプリミティブ数値型が表現できる値の下限と上限がわかります。 
+
 
 ```jldoctest
 julia> (typemin(Int32), typemax(Int32))
@@ -315,14 +368,27 @@ julia> for T in [Int8,Int16,Int32,Int64,Int128,UInt8,UInt16,UInt32,UInt64,UInt12
 UInt128: [0,340282366920938463463374607431768211455]
 ```
 
+```@raw html
+<!--
 The values returned by [`typemin`](@ref) and [`typemax`](@ref) are always of the given argument
 type. (The above expression uses several features we have yet to introduce, including [for loops](@ref man-loops),
 [Strings](@ref man-strings), and [Interpolation](@ref), but should be easy enough to understand for users
 with some existing programming experience.)
+-->
+```
+ [`typemin`](@ref) や [`typemax`](@ref)といった関数の返す値の型は、常に引数が表している型と等しくなります。
+()
 
-### Overflow behavior
 
+`[](### Overflow behavior)
+### オーバーフロー時の挙動
+
+```@raw html
+<!--
 In Julia, exceeding the maximum representable value of a given type results in a wraparound behavior:
+-->
+```
+
 
 ```jldoctest
 julia> x = typemax(Int64)
@@ -335,23 +401,37 @@ julia> x + 1 == typemin(Int64)
 true
 ```
 
+```@raw html
+<!--
 Thus, arithmetic with Julia integers is actually a form of [modular arithmetic](https://en.wikipedia.org/wiki/Modular_arithmetic).
 This reflects the characteristics of the underlying arithmetic of integers as implemented on modern
 computers. In applications where overflow is possible, explicit checking for wraparound produced
 by overflow is essential; otherwise, the [`BigInt`](@ref) type in [Arbitrary Precision Arithmetic](@ref)
 is recommended instead.
+-->
+```
 
+`[](### Division errors)
 ### Division errors
 
+```@raw html
+<!--
 Integer division (the `div` function) has two exceptional cases: dividing by zero, and dividing
 the lowest negative number ([`typemin`](@ref)) by -1. Both of these cases throw a [`DivideError`](@ref).
 The remainder and modulus functions (`rem` and `mod`) throw a [`DivideError`](@ref) when their
 second argument is zero.
+-->
+```
 
+`[](## Floating-Point Numbers)
 ## Floating-Point Numbers
 
+```@raw html
+<!--
 Literal floating-point numbers are represented in the standard formats, using
 [E-notation](https://en.wikipedia.org/wiki/Scientific_notation#E-notation) when necessary:
+-->
+```
 
 ```jldoctest
 julia> 1.0
@@ -376,8 +456,12 @@ julia> 2.5e-4
 0.00025
 ```
 
+```@raw html
+<!--
 The above results are all [`Float64`](@ref) values. Literal [`Float32`](@ref) values can be
 entered by writing an `f` in place of `e`:
+-->
+```
 
 ```jldoctest
 julia> 0.5f0

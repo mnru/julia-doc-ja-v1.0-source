@@ -1,0 +1,4 @@
+﻿前書き		始めよう		変数		整数と浮動小数点数	
+dipatch	選択する					support	対応する
+multiple dispatch	多重ディスパッチ					effectively	事実上
+                                                       					                                                	a full complement of 	全ての
