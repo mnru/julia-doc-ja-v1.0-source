@@ -432,7 +432,7 @@ second argument is zero.
 ```
 
 `[](## Floating-Point Numbers)
-## Floating-Point Numbers
+## 浮動小数点数
 
 ```@raw html
 <!--
@@ -440,6 +440,9 @@ Literal floating-point numbers are represented in the standard formats, using
 [E-notation](https://en.wikipedia.org/wiki/Scientific_notation#E-notation) when necessary:
 -->
 ```
+
+浮動小数点数のリテラルは標準的なものです。必要に応じて[E記法](https://en.wikipedia.org/wiki/Scientific_notation#E-notation)
+も使えます。
 
 ```jldoctest
 julia> 1.0
@@ -470,6 +473,8 @@ The above results are all [`Float64`](@ref) values. Literal [`Float32`](@ref) va
 entered by writing an `f` in place of `e`:
 -->
 ```
+上記の計算結果はすべて[`Float64`](@ref)の値です。
+`e`の代わりに`f`をつけると、[`Float32`](@ref)リテラルの値になります。
 
 ```jldoctest
 julia> 0.5f0
@@ -482,7 +487,14 @@ julia> 2.5f-4
 0.00025f0
 ```
 
+```@raw html
+<!--
 Values can be converted to [`Float32`](@ref) easily:
+-->
+```
+
+値を[`Float32`](@ref)に変換するのも簡単です。
+
 
 ```jldoctest
 julia> Float32(-1.5)
@@ -492,8 +504,15 @@ julia> typeof(ans)
 Float32
 ```
 
+```@raw html
+<!--
 Hexadecimal floating-point literals are also valid, but only as [`Float64`](@ref) values,
 with `p` preceding the base-2 exponent:
+-->
+```
+
+16進の浮動小数点数リテラルは、2の指数の前に`p`をつけることで利用可能で、[`Float64`](@ref) の値になります。
+
 
 ```jldoctest
 julia> 0x1p0
@@ -509,8 +528,15 @@ julia> typeof(ans)
 Float64
 ```
 
+```@raw html
+<!--
 Half-precision floating-point numbers are also supported ([`Float16`](@ref)), but they are
 implemented in software and use [`Float32`](@ref) for calculations.
+-->
+```
+
+半精度の浮動小数点数にも対応していますが ([`Float16`](@ref))、ソフトウェア上の実装で、演算には [`Float32`](@ref)を使います。
+
 
 ```jldoctest
 julia> sizeof(Float16(4.))
@@ -520,18 +546,33 @@ julia> 2*Float16(4.)
 Float16(8.0)
 ```
 
+```@raw html
+<!--
 The underscore `_` can be used as digit separator:
+-->
+```
+
+桁の区切りとしてアンダースコア`_`を使うことができます。
 
 ```jldoctest
 julia> 10_000, 0.000_000_005, 0xdead_beef, 0b1011_0010
 (10000, 5.0e-9, 0xdeadbeef, 0xb2)
 ```
 
-### Floating-point zero
+[](### Floating-point zero)
+### 浮動小数点数の0
 
+```@raw html
+<!--
 Floating-point numbers have [two zeros](https://en.wikipedia.org/wiki/Signed_zero), positive zero
 and negative zero. They are equal to each other but have different binary representations, as
 can be seen using the [`bitstring`](@ref) function:
+-->
+```
+
+浮動小数点数には正と負の[2つの0](https://en.wikipedia.org/wiki/Signed_zero)があります。
+この2つは値は同じですが2進数の表現が異なり、[`bitstring`](@ref)関数を使ってみることができます。
+
 
 ```jldoctest
 julia> 0.0 == -0.0
@@ -543,17 +584,35 @@ julia> bitstring(0.0)
 julia> bitstring(-0.0)
 "1000000000000000000000000000000000000000000000000000000000000000"
 ```
+[](### Special floating-point values)
+### 特殊な浮動小数点数の値
 
-### Special floating-point values
-
+```@raw html
+<!--
 There are three specified standard floating-point values that do not correspond to any point on
 the real number line:
+-->
+```
 
+浮動小数点数の値で実数の数直線上に対応する点のないものが3つあります。
+
+```@raw html
+<!--
 | `Float16` | `Float32` | `Float64` | Name              | Description                                                     |
 |:--------- |:--------- |:--------- |:----------------- |:--------------------------------------------------------------- |
 | `Inf16`   | `Inf32`   | `Inf`     | positive infinity | a value greater than all finite floating-point values           |
 | `-Inf16`  | `-Inf32`  | `-Inf`    | negative infinity | a value less than all finite floating-point values              |
 | `NaN16`   | `NaN32`   | `NaN`     | not a number      | a value not `==` to any floating-point value (including itself) |
+-->
+```
+
+| `Float16` | `Float32` | `Float64` |名前              | 説明                                                     |
+|:--------- |:--------- |:--------- |:---------------- |:--------------------------------------------------------------- |
+| `Inf16`   | `Inf32`   | `Inf`     | 正の無限大        | すべての浮動小数点数より大きい値           |
+| `-Inf16`  | `-Inf32`  | `-Inf`    | 負の無限大        | a value less than all finite floating-point values              |
+| `NaN16`   | `NaN32`   | `NaN`     | 非数             | a value not `==` to any floating-point value (including itself) |
+
+
 
 For further discussion of how these non-finite floating-point values are ordered with respect
 to each other and other floats, see [Numeric Comparisons](@ref). By the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008),
