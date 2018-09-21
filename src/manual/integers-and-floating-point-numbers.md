@@ -431,6 +431,12 @@ second argument is zero.
 -->
 ```
 
+整数の除算(`div`関数)では、2つ例外が起こる場合があります。0で割る場合と、負の下限の数([`typemin`](@ref))を-1で割る場合です。
+どちらの場合も[`DivideError`](@ref)例外が投げられます。
+剰余・モジュロ演算(`rem`と`mod`)も第2」引数が0の時も
+、[`DivideError`](@ref)例外が投げられます。
+
+
 `[](## Floating-Point Numbers)
 ## Floating-Point Numbers
 
