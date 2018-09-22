@@ -955,7 +955,7 @@ the same functions with a `do` block:
 -->
 ```
 
- [`BigFloat`](@ref)演算のデフォルトの精度(有効桁数)や丸めモードは、
+ [`BigFloat`](@ref)演算のデフォルトの精度(仮数のビット数)や丸めモードは、
 [`setprecision`](@ref)や[`setrounding`](@ref)をグローバル環境で呼び出すことで変更可能で、
 以降のすべての計算がこの変更の影響を受けます。
 一方、精度や丸めモードの変更を特定のブロック内の実行だけにとどめたい場合は、同じ関数を
@@ -978,11 +978,19 @@ julia> setprecision(40) do
 1.1000000000004
 ```
 
-## [Numeric Literal Coefficients](@id man-numeric-literal-coefficients)
+`[](## [Numeric Literal Coefficients](@id man-numeric-literal-coefficients))
+## [数値リテラル係数](@id man-numeric-literal-coefficients)
 
+```@raw html
+<!--
 To make common numeric formulae and expressions clearer, Julia allows variables to be immediately
 preceded by a numeric literal, implying multiplication. This makes writing polynomial expressions
 much cleaner:
+-->
+```
+数式一般を明快にするために、Juliaでは変数の直前に数値リテラルを書いて掛け算を表すことができます。
+これを使って多項式を書くとわかりやすくなります。
+
 
 ```jldoctest numeric-coefficients
 julia> x = 3
@@ -995,13 +1003,20 @@ julia> 1.5x^2 - .5x + 1
 13.0
 ```
 
+```@raw html
+<!--
 It also makes writing exponential functions more elegant:
+-->
+```
+巾関数もきれいに書けます。
 
 ```jldoctest numeric-coefficients
 julia> 2^2x
 64
 ```
 
+```@raw html
+<!--
 The precedence of numeric literal coefficients is slightly lower than that of
 unary operators such as negation.
 So `-2x` is parsed as `(-2) * x` and `√2x` is parsed as `(√2) * x`.
@@ -1010,27 +1025,57 @@ combined with exponentiation.
 For example `2^3x` is parsed as `2^(3x)`, and `2x^3` is parsed as `2*(x^3)`.
 
 Numeric literals also work as coefficients to parenthesized expressions:
+-->
+```
+
+数値リテラル係数の優先順位はマイナスなどの単項演算子低いです。
+そのため `-2x`は`(-2) * x`に解析され、 `√2x` は `(√2) * x`と解析されます。
+しかし巾関数と結合するときは、単項演算子と同様に解析されます。
+例えば、 `2^3x` は `2^(3x)`、 `2x^3` は `2*(x^3)`というように解析されます。
+
 
 ```jldoctest numeric-coefficients
 julia> 2(x-1)^2 - 3(x-1) + 1
 3
 ```
+```@raw html
+<!--
 !!! note
     The precedence of numeric literal coefficients used for implicit
     multiplication is higher than other binary operators such as multiplication
     (`*`), and division (`/`, `\`, and `//`).  This means, for example, that
     `1 / 2im` equals `-0.5im` and `6 // 2(2 + 1)` equals `1 // 1`.
+-->
+```
+!!! 注意
+    掛け算を暗に示す数値リテラル係数は他の2項演算子、例えば、乗法(`*`)や除法 (`/`, `\`, `//`)よりも
+    優先順位は高いです。
+    例えば、`1 / 2im`は`-0.5im`と等しく、`6 // 2(2 + 1)`は`1 // 1`と等しいです。
 
+
+```@raw html
+<!--
 Additionally, parenthesized expressions can be used as coefficients to variables, implying multiplication
 of the expression by the variable:
+-->
+```
+
+さらに、括弧でくくった式を変数に対する係数として扱い、式と変数の掛け算を行うことができます。
 
 ```jldoctest numeric-coefficients
 julia> (x-1)x
 6
 ```
 
+```@raw html
+<!--
 Neither juxtaposition of two parenthesized expressions, nor placing a variable before a parenthesized
 expression, however, can be used to imply multiplication:
+-->
+```
+
+しかし、括弧でくくった式を２つ並べたり、括弧でくくった式の前に変数をかいたりしても、掛け算とはみなされません。
+
 
 ```jldoctest numeric-coefficients
 julia> (x-1)(x+1)
@@ -1040,6 +1085,8 @@ julia> x(x+1)
 ERROR: MethodError: objects of type Int64 are not callable
 ```
 
+```@raw html
+<!--
 Both expressions are interpreted as function application: any expression that is not a numeric
 literal, when immediately followed by a parenthetical, is interpreted as a function applied to
 the values in parentheses (see [Functions](@ref) for more about functions). Thus, in both of these
@@ -1048,13 +1095,36 @@ cases, an error occurs since the left-hand value is not a function.
 The above syntactic enhancements significantly reduce the visual noise incurred when writing common
 mathematical formulae. Note that no whitespace may come between a numeric literal coefficient
 and the identifier or parenthesized expression which it multiplies.
+-->
+```
+どちらの式も関数適用と解釈されます。
+数値リテラルではない式に括弧でくくったものを続けると、括弧の中のものに対する関数適用だと解釈されます
+( 関数に関する詳細は[関数](@ref)を参照)。
+どちらのケースも左側が関数ではないためエラーがおこります。
 
-### Syntax Conflicts
+こうした構文の拡張によって、普通に書いた数式の見た目の煩わしさが大幅に減っています。
+掛け算をおこなうには、数値リテラル係数と、識別子や括弧でくくった式の間に、空白を入れてはいけないことに注意してください。
 
+
+
+
+`[](### Syntax Conflicts)
+### 構文の競合
+
+```@raw html
+<!--
 Juxtaposed literal coefficient syntax may conflict with two numeric literal syntaxes: hexadecimal
 integer literals and engineering notation for floating-point literals. Here are some situations
 where syntactic conflicts arise:
+-->
+```
 
+リテラル係数を並べる構文と競合しうる構文が２つあります。
+16進整数リテラルと浮動小数点数リテラルの指数表記です。
+競合する例を挙げてみると
+
+```@raw html
+<!--
   * The hexadecimal integer literal expression `0xff` could be interpreted as the numeric literal
     `0` multiplied by the variable `xff`.
   * The floating-point literal expression `1e10` could be interpreted as the numeric literal `1` multiplied
@@ -1062,29 +1132,82 @@ where syntactic conflicts arise:
   * The 32-bit floating-point literal expression `1.5f22` could be interpreted as the numeric literal
     `1.5` multiplied by the variable `f22`.
 
+-->
+```
+  * 16進整数リテラルの`0xff`は、数値リテラルの`0`と変数`xff`の掛け算と解釈できる。
+  * 浮動小数点リテラルの`1e10`は数値リテラル`1`と変数`e10`の掛け算と解釈できる。`E`形式も同様。
+  * 32bit浮動小数点リテラルの`1.5f22`数値リテラル`1.5`と変数`f22`の掛け算と解釈できる。
+
+```@raw html
+<!--
 In all cases, we resolve the ambiguity in favor of interpretation as numeric literals:
 
   * Expressions starting with `0x` are always hexadecimal literals.
   * Expressions starting with a numeric literal followed by `e` or `E` are always floating-point literals.
   * Expressions starting with a numeric literal followed by `f` are always 32-bit floating-point literals.
 
+-->
+```
+
+すべてのケースで、数値リテラルとしての解釈を好んで、曖昧さを解決しています。
+
+  * `0x`で始まる式は、常に16進リテラルである。
+  * `e`か`E`を伴う数値リテラルで始まる式は、常に浮動小数点リテラルである。
+  * `f`を伴う数値リテラルで始まる式は、常に32bit浮動小数点リテラルである。
+
+```@raw html
+<!--
 Unlike `E`, which is equivalent to `e` in numeric literals for historical reasons, `F` is just another
 letter and does not behave like `f` in numeric literals. Hence, expressions starting with a numeric literal
 followed by `F` are interpreted as the numerical literal multiplied by a variable, which means that, for
 example, `1.5F22` is equal to `1.5 * F22`.
+-->
+```
 
-## Literal zero and one
+ `E`は歴史的な理由もあって、数値リテラルの中で`e`と同等に扱われますが、`F`の場合はまた別で数値リテラルの中でも`f`のようには扱われません。
+なので、`F`を伴う数値リテラルで始まる式は、数値リテラルと変数の掛け算として解釈されます。
+例えば、 `1.5F22`は`1.5 * F22`と等しくなります。
 
+
+
+`[](## Literal zero and one)
+## 0と1のリテラル
+
+```@raw html
+<!--
 Julia provides functions which return literal 0 and 1 corresponding to a specified type or the
 type of a given variable.
+-->
+```
+
+Juliaには、0や1のリテラルを返す関数で、指定した型や、変数と同じ型となるものがあります。
+
+```@raw html
+<!--
 
 | Function          | Description                                      |
 |:----------------- |:------------------------------------------------ |
 | [`zero(x)`](@ref) | Literal zero of type `x` or type of variable `x` |
 | [`one(x)`](@ref)  | Literal one of type `x` or type of variable `x`  |
+-->
+```
 
+| 関数              | 説明                                      |
+|:----------------- |:------------------------------------------------ |
+| [`zero(x)`](@ref) | 型`x`の0リテラルか、変数`x`と同じ0リテラル |
+| [`one(x)`](@ref)  | 型`x`の1リテラルか、変数`x`と同じ1リテラル  |
+
+
+```@raw html
+<!--
 These functions are useful in [Numeric Comparisons](@ref) to avoid overhead from unnecessary
 [type conversion](@ref conversion-and-promotion).
+-->
+```
+
+これらの関数は [数値の比較](@ref)を行うときに、 [型変換](@ref conversion-and-promotion)の不要なオーバーヘッドを
+避けるために役立ちます。
+
 
 Examples:
 

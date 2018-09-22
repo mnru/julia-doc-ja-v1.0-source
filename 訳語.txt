@@ -20,3 +20,6 @@
 	Rounding modes	丸めモード			
 	ieee standard	ieee 規格			
 	least significant bit	最下位ビット			
+	significand	仮数			
+	exponential	巾関数			
+	engineering notation	指数表記			
