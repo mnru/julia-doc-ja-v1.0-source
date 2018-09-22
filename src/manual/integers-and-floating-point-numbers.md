@@ -826,12 +826,23 @@ value, with ties rounded towards the nearest value with an even least significan
 デフォルトの丸めモードは常に[`最近接丸め`](@ref)で、これは一番近い表現可能な数に丸める方法で、等しい場合は
 最下位ビットが偶数になるように丸めます。
 
-### Background and References
+`[](### Background and References)
+### 背景と参考資料
 
+```@raw html
+<!--
 Floating-point arithmetic entails many subtleties which can be surprising to users who are unfamiliar
 with the low-level implementation details. However, these subtleties are described in detail in
 most books on scientific computation, and also in the following references:
+-->
+```
 
+浮動小数点数の算術には低レベルの実装の詳細なじみのない人が驚くような微妙な点がたくさんあります。
+しかしその微妙な点の詳細は、大抵の科学計算に関する本や下記の資料に記載されています。
+
+
+  ```@raw html
+  <!--
   * The definitive guide to floating point arithmetic is the [IEEE 754-2008 Standard](http://standards.ieee.org/findstds/standard/754-2008.html);
     however, it is not available for free online.
   * For a brief but lucid presentation of how floating-point numbers are represented, see John D.
@@ -847,8 +858,28 @@ most books on scientific computation, and also in the following references:
     of [William Kahan](https://en.wikipedia.org/wiki/William_Kahan), commonly known as the "Father
     of Floating-Point". Of particular interest may be [An Interview with the Old Man of Floating-Point](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html).
 
-## Arbitrary Precision Arithmetic
+  -->
+  ```
 
+* 浮動小数点数の演算 に関する最も信頼のおけるガイドは [IEEE 754-2008 規格](http://standards.ieee.org/findstds/standard/754-2008.html)です。
+    しかし、無料・オンラインでは利用不可。
+  * 浮動小数点数の表現方法に関する簡潔だが明快な解説として、John D.Cook'の [記事](https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/)
+    を参照のこと。
+     [入門](https://www.johndcook.com/blog/2009/04/06/numbers-are-a-leaky-abstraction/)
+    では理想化された抽象的な実数と表現とのの違いからおこる問題が書かれている。
+  * 同様にお薦めなのが、Bruce Dawsonの[浮動小数点数に関する一連のブログ投稿](https://randomascii.wordpress.com/2012/05/20/thats-not-normalthe-performance-of-odd-floats/).
+  * 浮動小数点数に関する秀逸で深遠な議論と、その計算時に遭遇する数的精度の問題は
+    David Goldbergの論文 [すべとの計算科学者が浮動小数点数演算について知るべきこと](http://citeseerx.ist.psu.edu/viewdoc/donload?doi=10.1.1.22.6768&rep=rep1&type=pdf)を参照のこと。
+  * 浮動小数点数に関する歴史・理論・問題さらにその他の多くの数値計算に関する話題を集めた広範囲にわたる文書として[著作集](https://people.eecs.berkeley.edu/~wkahan/)を参照のこと。
+    著者 [William Kahan](https://en.wikipedia.org/wiki/William_Kahan)は「浮動小数点の父」として広くしられている。
+    特に興味深いのは [浮動小数点の老人へのインタビュー](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html)。
+
+
+`[](## Arbitrary Precision Arithmetic)
+## 任意精度演算
+
+```@raw html
+<!--
 To allow computations with arbitrary-precision integers and floating point numbers, Julia wraps
 the [GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org) and the [GNU MPFR Library](http://www.mpfr.org),
 respectively. The [`BigInt`](@ref) and [`BigFloat`](@ref) types are available in Julia for arbitrary
@@ -857,6 +888,15 @@ precision integer and floating point numbers respectively.
 Constructors exist to create these types from primitive numerical types, and [`parse`](@ref)
 can be used to construct them from `AbstractString`s.  Once created, they participate in arithmetic
 with all other numeric types thanks to Julia's [type promotion and conversion mechanism](@ref conversion-and-promotion):
+-->
+```
+整数と浮動小数点数に対して任意精度で計算できるように、Juliaは[GNU Multiple Precision Arithmetic Library (GMP)](https://gmplib.org) と [GNU MPFR Library](http://www.mpfr.org)に対するラップをそれぞれ行っています。
+ [`BigInt`](@ref) と [`BigFloat`](@ref)の型がそれぞれ任意精度の整数と浮動小数点数として利用可能です。
+
+
+
+コンストラクタは、プリミティブ数値型から、これらの型を生成し、[`parse`](@ref)は`AbstractString`からこれらの型を生成します。
+生成した値は他の数値型と演算することができ、これはJuliaの [型昇格と型変換のしくみ](@ref conversion-and-promotion)のおかげです。
 
 ```jldoctest
 julia> BigInt(typemax(Int64)) + 1
@@ -875,8 +915,15 @@ julia> factorial(BigInt(40))
 815915283247897734345611269596115894272000000000
 ```
 
+```@raw html
+<!--
 However, type promotion between the primitive types above and [`BigInt`](@ref)/[`BigFloat`](@ref)
 is not automatic and must be explicitly stated.
+-->
+```
+しかしプリミティブ型と[`BigInt`](@ref)/[`BigFloat`](@ref)との型昇格は自動では行われず、明示的に記述する必要があります。
+
+
 
 ```jldoctest
 julia> x = typemin(Int64)
@@ -898,11 +945,21 @@ julia> typeof(y)
 BigInt
 ```
 
+```@raw html
+<!--
 The default precision (in number of bits of the significand) and rounding mode of [`BigFloat`](@ref)
 operations can be changed globally by calling [`setprecision`](@ref) and [`setrounding`](@ref),
 and all further calculations will take these changes in account.  Alternatively, the precision
 or the rounding can be changed only within the execution of a particular block of code by using
 the same functions with a `do` block:
+-->
+```
+
+ [`BigFloat`](@ref)演算のデフォルトの精度(有効桁数)や丸めモードは、
+[`setprecision`](@ref)や[`setrounding`](@ref)をグローバル環境で呼び出すことで変更可能で、
+以降のすべての計算がこの変更の影響を受けます。
+一方、精度や丸めモードの変更を特定のブロック内の実行だけにとどめたい場合は、同じ関数を
+`do`ブロック内で呼び出せば可能です。
 
 ```jldoctest
 julia> setrounding(BigFloat, RoundUp) do

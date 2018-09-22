@@ -18,3 +18,5 @@
 	modular arithmetic	合同算術			
 	Rounding mode	端数処理			
 	Rounding modes	丸めモード			
+	ieee standard	ieee 規格			
+	least significant bit	最下位ビット			
