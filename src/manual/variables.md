@@ -37,22 +37,24 @@ julia> x = "Hello World!"
 ```
 
 ```julia-repl
-# 値10を変数xに代入する
+# Assign the value 10 to the variable x
 julia> x = 10
 10
 
-# Xの値を計算処理する
+# Doing math with x's value
 julia> x + 1
 11
 
-# xに値を再代入する
+# Reassign x's value
 julia> x = 1 + 1
 2
 
-# 他の型の値、例えば文字列なども代入できる
+# You can assign values of other types, like strings of text
 julia> x = "Hello World!"
 "Hello World!"
 ```
+
+
 
 
 ```@raw html
