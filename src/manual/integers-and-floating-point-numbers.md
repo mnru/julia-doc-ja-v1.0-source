@@ -823,7 +823,7 @@ value, with ties rounded towards the nearest value with an even least significan
 浮動小数点数表現で正確に表現できない数は、適当な表現可能な数に丸める必要があります。
 しかしその処理方法は、必要に応じて、[IEEE 754 規格](https://en.wikipedia.org/wiki/IEEE_754-2008)に記載されている丸めモードにそって変えることができます。
 
-デフォルトの丸めモードは常に[`最近接丸め`](@ref)で、これは一番近い表現可能な数に丸める方法で、等しい場合は
+デフォルトの丸めモードは常に[`最近接丸め`](@ref)で、これは一番近い表現可能な数に丸める方法で、最近接の表現可能な数が２つある場合は
 最下位ビットが偶数になるように丸めます。
 
 `[](### Background and References)
@@ -841,8 +841,11 @@ most books on scientific computation, and also in the following references:
 しかしその微妙な点の詳細は、大抵の科学計算に関する本や下記の資料に記載されています。
 
 
-  ```@raw html
-  <!--
+
+
+```@raw html
+<!--
+
   * The definitive guide to floating point arithmetic is the [IEEE 754-2008 Standard](http://standards.ieee.org/findstds/standard/754-2008.html);
     however, it is not available for free online.
   * For a brief but lucid presentation of how floating-point numbers are represented, see John D.
@@ -858,8 +861,9 @@ most books on scientific computation, and also in the following references:
     of [William Kahan](https://en.wikipedia.org/wiki/William_Kahan), commonly known as the "Father
     of Floating-Point". Of particular interest may be [An Interview with the Old Man of Floating-Point](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html).
 
-  -->
-  ```
+
+-->
+```
 
   * 浮動小数点数の演算 に関する最も信頼のおけるガイドは [IEEE 754-2008 規格](http://standards.ieee.org/findstds/standard/754-2008.html)です。
     しかし、無料・オンラインでは利用不可。
@@ -871,7 +875,7 @@ most books on scientific computation, and also in the following references:
   * 浮動小数点数に関する秀逸で深遠な議論と、その計算時に遭遇する数的精度の問題は
     David Goldbergの論文 [すべとの計算科学者が浮動小数点数演算について知るべきこと](http://citeseerx.ist.psu.edu/viewdoc/donload?doi=10.1.1.22.6768&rep=rep1&type=pdf)を参照のこと。
   * 浮動小数点数に関する歴史・理論・問題さらにその他の多くの数値計算に関する話題を集めた広範囲にわたる文書として[著作集](https://people.eecs.berkeley.edu/~wkahan/)を参照のこと。
-    著者 [William Kahan](https://en.wikipedia.org/wiki/William_Kahan)は「浮動小数点の父」として広くしられている。
+    著者 [William Kahan](https://en.wikipedia.org/wiki/William_Kahan)は「浮動小数点の父」として広く知られている。
     特に興味深いのは [浮動小数点の老人へのインタビュー](https://people.eecs.berkeley.edu/~wkahan/ieee754status/754story.html)。
 
 
