@@ -40,31 +40,52 @@ are supported on all primitive numeric types:
 下記の[算術演算子](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
 はすべてのプリミティブ数値型で利用可能です。
 
-| 式         | 名前            | 説明                            |
-|:---------- |:-------------- |:-------------------------------------- |
-| `+x`       | unary plus      | the identity operation                 |
-| `-x`       | unary minus    | maps values to their additive inverses |
-| `x + y`    | binary plus    | performs addition                      |
-| `x - y`    | binary minus   | performs subtraction                   |
-| `x * y`    | times          | performs multiplication                |
-| `x / y`    | divide         | performs division                      |
-| `x ÷ y`    | integer divide | x / y, truncated to an integer         |
-| `x \ y`    | inverse divide | equivalent to `y / x`                  |
-| `x ^ y`    | power          | raises `x` to the `y`th power          |
-| `x % y`    | remainder      | equivalent to `rem(x,y)`               |
+| 式         | 名前        | 説明                            |
+|:---------- |:---------- |:-------------------------------------- |
+| `+x`       | 単項加算    | 恒等演算                 |
+| `-x`       | 単項減算    | 加算の逆元への関数 |
+| `x + y`    | 二項加算    | 加算を実行                      |
+| `x - y`    | 二項減算    | 減算を実行                   |
+| `x * y`    | 乗算        | 乗算を実行                |
+| `x / y`    | 除算        | 除算を実行                      |
+| `x ÷ y`    | 整数除算    | x / y, 整数に切り捨て         |
+| `x \ y`    | 逆除算      | `y / x`と同等                  |
+| `x ^ y`    | 巾          | `x` の `y`乗          |
+| `x % y`    | 剰余算      | `rem(x,y)`と同等               |
 
 
+```@raw html
+<!--
 as well as the negation on [`Bool`](@ref) types:
 
 | Expression | Name     | Description                              |
 |:---------- |:-------- |:---------------------------------------- |
 | `!x`       | negation | changes `true` to `false` and vice versa |
 
+-->
+```
+
+[`Bool`](@ref) 型の否定も同様です
+
+| 式         | 名前      | 説明                            |
+|:---------- |:-------- |:---------------------------------------- |
+| `!x`       | 否定     | `true`と`false`を逆にする|
+
+
+```@raw html
+<!--
 Julia's promotion system makes arithmetic operations on mixtures of argument types "just work"
 naturally and automatically. See [Conversion and Promotion](@ref conversion-and-promotion) for details of the promotion
 system.
 
 Here are some simple examples using arithmetic operators:
+
+-->
+```
+Juliaは昇格の仕組みのおかげで、引数に型の混合した算術演算をおこなっても、自然かつ自動的に"うまく動作"します。
+昇格の仕組みの詳細は[変換と昇格](@ref conversion-and-promotion)を参照してください。
+
+
 
 ```jldoctest
 julia> 1 + 2 + 3
@@ -77,15 +98,31 @@ julia> 3*2/12
 0.5
 ```
 
+```@raw html
+<!--
 (By convention, we tend to space operators more tightly if they get applied before other nearby
 operators. For instance, we would generally write `-x + 2` to reflect that first `x` gets negated,
 and then `2` is added to that result.)
+-->
+```
+(慣習的に、演算を近くのものより先に実行する場合は、空白を詰めがちです。
+例えば、よく`-x + 2`と書かれますが、これは先に`X`に-1を掛けてから`2`を足すことが反映されています。)
 
-## Bitwise Operators
 
+`[](## Bitwise Operators)
+## ビット演算子
+
+```@raw html
+<!--
 The following [bitwise operators](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators)
 are supported on all primitive integer types:
+-->
+```
+下記の[ビット演算子](https://en.wikipedia.org/wiki/Bitwise_operation#Bitwise_operators)
+はすべてのプリミティブ整数型で利用可能です。
 
+```@raw html
+<!--
 | Expression | Name                                                                     |
 |:---------- |:------------------------------------------------------------------------ |
 | `~x`       | bitwise not                                                              |
@@ -96,7 +133,28 @@ are supported on all primitive integer types:
 | `x >> y`   | [arithmetic shift](https://en.wikipedia.org/wiki/Arithmetic_shift) right |
 | `x << y`   | logical/arithmetic shift left                                            |
 
+-->
+```
+
+| 式         | 名前                                                                     |
+|:---------- |:------------------------------------------------------------------------ |
+| `~x`       | 否定(not)                                                              |
+| `x & y`    | 論理積(and)                                                              |
+| `x \| y`   | 論理和(or)                                                               |
+| `x ⊻ y`    | 排他的論理和(xor)                                               |
+| `x >>> y`  | [論理シフト](https://en.wikipedia.org/wiki/Logical_shift) 右       |
+| `x >> y`   | [算術シフト](https://en.wikipedia.org/wiki/Arithmetic_shift) 右 |
+| `x << y`   | 論理/算術　シフト　左                                            |
+
+
+```@raw html
+<!--
 Here are some examples with bitwise operators:
+
+-->
+```
+
+ビット演算の例をいくつかあげます。
 
 ```jldoctest
 julia> ~123
@@ -121,12 +179,22 @@ julia> ~UInt8(123)
 0x84
 ```
 
-## Updating operators
+`[](## Updating operators)
+## 代入演算子
 
+```@raw html
+<!--
 Every binary arithmetic and bitwise operator also has an updating version that assigns the result
 of the operation back into its left operand. The updating version of the binary operator is formed
 by placing a `=` immediately after the operator. For example, writing `x += 3` is equivalent to
 writing `x = x + 3`:
+-->
+```
+
+算術・ビット演算子で二項演算子のものはすべて演算結果を左の演算子に代入するバージョンの演算子が存在します。
+代入バージョンの演算子は元の演算子のすぐ後ろに`=`をつけます。
+例えば、`x += 3`は`x = x + 3`と同等です。
+
 
 ```jldoctest
 julia> x = 1
@@ -139,15 +207,30 @@ julia> x
 4
 ```
 
+```@raw html
+<!--
 The updating versions of all the binary arithmetic and bitwise operators are:
+-->
+```
+
+代入バージョンの二項演算子である算術・ビット演算子をすべて挙げると
 
 ```
 +=  -=  *=  /=  \=  ÷=  %=  ^=  &=  |=  ⊻=  >>>=  >>=  <<=
 ```
 
+```@raw html
+<!--
 !!! note
     An updating operator rebinds the variable on the left-hand side. As a result, the type of the
     variable may change.
+-->
+```
+
+!!! 注意
+    代入演算子は左辺の変数に対して再束縛を行います。この結果、変数の型が変わることも起こりえます。
+
+
 
     ```jldoctest
     julia> x = 0x01; typeof(x)
@@ -160,8 +243,12 @@ The updating versions of all the binary arithmetic and bitwise operators are:
     Int64
     ```
 
-## [Vectorized "dot" operators](@id man-dot-operators)
+`[](## [Vectorized "dot" operators](@id man-dot-operators))
+## [ベクトル化した "dot" 演算子](@id man-dot-operators)
 
+
+```@raw html
+<!--
 For *every* binary operation like `^`, there is a corresponding
 "dot" operation `.^` that is *automatically* defined
 to perform `^` element-by-element on arrays. For example,
@@ -171,6 +258,17 @@ mathematical meaning to "cubing" a (non-square) array, but
 (or "vectorized") result `[1^3, 2^3, 3^3]`.  Similarly for unary
 operators like `!` or `√`, there is a corresponding `.√` that
 applies the operator elementwise.
+-->
+```
+
+`^`のような *すべての* 二項演算子に対して 、対応する"dot"演算子が`.^`のように *自動的に* 定義され、
+配列の要素ごとに演算を行います。
+例えば、`[1,2,3] ^ 3`は定義されていません。というのも、（二次元ではない）配列に数学的に標準的な"三乗"の
+意味がないからです。
+しかし、`[1,2,3] .^ 3`は要素ごとの(またはベクトル化した)計算結果`[1^3, 2^3, 3^3]`が定義できます。
+同様に`!` や`√`などの単項演算子にも、`.√`のような、要素ごとに演算するものが存在します。
+
+
 
 ```jldoctest
 julia> [1,2,3] .^ 3
@@ -178,6 +276,23 @@ julia> [1,2,3] .^ 3
   1
   8
  27
+```
+
+```@raw html
+<!--
+More specifically, `a .^ b` is parsed as the ["dot" call](@ref man-vectorized)
+`(^).(a,b)`, which performs a [broadcast](@ref Broadcasting) operation:
+it can combine arrays and scalars, arrays of the same size (performing
+the operation elementwise), and even arrays of different shapes (e.g.
+combining row and column vectors to produce a matrix). Moreover, like
+all vectorized "dot calls," these "dot operators" are
+*fusing*. For example, if you compute `2 .* A.^2 .+ sin.(A)` (or
+equivalently `@. 2A^2 + sin(A)`, using the [`@.`](@ref @__dot__) macro) for
+an array `A`, it performs a *single* loop over `A`, computing `2a^2 + sin(a)`
+for each element of `A`. In particular, nested dot calls like `f.(g.(x))`
+are fused, and "adjacent" binary operators like `x .+ 3 .* x.^2` are
+equivalent to nested dot calls `(+).(x, (*).(3, (^).(x, 2)))`.
+-->
 ```
 
 More specifically, `a .^ b` is parsed as the ["dot" call](@ref man-vectorized)
@@ -193,6 +308,10 @@ for each element of `A`. In particular, nested dot calls like `f.(g.(x))`
 are fused, and "adjacent" binary operators like `x .+ 3 .* x.^2` are
 equivalent to nested dot calls `(+).(x, (*).(3, (^).(x, 2)))`.
 
+
+
+```@raw html
+<!--
 Furthermore, "dotted" updating operators like `a .+= b` (or `@. a += b`) are parsed
 as `a .= a .+ b`, where `.=` is a fused *in-place* assignment operation
 (see the [dot syntax documentation](@ref man-vectorized)).
@@ -207,10 +326,36 @@ For example, it is not clear whether `1.+x` means `1. + x` or `1 .+ x`.
 Therefore this syntax is disallowed, and spaces must be used around
 the operator in such cases.
 
-## Numeric Comparisons
+-->
+```
+Furthermore, "dotted" updating operators like `a .+= b` (or `@. a += b`) are parsed
+as `a .= a .+ b`, where `.=` is a fused *in-place* assignment operation
+(see the [dot syntax documentation](@ref man-vectorized)).
 
+Note the dot syntax is also applicable to user-defined operators.
+For example, if you define `⊗(A,B) = kron(A,B)` to give a convenient
+infix syntax `A ⊗ B` for Kronecker products ([`kron`](@ref)), then
+`[A,B] .⊗ [C,D]` will compute `[A⊗C, B⊗D]` with no additional coding.
+
+Combining dot operators with numeric literals can be ambiguous.
+For example, it is not clear whether `1.+x` means `1. + x` or `1 .+ x`.
+Therefore this syntax is disallowed, and spaces must be used around
+the operator in such cases.
+
+
+`[](## Numeric Comparisons)
+## 数値の比較
+
+```@raw html
+<!--
 Standard comparison operations are defined for all the primitive numeric types:
+-->
+```
+すべてのプリミティブ数値型に対して標準的な比較演算が定義されています。
 
+
+```@raw html
+<!--
 | Operator                     | Name                     |
 |:---------------------------- |:------------------------ |
 | [`==`](@ref)                 | equality                 |
@@ -219,8 +364,28 @@ Standard comparison operations are defined for all the primitive numeric types:
 | [`<=`](@ref), [`≤`](@ref <=) | less than or equal to    |
 | [`>`](@ref)                  | greater than             |
 | [`>=`](@ref), [`≥`](@ref >=) | greater than or equal to |
+-->
+```
 
+| 演算             　　　        | 名前                     |
+|:---------------------------- |:------------------------ |
+| [`==`](@ref)                 |  等号               |
+| [`!=`](@ref), [`≠`](@ref !=) | 不等号               |
+| [`<`](@ref)                  | 未満                |
+| [`<=`](@ref), [`≤`](@ref <=) | 以下    |
+| [`>`](@ref)                  | より大きい             |
+| [`>=`](@ref), [`≥`](@ref >=) | 以上 |
+
+
+```@raw html
+<!--
 Here are some simple examples:
+
+-->
+```
+
+簡単な例を挙げます。
+
 
 ```jldoctest
 julia> 1 == 1
@@ -257,6 +422,8 @@ julia> 3 < -0.5
 false
 ```
 
+```@raw html
+<!--
 Integers are compared in the standard manner -- by comparison of bits. Floating-point numbers
 are compared according to the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008):
 
@@ -267,6 +434,23 @@ are compared according to the [IEEE 754 standard](https://en.wikipedia.org/wiki/
   * `NaN` is not equal to, not less than, and not greater than anything, including itself.
 
 The last point is potentially surprising and thus worth noting:
+
+
+
+
+-->
+```
+整数の比較は標準的にビットの比較によって行います。
+浮動小数点の比較は[IEEE 754 規格](https://en.wikipedia.org/wiki/IEEE_754-2008)によって行います。
+
+
+  * 有限の数の順序は通常通り。
+  * 正の0は負の0と等しく、よりおおきいわけではない。
+  * `Inf`は自身と等しく、`NaN`以外のその他すべてより大きい。
+  * `-Inf`は自身と等しく、`NaN`以外のその他すべてより小さい。
+  * `NaN`は自身も含めて、どれとも等しくなく、より小さくもなく、より大きくもない。
+
+
 
 ```jldoctest
 julia> NaN == NaN
@@ -282,24 +466,55 @@ julia> NaN > NaN
 false
 ```
 
+```@raw html
+<!--
 and can cause especial headaches with [arrays](@ref man-multi-dim-arrays):
+-->
+```
+
+[配列](@ref man-multi-dim-arrays)を扱いは、頭痛の種になりえます。
 
 ```jldoctest
 julia> [1 NaN] == [1 NaN]
 false
 ```
 
+```@raw html
+<!--
 Julia provides additional functions to test numbers for special values, which can be useful in
 situations like hash key comparisons:
+-->
+```
 
+Juliaには特殊な値の数を検査する補助的な関数があって、ハッシュキーの比較などには役立ちます。
+
+
+```@raw html
+<!--
 | Function                | Tests if                  |
 |:----------------------- |:------------------------- |
 | [`isequal(x, y)`](@ref) | `x` and `y` are identical |
 | [`isfinite(x)`](@ref)   | `x` is a finite number    |
 | [`isinf(x)`](@ref)      | `x` is infinite           |
 | [`isnan(x)`](@ref)      | `x` is not a number       |
+-->
+```
 
+| 関数                     | 検査内容                  |
+|:----------------------- |:------------------------- |
+| [`isequal(x, y)`](@ref) | `x` と`y`が等しいかどうか |
+| [`isfinite(x)`](@ref)   | `x` が有限の数かどうか   |
+| [`isinf(x)`](@ref)      | `x` が無限かどうか           |
+| [`isnan(x)`](@ref)      | `x` が非数かどうか       |
+
+
+```@raw html
+<!--
 [`isequal`](@ref) considers `NaN`s equal to each other:
+-->
+```
+[`isequal`](@ref)では`NaN`は互いに等しいとみなします。
+
 
 ```jldoctest
 julia> isequal(NaN, NaN)
@@ -312,7 +527,13 @@ julia> isequal(NaN, NaN32)
 true
 ```
 
+```@raw html
+<!--
 `isequal` can also be used to distinguish signed zeros:
+-->
+```
+
+`isequal`は符号つきの０を見分ける用途にも利用できます。
 
 ```jldoctest
 julia> -0.0 == 0.0
@@ -322,6 +543,8 @@ julia> isequal(-0.0, 0.0)
 false
 ```
 
+```@raw html
+<!--
 Mixed-type comparisons between signed integers, unsigned integers, and floats can be tricky. A
 great deal of care has been taken to ensure that Julia does them correctly.
 
@@ -329,23 +552,50 @@ For other types, `isequal` defaults to calling [`==`](@ref), so if you want to d
 equality for your own types then you only need to add a [`==`](@ref) method.  If you define
 your own equality function, you should probably define a corresponding [`hash`](@ref) method
 to ensure that `isequal(x,y)` implies `hash(x) == hash(y)`.
+-->
+```
 
-### Chaining comparisons
+符号付整数、符号なし整数、浮動小数点数と型の混ざった比較には技巧が必要です。
+Juliaでは比較が正しくできることを保証するために、多大な注意を払ってきました。
+他の型に対しては、`isequal`はデフォルトで [`==`](@ref)を呼び出します。
+なので、自分の作った型に対して等号を定義するには、 [`==`](@ref)メソッドを加えるだけいいです。
+自分で等号を定義する場合には、`isequal(x,y)` が成り立つときは`hash(x) == hash(y)`が成り立つのを保証するために
+ 対応する[`hash`](@ref)メソッドも定義すべきでしょう。
 
+`[](### Chaining comparisons)
+### 比較の連鎖
+
+```@raw html
+<!--
 Unlike most languages, with the [notable exception of Python](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators),
 comparisons can be arbitrarily chained:
+-->
+```
+
+ [有名な例外であるPython](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators)
+を除くほとんどの言語とは違って、比較を好きなだけつなぐことができます。
 
 ```jldoctest
 julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
 true
 ```
 
+```@raw html
+<!--
 Chaining comparisons is often quite convenient in numerical code. Chained comparisons use the
 `&&` operator for scalar comparisons, and the [`&`](@ref) operator for elementwise comparisons,
 which allows them to work on arrays. For example, `0 .< A .< 1` gives a boolean array whose entries
 are true where the corresponding elements of `A` are between 0 and 1.
 
 Note the evaluation behavior of chained comparisons:
+-->
+```
+
+比較の連鎖は数値を使うコードでは大変便利です。
+比較の連鎖では、`&&`演算子をスカラ値の比較に使い、[`&`](@ref)演算子を要素ごとの比較に使って配列での比較を可能にします。
+例えば、`0 .< A .< 1`は 、`A`の対応する要素が0と1の間にある場合にtrueをとなるブール値の配列を返します。
+
+
 
 ```jldoctest
 julia> v(x) = (println(x); x)
@@ -363,11 +613,21 @@ julia> v(1) > v(2) <= v(3)
 false
 ```
 
+```@raw html
+<!--
 The middle expression is only evaluated once, rather than twice as it would be if the expression
 were written as `v(1) < v(2) && v(2) <= v(3)`. However, the order of evaluations in a chained
 comparison is undefined. It is strongly recommended not to use expressions with side effects (such
 as printing) in chained comparisons. If side effects are required, the short-circuit `&&` operator
 should be used explicitly (see [Short-Circuit Evaluation](@ref)).
+-->
+```
+真ん中の式は1度しか評価されませんが、`v(1) < v(2) && v(2) <= v(3)`と書いたなら評価は2度行われます。
+しかし、連鎖した比較の評価の順番は決まっていません。
+比較の連鎖では、（表示などの）副作用を伴う式は使わないように強くお勧めします。
+副作用が必要な場合は短絡評価の`&&`演算子を明示的に使うべきでしょう。
+([短絡評価](@ref)を参照のこと。)
+
 
 ### Elementary Functions
 

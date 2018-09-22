@@ -23,3 +23,7 @@
 	significand	仮数			
 	exponential	巾関数			
 	engineering notation	指数表記			
+算術演算と初等関数	Updating operator	代入演算子			
+	specifically	具体的には			
+	adjacent	隣接した			
+	additional	補助的な			
