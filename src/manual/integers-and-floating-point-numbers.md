@@ -861,7 +861,7 @@ most books on scientific computation, and also in the following references:
   -->
   ```
 
-* 浮動小数点数の演算 に関する最も信頼のおけるガイドは [IEEE 754-2008 規格](http://standards.ieee.org/findstds/standard/754-2008.html)です。
+  * 浮動小数点数の演算 に関する最も信頼のおけるガイドは [IEEE 754-2008 規格](http://standards.ieee.org/findstds/standard/754-2008.html)です。
     しかし、無料・オンラインでは利用不可。
   * 浮動小数点数の表現方法に関する簡潔だが明快な解説として、John D.Cook'の [記事](https://www.johndcook.com/blog/2009/04/06/anatomy-of-a-floating-point-number/)
     を参照のこと。
@@ -1074,7 +1074,7 @@ expression, however, can be used to imply multiplication:
 -->
 ```
 
-しかし、括弧でくくった式を２つ並べたり、括弧でくくった式の前に変数をかいたりしても、掛け算とはみなされません。
+しかし、括弧でくくった式を２つ並べたり、括弧でくくった式の前に変数を置いても、掛け算とはみなされません。
 
 
 ```jldoctest numeric-coefficients
@@ -1097,7 +1097,7 @@ mathematical formulae. Note that no whitespace may come between a numeric litera
 and the identifier or parenthesized expression which it multiplies.
 -->
 ```
-どちらの式も関数適用と解釈されます。
+どちらの式も関数適用として解釈されます。
 数値リテラルではない式に括弧でくくったものを続けると、括弧の中のものに対する関数適用だと解釈されます
 ( 関数に関する詳細は[関数](@ref)を参照)。
 どちらのケースも左側が関数ではないためエラーがおこります。
