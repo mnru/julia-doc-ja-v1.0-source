@@ -433,7 +433,7 @@ second argument is zero.
 
 整数の除算(`div`関数)では、2つ例外が起こる場合があります。0で割る場合と、負の下限の数([`typemin`](@ref))を-1で割る場合です。
 どちらの場合も[`DivideError`](@ref)例外が投げられます。
-剰余・モジュロ演算(`rem`と`mod`)も第2」引数が0の時も
+剰余演算(`rem`と`mod`)も第2引数が0の時も
 、[`DivideError`](@ref)例外が投げられます。
 
 
@@ -485,7 +485,7 @@ entered by writing an `f` in place of `e`:
 ```jldoctest
 julia> 0.5f0
 0.5f0
-
+ＳＷ
 julia> typeof(ans)
 Float32
 
@@ -517,7 +517,7 @@ with `p` preceding the base-2 exponent:
 -->
 ```
 
-16進の浮動小数点数リテラルは、2の指数の前に`p`をつけることで利用可能で、[`Float64`](@ref) の値になります。
+16進の浮動小数点数リテラルは、指数(基数は2)の前に`p`をつけて利用し、値は[`Float64`](@ref) になります。
 
 
 ```jldoctest
@@ -577,7 +577,7 @@ can be seen using the [`bitstring`](@ref) function:
 ```
 
 浮動小数点数には正と負の[2つの0](https://en.wikipedia.org/wiki/Signed_zero)があります。
-この2つは値は同じですが2進数の表現が異なり、[`bitstring`](@ref)関数を使ってみることができます。
+この2つは値は同じですが2進数の表現が異なり、[`bitstring`](@ref)関数で見ることができます。
 
 
 ```jldoctest
@@ -614,15 +614,24 @@ the real number line:
 
 | `Float16` | `Float32` | `Float64` |名前              | 説明                                                     |
 |:--------- |:--------- |:--------- |:---------------- |:--------------------------------------------------------------- |
-| `Inf16`   | `Inf32`   | `Inf`     | 正の無限大        | すべての浮動小数点数より大きい値           |
-| `-Inf16`  | `-Inf32`  | `-Inf`    | 負の無限大        | a value less than all finite floating-point values              |
-| `NaN16`   | `NaN32`   | `NaN`     | 非数             | a value not `==` to any floating-point value (including itself) |
+| `Inf16`   | `Inf32`   | `Inf`     | 正の無限大        | すべての有限の浮動小数点数より大きい値           |
+| `-Inf16`  | `-Inf32`  | `-Inf`    | 負の無限大        | すべての有限の浮動小数点数より小さい値               |
+| `NaN16`   | `NaN32`   | `NaN`     | 非数             | どんな浮動小数点数とも `==` の成り立たない値(自身とも) |
 
 
 
+```@raw html
+<!--
 For further discussion of how these non-finite floating-point values are ordered with respect
 to each other and other floats, see [Numeric Comparisons](@ref). By the [IEEE 754 standard](https://en.wikipedia.org/wiki/IEEE_754-2008),
 these floating-point values are the results of certain arithmetic operations:
+-->
+```
+
+こうした非有限の浮動小数点数を、非有限・有限のものに対してどう順序づけるかという更なる議論は、[数値の比較](@ref)を参照してください。
+ [IEEE 754 規格](https://en.wikipedia.org/wiki/IEEE_754-2008)では、
+ これらの浮動小数点数の値はある種の算術演算の結果として得られます。
+
 
 ```jldoctest
 julia> 1/Inf
@@ -662,7 +671,13 @@ julia> 0 * Inf
 NaN
 ```
 
+```@raw html
+<!--
 The [`typemin`](@ref) and [`typemax`](@ref) functions also apply to floating-point types:
+-->
+```
+
+ 関数の[`typemin`](@ref) と [`typemax`](@ref)は浮動小数点数型に対しても適用できます。
 
 ```jldoctest
 julia> (typemin(Float16),typemax(Float16))
@@ -675,14 +690,25 @@ julia> (typemin(Float64),typemax(Float64))
 (-Inf, Inf)
 ```
 
-### Machine epsilon
+`[](### Machine epsilon)
+### 計算機イプシロン
 
+```@raw html
+<!--
 Most real numbers cannot be represented exactly with floating-point numbers, and so for many purposes
 it is important to know the distance between two adjacent representable floating-point numbers,
 which is often known as [machine epsilon](https://en.wikipedia.org/wiki/Machine_epsilon).
 
 Julia provides [`eps`](@ref), which gives the distance between `1.0` and the next larger representable
 floating-point value:
+-->
+```
+
+ほとんどの実数は浮動小数点数では、正確に表現できません。
+そのため、多くの目的で、隣接する浮動小数点数の距離を知ることが重要です。
+これは、[計算機イプシロン](https://en.wikipedia.org/wiki/Machine_epsilon)として、知られています。
+
+Juliaでは[`eps`](@ref)で、`1.0`と表現可能な次に大きな浮動小数点値との距離が、分かります。
 
 ```jldoctest
 julia> eps(Float32)
@@ -695,11 +721,21 @@ julia> eps() # same as eps(Float64)
 2.220446049250313e-16
 ```
 
+```@raw html
+<!--
 These values are `2.0^-23` and `2.0^-52` as [`Float32`](@ref) and [`Float64`](@ref) values,
 respectively. The [`eps`](@ref) function can also take a floating-point value as an
 argument, and gives the absolute difference between that value and the next representable
 floating point value. That is, `eps(x)` yields a value of the same type as `x` such that
 `x + eps(x)` is the next representable floating-point value larger than `x`:
+-->
+```
+
+これら`2.0^-23`と`2.0^-52`は、それぞれ[`Float32`](@ref)と[`Float64`](@ref)の値です。
+[`eps`](@ref)関数は、浮動小数点数値を引数にとることもできて、その値と次の表現可能な浮動小数点数値との差の絶対値
+が得られます。
+つまり、`eps(x)`は`x`と同じ型の値を返すので、`x + eps(x)`は`x`の次に大きな表現可能な浮動小数点数値です。
+
 
 ```jldoctest
 julia> eps(1.0)
@@ -715,6 +751,8 @@ julia> eps(0.0)
 5.0e-324
 ```
 
+```@raw html
+<!--
 The distance between two adjacent representable floating-point numbers is not constant, but is
 smaller for smaller values and larger for larger values. In other words, the representable floating-point
 numbers are densest in the real number line near zero, and grow sparser exponentially as one moves
@@ -723,6 +761,18 @@ a 64-bit floating-point value.
 
 Julia also provides the [`nextfloat`](@ref) and [`prevfloat`](@ref) functions which return
 the next largest or smallest representable floating-point number to the argument respectively:
+-->
+```
+
+隣接する表現可能な浮動小数点数の距離は一定ではなく、小さいほど小さく、大きいほど大きくなります。
+言い換えると、表現可能な浮動小数点数の数直線は、0の近くで一番密で、0から遠ざかるほど指数的に疎になります。
+定義により、`eps(1.0)`は`eps(Float64)`と同じです。
+というのも、 `1.0`は64bitの浮動小数点数値だからです。
+
+Juliaでは[`nextfloat`](@ref)や[`prevfloat`](@ref)といった関数も利用可能で、それぞれ表現可能な浮動小数点数で
+次に大きなものと小さなものを返します。
+
+
 
 ```jldoctest
 julia> x = 1.25f0
@@ -744,11 +794,22 @@ julia> bitstring(nextfloat(x))
 "00111111101000000000000000000001"
 ```
 
+```@raw html
+<!--
 This example highlights the general principle that the adjacent representable floating-point numbers
 also have adjacent binary integer representations.
+-->
+```
 
-### Rounding modes
+この例では隣接する表現可能な浮動小数点数は、２進整数表現も隣接するという一般原則が強調されています。
 
+
+`[](### Rounding modes)
+### 端数処理
+
+
+```@raw html
+<!--
 If a number doesn't have an exact floating-point representation, it must be rounded to an
 appropriate representable value. However, the manner in which this rounding is done can be
 changed if required according to the rounding modes presented in the [IEEE 754
@@ -756,6 +817,14 @@ standard](https://en.wikipedia.org/wiki/IEEE_754-2008).
 
 The default mode used is always [`RoundNearest`](@ref), which rounds to the nearest representable
 value, with ties rounded towards the nearest value with an even least significant bit.
+
+-->
+```
+浮動小数点数表現で正確に表現できない数は、適当な表現可能な数に丸める必要があります。
+しかしその処理方法は、必要に応じて、[IEEE 754 規格](https://en.wikipedia.org/wiki/IEEE_754-2008)に記載されている丸めモードにそって変えることができます。
+
+デフォルトの丸めモードは常に[`最近接丸め`](@ref)で、これは一番近い表現可能な数に丸める方法で、等しい場合は
+最下位ビットが偶数になるように丸めます。
 
 ### Background and References
 
