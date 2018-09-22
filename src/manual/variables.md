@@ -12,8 +12,6 @@ Juliaでは、変数とは値に関連付け（または束縛)した名前の�
 これは（例えば計算結果などの）値を保存してあとで使う場合に便利です。
 例を挙げると
 
-```@raw html
-<!--
 
 ```julia-repl
 # Assign the value 10 to the variable x
@@ -33,26 +31,6 @@ julia> x = "Hello World!"
 "Hello World!"
 ```
 
--->
-```
-
-```julia-repl
-# Assign the value 10 to the variable x
-julia> x = 10
-10
-
-# Doing math with x's value
-julia> x + 1
-11
-
-# Reassign x's value
-julia> x = 1 + 1
-2
-
-# You can assign values of other types, like strings of text
-julia> x = "Hello World!"
-"Hello World!"
-```
 
 
 
