@@ -13,7 +13,8 @@ Juliaには、すべての数値プリミティブ型に対して、基本的な
 また、移植性が高く効率的な実装の、理解しやすい標準的な数学関数も用意されています。
 
 
-## Arithmetic Operators
+`[](## Arithmetic Operators)
+## 算術演算子
 
 The following [arithmetic operators](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
 are supported on all primitive numeric types:
