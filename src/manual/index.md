@@ -4,7 +4,7 @@
   * [始めよう](@ref man-getting-started)
   * [変数](@ref)
   * [整数と浮動小数点数](@ref)
-  * [Mathematical Operations and Elementary Functions](@ref)
+  * [算術演算と初等関数](@ref)
   * [Complex and Rational Numbers](@ref)
   * [Strings](@ref)
   * [Functions](@ref)
