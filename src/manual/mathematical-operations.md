@@ -1,5 +1,5 @@
 `[](# Mathematical Operations and Elementary Functions)
-#算術演算と初等関数
+# 算術演算と初等関数
 
 ```@raw html
 <!--
@@ -9,7 +9,8 @@ collection of standard mathematical functions.
 -->
 ```
 
-Juliaには、
+Juliaには、すべての数値プリミティブ型に対して、基本的な算術演算子とビット演算子が用意されています。
+また、移植性が高く効率的な実装の、理解しやすい標準的な数学関数も用意されています。
 
 
 ## Arithmetic Operators
