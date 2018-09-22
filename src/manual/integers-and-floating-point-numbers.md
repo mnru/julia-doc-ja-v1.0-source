@@ -164,7 +164,7 @@ or 64-bit:
 -->
 ```
 
-Juliaの内部変数[`Sys.WORD_SIZE`](@ref)からターゲットシステムが32bitと64bitのどちらなのかが分かります。
+Juliaの内部変数[`Sys.WORD_SIZE`](@ref)からターゲットシステムが32bitか64bitかが分かります。
 
 ```julia-repl
 # 32-bit system:
@@ -206,7 +206,7 @@ Larger integer literals that cannot be represented using only 32 bits but can be
 64 bits always create 64-bit integers, regardless of the system type:
 -->
 ```
-大きな整数リテラルで、32bitでは表現できないけれども、64bitなら可能なものは、システムの整数型にかかわらず、常に64bitの整数が
+大きな整数リテラルで、32bitでは表現できなくても64bitなら可能なものは、システムの整数型にかかわらず、常に64bitの整数が
 生成されます。
 
 
