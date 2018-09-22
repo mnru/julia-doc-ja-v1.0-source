@@ -1,7 +1,20 @@
-﻿前書き		始めよう		変数		整数と浮動小数点数	
-dipatch	選択する					support	対応する
-multiple dispatch	多重ディスパッチ					effectively	事実上
-                                                       					                                                	a full complement of 	全ての
-						Interpolation	式展開
-						wraparound	循環する
-							合同算術
+﻿前書き	dipatch	選択する			
+	multiple dispatch	多重ディスパッチ			
+始めよう					
+変数					                                                
+					
+					
+					
+					
+					
+					
+					
+					
+整数と浮動小数点数	support	対応する			
+	effectively	事実上			
+	a full complement of 	全ての			
+	Interpolation	式展開			
+	wraparound	循環する			
+	modular arithmetic	合同算術			
+	Rounding mode	端数処理			
+	Rounding modes	丸めモード			

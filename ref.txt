@@ -1,0 +1,7 @@
+前書き,,
+,,
+始めよう,,
+変数,,
+整数と浮動小数点数,[Numeric Comparisons],数値の比較
+,[Interpolation],式展開
+,[`RoundNearest`],最近接丸め
