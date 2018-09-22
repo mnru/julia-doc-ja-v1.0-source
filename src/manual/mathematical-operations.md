@@ -16,6 +16,8 @@ Juliaには、すべての数値プリミティブ型に対して、基本的な
 `[](## Arithmetic Operators)
 ## 算術演算子
 
+```@raw html
+<!--
 The following [arithmetic operators](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
 are supported on all primitive numeric types:
 
@@ -31,6 +33,26 @@ are supported on all primitive numeric types:
 | `x \ y`    | inverse divide | equivalent to `y / x`                  |
 | `x ^ y`    | power          | raises `x` to the `y`th power          |
 | `x % y`    | remainder      | equivalent to `rem(x,y)`               |
+
+-->
+```
+
+下記の[算術演算子](https://en.wikipedia.org/wiki/Arithmetic#Arithmetic_operations)
+はすべてのプリミティブ数値型で利用可能です。
+
+| 式         | 名前            | 説明                            |
+|:---------- |:-------------- |:-------------------------------------- |
+| `+x`       | unary plus      | the identity operation                 |
+| `-x`       | unary minus    | maps values to their additive inverses |
+| `x + y`    | binary plus    | performs addition                      |
+| `x - y`    | binary minus   | performs subtraction                   |
+| `x * y`    | times          | performs multiplication                |
+| `x / y`    | divide         | performs division                      |
+| `x ÷ y`    | integer divide | x / y, truncated to an integer         |
+| `x \ y`    | inverse divide | equivalent to `y / x`                  |
+| `x ^ y`    | power          | raises `x` to the `y`th power          |
+| `x % y`    | remainder      | equivalent to `rem(x,y)`               |
+
 
 as well as the negation on [`Bool`](@ref) types:
 
