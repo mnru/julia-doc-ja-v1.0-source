@@ -158,6 +158,11 @@ is also defined for complex numbers:
 -->
 ```
 
+通常通り、複素数の絶対値 ([`abs`](@ref))は０からの距離です。
+[`abs2`](@ref)は、複素数の絶対値の二乗で、特に複素数に対して、平方根の計算をさけるために使われます。
+[`angle`](@ref)はラジアンによる位相角（**偏角**としても知られています）を返します。
+その他すべての[初等関数](@ref)も複素数に対して定義されています。
+
 
 ```jldoctest
 julia> sqrt(1im)
@@ -183,6 +188,9 @@ complex values when applied to complex numbers. For example, [`sqrt`](@ref) beha
 when applied to `-1` versus `-1 + 0im` even though `-1 == -1 + 0im`:
 -->
 ```
+通常、数学的な関数は、実数に対しては実数を、複素数に対しては複素数を返す点に注意してください。
+例えば、 `-1 == -1 + 0im`が成り立ちますが、[`sqrt`](@ref)は`-1`と`-1 + 0im`で挙動が違います。 
+
 
 ```jldoctest
 julia> sqrt(-1)
@@ -202,6 +210,9 @@ from variables. Instead, the multiplication must be explicitly written out:
 -->
 ```
 
+[数値リテラル係数表記](@ref man-numeric-literal-coefficients)は変数から複素数をつくる際には機能しません。
+かわりに、掛け算を明示的に書く必要があります。
+
 
 ```jldoctest
 julia> a = 1; b = 2; a + b*im
@@ -214,6 +225,8 @@ However, this is *not* recommended; Use the [`complex`](@ref) function instead t
 a complex value directly from its real and imaginary parts:
 -->
 ```
+しかし、これは推奨**されません**。
+実部と虚部から直接、複素数をつくるには、[`complex`](@ref)を使ってください。
 
 
 ```jldoctest
@@ -229,6 +242,11 @@ This construction avoids the multiplication and addition operations.
 of a complex number as described in the [Special floating-point values](@ref) section:
 -->
 ```
+
+この作り方によって、乗算・加算が避けられます。
+[特殊な浮動小数点数の値](@ref)のセクションで述べた、[`Inf`](@ref)や[`NaN`](@ref)は、複素数の実部や虚部に
+使うことができます。
+
 
 ```jldoctest
 julia> 1 + Inf*im

@@ -39,3 +39,6 @@
 	mantissa	仮数			
 複素数と有理数	deem	～と思う			
 	co-opt	選出する			
+	phase angle	位相角			
+	argument	偏角			
+	gamut	全部			
