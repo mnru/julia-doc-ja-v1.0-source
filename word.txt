@@ -37,4 +37,5 @@
 	exponent	指数			
 	significand	仮数			
 	mantissa	仮数			
-複素数と有理数					
+複素数と有理数	deem	～と思う			
+	co-opt	選出する			

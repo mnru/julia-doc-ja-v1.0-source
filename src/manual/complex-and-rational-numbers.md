@@ -26,7 +26,10 @@ this binding suffices to provide convenient syntax for complex numbers, similar 
 mathematical notation:
 -->
 ```
-グローバル定数の [`im`](@ref)には複素数の *i* が束縛されていて、
+グローバル定数の [`im`](@ref)には複素数の *i* が束縛されていて、-1の平方根を表しています。
+`i`はよくインデックスに使われる変数のために、グローバル変数にするのは害があると思われます。
+Juliaでは、数値リテラルを[識別子の前に置くと係数になる](@ref man-numeric-literal-coefficients)ので、
+この定数は、従来の数学表記に似た、便利な複素数の構文として、利用できます。
 
 
 ```jldoctest
