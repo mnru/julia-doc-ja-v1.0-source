@@ -27,3 +27,8 @@
 	specifically	具体的には			
 	adjacent	隣接した			
 	additional	補助的な			
+	complete	一通り			
+	comprehensive	一通り			
+	provide collection	そろっている			
+	congruent to `x` modulo `2^n`	`2^n`を法として`x`と合同			
+	hyperbolic functions	双曲線関数			

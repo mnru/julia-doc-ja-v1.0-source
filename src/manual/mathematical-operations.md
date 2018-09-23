@@ -9,8 +9,8 @@ collection of standard mathematical functions.
 -->
 ```
 
-Juliaには、すべての数値プリミティブ型に対して、基本的な算術演算子とビット演算子が用意されています。
-また、移植性が高く効率的な実装の、理解しやすい標準的な数学関数も用意されています。
+Juliaには、すべての数値プリミティブ型に対して、基本的な算術演算子とビット演算子が一通りそろっています。
+また、移植性が高く効率的な実装の、標準的な数学関数も一通りそろっています。
 
 
 `[](## Arithmetic Operators)
@@ -573,7 +573,7 @@ comparisons can be arbitrarily chained:
 ```
 
  [有名な例外であるPython](https://en.wikipedia.org/wiki/Python_syntax_and_semantics#Comparison_operators)
-を除くほとんどの言語とは違って、比較を好きなだけつなぐことができます。
+は別にして、ほとんどの言語とは異なり、Juliaでは比較を好きなだけつなぐことができます。
 
 ```jldoctest
 julia> 1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
@@ -629,8 +629,11 @@ should be used explicitly (see [Short-Circuit Evaluation](@ref)).
 ([短絡評価](@ref)を参照のこと。)
 
 
-### Elementary Functions
+`[](### Elementary Functions)
+### 初等関数
 
+```@raw html
+<!--
 Julia provides a comprehensive collection of mathematical functions and operators. These mathematical
 operations are defined over as broad a class of numerical values as permit sensible definitions,
 including integers, floating-point numbers, rationals, and complex numbers,
@@ -639,11 +642,33 @@ wherever such definitions make sense.
 Moreover, these functions (like any Julia function) can be applied in "vectorized" fashion to
 arrays and other collections with the [dot syntax](@ref man-vectorized) `f.(A)`,
 e.g. `sin.(A)` will compute the sine of each element of an array `A`.
+-->
+```
 
-## Operator Precedence and Associativity
+Juliaには、数学的な関数や演算子が一通りそろっています。
+この数学的な演算子は、広範な種類の数値に対して、意味をなす限り定義され、
+対象は整数、浮動小数点数、有理数、複素数に及びます。
 
+さらに、これらの関数は(Juliaの他の関数と同じように)、"ベクトル化"した形で、配列やその他のコレクションに対して
+適用できます。
+その時には、[dot 構文](@ref man-vectorized) `f.(A)`を使い、
+例えば、`sin.(A)`だと配列`A`の各要素に対するsinの値を計算します。
+
+
+`[](## Operator Precedence and Associativity)
+## 演算子の優先順位と結合則
+
+```@raw html
+<!--
 Julia applies the following order and associativity of operations, from highest precedence to lowest:
+-->
+```
 
+Juliaでは、下記の優先順位と結合則で、高いほうから低いほうへと、演算子が適用されます。
+
+
+```@raw html
+<!--
 | Category       | Operators                                                                                         | Associativity              |
 |:-------------- |:------------------------------------------------------------------------------------------------- |:-------------------------- |
 | Syntax         | `.` followed by `::`                                                                              | Left                       |
@@ -661,16 +686,62 @@ Julia applies the following order and associativity of operations, from highest 
 | Pair           | `=>`                                                                                              | Right                      |
 | Assignments    | `= += -= *= /= //= \= ^= ÷= %= \|= &= ⊻= <<= >>= >>>=`                                            | Right                      |
 
+-->
+```
+
+| 種別    | 演算子                                                                                         | 結合則             |
+|:--------|:------------------------------------------------------------------------------------------------- |:-------------------------- |
+| 構文    | `.` 次に `::`                                                　　　　                              | 左                       |
+| 巾      | `^`                                                                                               | 右                      |
+| 単項    | `+ - √`                                                                                           | 右[^1]                  |
+| シフト  | `<< >> >>>`                                                                                       | 左                       |
+| 分数    | `//`                                                                                              | 左                       |
+| 乗算    | `* / % & \ ÷`                                                                                     | 左[^2]                   |
+| 加算    | `+ - \| ⊻`                                                                                        | 左[^2]                   |
+| 構文    | `: ..`                                                                                            | 左                       |
+| 構文    | `\|>`                                                                                             | 左                       |
+| 構文    | `<\|`                                                                                             | 右                      |
+| 比較    | `> < >= <= == === != !== <:`                                                                      | 非結合           |
+| 制御    | `&&` 次に `\|\|` 次に `?`                                            　　　　　　　　               | 右                      |
+| 対      | `=>`                                                                                              | 右                      |
+| 代入    | `= += -= *= /= //= \= ^= ÷= %= \|= &= ⊻= <<= >>= >>>=`                                            | 右                      |
+
+
+```@raw html
+<!--
 [^1]:
     The unary operators `+` and `-` require explicit parentheses around their argument to disambiguate them from the operator `++`, etc. Other compositions of unary operators are parsed with right-associativity, e. g., `√√-a` as `√(√(-a))`.
 [^2]:
     The operators `+`, `++` and `*` are non-associative. `a + b + c` is parsed as `+(a, b, c)` not `+(+(a, b),
     c)`. However, the fallback methods for `+(a, b, c, d...)` and `*(a, b, c, d...)` both default to left-associative evaluation.
+-->
+```
 
+[^1]:
+    単項演算子の `+` と `-`には、`++`などの演算子との曖昧さをなくすために、明示的な括弧が必要です。
+    他の単項演算子の結合は右結合として解析されます。例えば、 `√√-a`は`√(√(-a))`です。
+[^2]:
+    演算子の `+`, `++`,`*` は非結合的です。
+    `a + b + c` は `+(a, b, c)` として解析され `+(+(a, b),c)`ではありません。
+    しかし、フォールバックメソッドの `+(a, b, c, d...)` と `*(a, b, c, d...)` は両方ともデフォルトでは左結合で評価されます。
+
+
+```@raw html
+<!--
 For a complete list of *every* Julia operator's precedence, see the top of this file:
 [`src/julia-parser.scm`](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm)
 
 You can also find the numerical precedence for any given operator via the built-in function `Base.operator_precedence`, where higher numbers take precedence:
+
+-->
+```
+
+**すべての** Juliaの演算子の優先順位の完全なリストはこのファイルの最初をみてください。
+[`src/julia-parser.scm`](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm)
+
+また演算子の数値的な優先順位を組み込み関数の`Base.operator_precedence`を使ってみることができます。
+大きい数字のほうが優先順位が高くなります。
+
 
 ```jldoctest
 julia> Base.operator_precedence(:+), Base.operator_precedence(:*), Base.operator_precedence(:.)
@@ -680,7 +751,13 @@ julia> Base.operator_precedence(:sin), Base.operator_precedence(:+=), Base.opera
 (0, 1, 1)
 ```
 
+```@raw html
+<!--
 A symbol representing the operator associativity can also be found by calling the built-in function `Base.operator_associativity`:
+-->
+```
+演算子を表すシンボルの結合則も、組み込み関数の`Base.operator_associativity`を使ってみることができます。
+
 
 ```jldoctest
 julia> Base.operator_associativity(:-), Base.operator_associativity(:+), Base.operator_associativity(:^)
@@ -690,14 +767,34 @@ julia> Base.operator_associativity(:⊗), Base.operator_associativity(:sin), Bas
 (:left, :none, :right)
 ```
 
+```@raw html
+<!--
 Note that symbols such as `:sin` return precedence `0`. This value represents invalid operators and not
 operators of lowest precedence. Similarly, such operators are assigned associativity `:none`.
+-->
+```
 
-## Numerical Conversions
+`:sin`のようなシンボルには優先順位が `0`として返される点に注意してください。
+この値は演算子として無効であることを表し、優先順位が最も低いわけではありません。
+同様にこういった演算子には結合性は`:none`が割り当てられています。
 
+
+`[](## Numerical Conversions)
+## 数値変換
+
+```@raw html
+<!--
 Julia supports three forms of numerical conversion, which differ in their handling of inexact
 conversions.
+-->
+```
 
+Juliaでは3種の数値変換が利用できますが、それぞれ厳密な変換ができないときの扱いが異なります。
+
+
+
+```@raw html
+<!--
   * The notation `T(x)` or `convert(T,x)` converts `x` to a value of type `T`.
 
       * If `T` is a floating-point type, the result is the nearest representable value, which could be
@@ -708,8 +805,27 @@ conversions.
     to fit.
   * The [Rounding functions](@ref) take a type `T` as an optional argument. For example, `round(Int,x)`
     is a shorthand for `Int(round(x))`.
+-->
+```
 
+  * `T(x)`や`convert(T,x)`といった表記では`x`を型`T`の値に変換する。
+
+      * `T`が浮動小数点数型の場合、最近接の表現可能な値を返し、正負の無限大になることもありえます。
+      * `T`が整数型の場合、`x`が型`T`で表現不可能な場合、`InexactError`が生じる。
+  * `x % T`は、`x`を型が`T`で、`2^n`を法として`x`と合同な数に変換します。
+    ここで`n`は`T`のビット数です。
+    換言すると、2進表現を`T`に収まるように切り捨てているのです。
+  * [端数処理関数](@ref)は、必要に応じて、型`T`を引数にとることができます。
+   例えば、`round(Int,x)`は`Int(round(x))`を手短にしたものです。
+
+
+```@raw html
+<!--
 The following examples show the different forms.
+-->
+```
+それぞれの例を下記に挙げます。
+
 
 ```jldoctest
 julia> Int8(127)
@@ -748,10 +864,20 @@ Stacktrace:
 [...]
 ```
 
+```@raw html
+<!--
 See [Conversion and Promotion](@ref conversion-and-promotion) for how to define your own conversions and promotions.
+-->
+```
 
-### Rounding functions
+自分で変換や昇格を定義するには、[変換と昇格](@ref conversion-and-promotion)を参照してください。
 
+`[](### Rounding functions)
+### 端数処理関数
+
+
+```@raw html
+<!--
 | Function              | Description                      | Return type |
 |:--------------------- |:-------------------------------- |:----------- |
 | [`round(x)`](@ref)    | round `x` to the nearest integer | `typeof(x)` |
@@ -762,9 +888,25 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 | [`ceil(T, x)`](@ref)  | round `x` towards `+Inf`         | `T`         |
 | [`trunc(x)`](@ref)    | round `x` towards zero           | `typeof(x)` |
 | [`trunc(T, x)`](@ref) | round `x` towards zero           | `T`         |
+-->
+```
+| 関数                  | 説明                        | 戻り値の型  |
+|:--------------------- |:-------------------------- |:----------- |
+| [`round(x)`](@ref)    | `x`を最近接の整数に丸める 　　| `typeof(x)` |
+| [`round(T, x)`](@ref) | `x`を最近接の整数に丸める 　　| `T`         |
+| [`floor(x)`](@ref)    | `x`を`-Inf`方向に丸める      | `typeof(x)` |
+| [`floor(T, x)`](@ref) | `x`を`-Inf`方向に丸める      | `T`         |
+| [`ceil(x)`](@ref)     | `x`を`+Inf`方向に丸める      | `typeof(x)` |
+| [`ceil(T, x)`](@ref)  | `x`を`+Inf`方向に丸める      | `T`         |
+| [`trunc(x)`](@ref)    | `x`を0方向に丸める           | `typeof(x)` |
+| [`trunc(T, x)`](@ref) | `x`を0方向に丸める           | `T`         |
 
-### Division functions
 
+`[](### Division functions)
+### 除算関数
+
+```@raw html
+<!--
 | Function                  | Description                                                                                               |
 |:------------------------- |:--------------------------------------------------------------------------------------------------------- |
 | [`div(x,y)`](@ref), `x÷y` | truncated division; quotient rounded towards zero                                                         |
@@ -778,9 +920,29 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 | [`fldmod(x,y)`](@ref)     | returns `(fld(x,y),mod(x,y))`                                                                             |
 | [`gcd(x,y...)`](@ref)     | greatest positive common divisor of `x`, `y`,...                                                          |
 | [`lcm(x,y...)`](@ref)     | least positive common multiple of `x`, `y`,...                                                            |
+-->
+```
 
-### Sign and absolute value functions
+| 関数                      | 説明                                                                                               |
+|:------------------------- |:--------------------------------------------------------------------------------------------------------- |
+| [`div(x,y)`](@ref), `x÷y` | 切り落とし除算 0方向に丸めた商                                                        |
+| [`fld(x,y)`](@ref)        | 床除算　　　`-Inf`方向に丸めた商                                                          |
+| [`cld(x,y)`](@ref)        | 天井除算　　`+Inf`方向に丸めた商                                                               |
+| [`rem(x,y)`](@ref)        | remainder　 `x == div(x,y)*y + rem(x,y)`　 符号は `x` と一致                                       |
+| [`mod(x,y)`](@ref)        | modulus　　 `x == fld(x,y)*y + mod(x,y)`　　符号は `y` と一致                                        |
+| [`mod1(x,y)`](@ref)       | 1 オフセットした`mod` `mod(r, y) == mod(x, y)を満たす`r`の中で`y>0`の時`r∈(0,y]``y<0`の時 `r∈[y,0)`のものを返す  |
+| [`mod2pi(x)`](@ref)       | 2piを法とする剰余  `0 <= mod2pi(x)    < 2pi`                                                   |
+| [`divrem(x,y)`](@ref)     | `(div(x,y),rem(x,y))`を返す                                                                             |
+| [`fldmod(x,y)`](@ref)     | `(fld(x,y),mod(x,y))`を返す                                                                             |
+| [`gcd(x,y...)`](@ref)     |  `x`, `y`,... の正の最大公約数                                                          |
+| [`lcm(x,y...)`](@ref)     | `x`, `y`,... の正の最小公倍数                                                            |
 
+
+`[](### Sign and absolute value functions)
+### 符号・絶対値関数
+
+```@raw html
+<!--
 | Function                | Description                                                |
 |:----------------------- |:---------------------------------------------------------- |
 | [`abs(x)`](@ref)        | a positive value with the magnitude of `x`                 |
@@ -789,8 +951,41 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 | [`signbit(x)`](@ref)    | indicates whether the sign bit is on (true) or off (false) |
 | [`copysign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `y`      |
 | [`flipsign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `x*y`    |
+-->
+```
 
-### Powers, logs and roots
+| 関数                     | 説明                                                |
+|:----------------------- |:---------------------------------------------------------- |
+| [`abs(x)`](@ref)        | a positive value with the magnitude of `x`                 |
+| [`abs2(x)`](@ref)       | the squared magnitude of `x`                               |
+| [`sign(x)`](@ref)       | indicates the sign of `x`, returning -1, 0, or +1          |
+| [`signbit(x)`](@ref)    | indicates whether the sign bit is on (true) or off (false) |
+| [`copysign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `y`      |
+| [`flipsign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `x*y`    |
+
+`[](### Powers, logs and roots)
+### 巾、対数、平方根
+
+```@raw html
+<!--
+| Function                 | Description                                                                |
+|:------------------------ |:-------------------------------------------------------------------------- |
+| [`sqrt(x)`](@ref), `√x`  | square root of `x`                                                         |
+| [`cbrt(x)`](@ref), `∛x`  | cube root of `x`                                                           |
+| [`hypot(x,y)`](@ref)     | hypotenuse of right-angled triangle with other sides of length `x` and `y` |
+| [`exp(x)`](@ref)         | natural exponential function at `x`                                        |
+| [`expm1(x)`](@ref)       | accurate `exp(x)-1` for `x` near zero                                      |
+| [`ldexp(x,n)`](@ref)     | `x*2^n` computed efficiently for integer values of `n`                     |
+| [`log(x)`](@ref)         | natural logarithm of `x`                                                   |
+| [`log(b,x)`](@ref)       | base `b` logarithm of `x`                                                  |
+| [`log2(x)`](@ref)        | base 2 logarithm of `x`                                                    |
+| [`log10(x)`](@ref)       | base 10 logarithm of `x`                                                   |
+| [`log1p(x)`](@ref)       | accurate `log(1+x)` for `x` near zero                                      |
+| [`exponent(x)`](@ref)    | binary exponent of `x`                                                     |
+| [`significand(x)`](@ref) | binary significand (a.k.a. mantissa) of a floating-point number `x`        |
+
+-->
+```
 
 | Function                 | Description                                                                |
 |:------------------------ |:-------------------------------------------------------------------------- |
@@ -812,7 +1007,8 @@ For an overview of why functions like [`hypot`](@ref), [`expm1`](@ref), and [`lo
 are necessary and useful, see John D. Cook's excellent pair of blog posts on the subject: [expm1, log1p, erfc](https://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/),
 and [hypot](https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/).
 
-### Trigonometric and hyperbolic functions
+`[](### Trigonometric and hyperbolic functions)
+### 三角関数と双曲線関数
 
 All the standard trigonometric and hyperbolic functions are also defined:
 
@@ -839,7 +1035,10 @@ sind   cosd   tand   cotd   secd   cscd
 asind  acosd  atand  acotd  asecd  acscd
 ```
 
-### Special functions
+`[](### Special functions)
+`[](### Special functions)
+### 特殊関数
+
 
 Many other special mathematical functions are provided by the package
 [SpecialFunctions.jl](https://github.com/JuliaMath/SpecialFunctions.jl).
