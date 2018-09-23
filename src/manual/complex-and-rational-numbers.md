@@ -1,17 +1,33 @@
-# Complex and Rational Numbers
+`[](# Complex and Rational Numbers)
+# 複素数と有理数
 
+```@raw html
+<!--
 Julia ships with predefined types representing both complex and rational numbers, and supports
 all standard [Mathematical Operations and Elementary Functions](@ref) on them. [Conversion and Promotion](@ref conversion-and-promotion) are defined
 so that operations on any combination of predefined numeric types, whether primitive or composite,
 behave as expected.
+-->
+```
+Juliaには複素数と有理数が定義済みの型として備わっていて、すべての標準的な[算術演算子と初等関数](@ref)に対応しています。
+プリミティブ型も複合型も、定義済みの型の組み合わせに対しては期待通りに動くように、[変換と昇格](@ref conversion-and-promotion)
+が定義されています。
 
-## Complex Numbers
 
+`[](## Complex Numbers)
+## 複素数
+
+```@raw html
+<!--
 The global constant [`im`](@ref) is bound to the complex number *i*, representing the principal
 square root of -1. It was deemed harmful to co-opt the name `i` for a global constant, since it
 is such a popular index variable name. Since Julia allows numeric literals to be [juxtaposed with identifiers as coefficients](@ref man-numeric-literal-coefficients),
 this binding suffices to provide convenient syntax for complex numbers, similar to the traditional
 mathematical notation:
+-->
+```
+グローバル定数の [`im`](@ref)には複素数の *i* が束縛されていて、
+
 
 ```jldoctest
 julia> 1 + 2im

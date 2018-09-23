@@ -5,7 +5,7 @@
   * [変数](@ref)
   * [整数と浮動小数点数](@ref)
   * [算術演算と初等関数](@ref)
-  * [Complex and Rational Numbers](@ref)
+  * [複素数と有理数](@ref)
   * [Strings](@ref)
   * [Functions](@ref)
   * [Control Flow](@ref)
