@@ -37,7 +37,12 @@ julia> 1 + 2im
 1 + 2im
 ```
 
+```@raw html
+<!--
 You can perform all the standard arithmetic operations with complex numbers:
+-->
+```
+複素数の標準的な算術演算はすべて実行可能です。
 
 ```jldoctest
 julia> (1 + 2im)*(2 - 3im)
@@ -71,7 +76,13 @@ julia> 3(2 - 5im)^-1.0
 0.20689655172413796 + 0.5172413793103449im
 ```
 
+```@raw html
+<!--
 The promotion mechanism ensures that combinations of operands of different types just work:
+-->
+```
+昇格のしくみによって、異なる型の組み合わせでもちゃんと動くことが保証されています。
+
 
 ```jldoctest
 julia> 2(1 - 1im)
@@ -102,10 +113,17 @@ julia> 1 + 3/4im
 1.0 - 0.75im
 ```
 
+```@raw html
+<!--
 Note that `3/4im == 3/(4*im) == -(3/4*im)`, since a literal coefficient binds more tightly than
 division.
 
 Standard functions to manipulate complex values are provided:
+-->
+```
+
+`3/4im == 3/(4*im) == -(3/4*im)`となることに注意してください。リテラル係数の方が除算より結合がつよいのです。
+
 
 ```jldoctest
 julia> z = 1 + 2im
@@ -130,11 +148,16 @@ julia> angle(1 + 2im) # phase angle in radians
 1.1071487177940904
 ```
 
+```@raw html
+<!--
 As usual, the absolute value ([`abs`](@ref)) of a complex number is its distance from zero.
 [`abs2`](@ref) gives the square of the absolute value, and is of particular use for complex
 numbers where it avoids taking a square root. [`angle`](@ref) returns the phase angle in radians
 (also known as the *argument* or *arg* function). The full gamut of other [Elementary Functions](@ref)
 is also defined for complex numbers:
+-->
+```
+
 
 ```jldoctest
 julia> sqrt(1im)
@@ -153,9 +176,13 @@ julia> sinh(1 + 2im)
 -0.4890562590412937 + 1.4031192506220405im
 ```
 
+```@raw html
+<!--
 Note that mathematical functions typically return real values when applied to real numbers and
 complex values when applied to complex numbers. For example, [`sqrt`](@ref) behaves differently
 when applied to `-1` versus `-1 + 0im` even though `-1 == -1 + 0im`:
+-->
+```
 
 ```jldoctest
 julia> sqrt(-1)
@@ -168,26 +195,40 @@ julia> sqrt(-1 + 0im)
 0.0 + 1.0im
 ```
 
+```@raw html
+<!--
 The [literal numeric coefficient notation](@ref man-numeric-literal-coefficients) does not work when constructing a complex number
 from variables. Instead, the multiplication must be explicitly written out:
+-->
+```
+
 
 ```jldoctest
 julia> a = 1; b = 2; a + b*im
 1 + 2im
 ```
 
+```@raw html
+<!--
 However, this is *not* recommended; Use the [`complex`](@ref) function instead to construct
 a complex value directly from its real and imaginary parts:
+-->
+```
+
 
 ```jldoctest
 julia> a = 1; b = 2; complex(a, b)
 1 + 2im
 ```
 
+```@raw html
+<!--
 This construction avoids the multiplication and addition operations.
 
 [`Inf`](@ref) and [`NaN`](@ref) propagate through complex numbers in the real and imaginary parts
 of a complex number as described in the [Special floating-point values](@ref) section:
+-->
+```
 
 ```jldoctest
 julia> 1 + Inf*im
@@ -197,7 +238,8 @@ julia> 1 + NaN*im
 1.0 + NaN*im
 ```
 
-## Rational Numbers
+`[](## Rational Numbers)
+## 有理数
 
 Julia has a rational number type to represent exact ratios of integers. Rationals are constructed
 using the [`//`](@ref) operator:
