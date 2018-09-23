@@ -105,8 +105,8 @@ operators. For instance, we would generally write `-x + 2` to reflect that first
 and then `2` is added to that result.)
 -->
 ```
-(慣習的に、演算を近くのものより先に実行する場合は、空白を詰めがちです。
-例えば、よく`-x + 2`と書かれますが、これは先に`X`に-1を掛けてから`2`を足すことが反映されています。)
+(慣習的に、周りの演算子より先に演算を行うときは、空白を詰めがちです。
+例えば、よく`-x + 2`と書きますが、これは先に`X`に-1を掛けてから`2`を足すことを反映しています。)
 
 
 `[](## Bitwise Operators)
@@ -232,16 +232,16 @@ The updating versions of all the binary arithmetic and bitwise operators are:
 
 
 
-    ```jldoctest
-    julia> x = 0x01; typeof(x)
-    UInt8
+```jldoctest
+julia> x = 0x01; typeof(x)
+UInt8
 
-    julia> x *= 2 # Same as x = x * 2
-    2
+julia> x *= 2 # Same as x = x * 2
+2
 
-    julia> typeof(x)
-    Int64
-    ```
+julia> typeof(x)
+Int64
+```
 
 `[](## [Vectorized "dot" operators](@id man-dot-operators))
 ## [ベクトル化した "dot" 演算子](@id man-dot-operators)
@@ -261,8 +261,8 @@ applies the operator elementwise.
 -->
 ```
 
-`^`のような *すべての* 二項演算子に対して 、対応する"dot"演算子が`.^`のように *自動的に* 定義され、
-配列の要素ごとに演算を行います。
+ **すべての** `^`のような二項演算子に対して 、`.^`のように対応する"dot"演算子が存在します。
+ これは **自動的に** 定義されて、配列の要素ごとに演算を行います。
 例えば、`[1,2,3] ^ 3`は定義されていません。というのも、（二次元ではない）配列に数学的に標準的な"三乗"の
 意味がないからです。
 しかし、`[1,2,3] .^ 3`は要素ごとの(またはベクトル化した)計算結果`[1^3, 2^3, 3^3]`が定義できます。
@@ -445,7 +445,7 @@ The last point is potentially surprising and thus worth noting:
 
 
   * 有限の数の順序は通常通り。
-  * 正の0は負の0と等しく、よりおおきいわけではない。
+  * 正の0は負の0と等しく、より大きくはない。
   * `Inf`は自身と等しく、`NaN`以外のその他すべてより大きい。
   * `-Inf`は自身と等しく、`NaN`以外のその他すべてより小さい。
   * `NaN`は自身も含めて、どれとも等しくなく、より小さくもなく、より大きくもない。
@@ -739,7 +739,7 @@ You can also find the numerical precedence for any given operator via the built-
 **すべての** Juliaの演算子の優先順位の完全なリストはこのファイルの最初をみてください。
 [`src/julia-parser.scm`](https://github.com/JuliaLang/julia/blob/master/src/julia-parser.scm)
 
-また演算子の数値的な優先順位を組み込み関数の`Base.operator_precedence`を使ってみることができます。
+また演算子の優先順位を表す数値は、組み込み関数の`Base.operator_precedence`を使ってみることができます。
 大きい数字のほうが優先順位が高くなります。
 
 
@@ -1050,15 +1050,15 @@ The complete list of trigonometric functions with degree variants is:
 
 -->
 ```
-これらの関数の引数はすべて１つですが、[`atan`](@ref)は２つ引数をとって、従来からある[`atan2`](https://en.wikipedia.org/wiki/Atan2)
+これらの関数の引数はすべて１つですが、[`atan`](@ref)の場合は、引数を２つとると昔からある[`atan2`](https://en.wikipedia.org/wiki/Atan2)
 として使うことができます。
 
 さらに、 [`sinpi(x)`](@ref)や[`cospi(x)`](@ref) を、それぞれ[`sin(pi*x)`](@ref)や[`cos(pi*x)`](@ref)よりも
 正確な計算をする関数として使うことができます。
 
-三角関数で、ラジアンのかわりに度(°)を使うには、後ろに`d`をつけます。
-例えば、[`sind(x)`](@ref)は`x`に度(°)が指定されたものとして、計算します。
-変数を度(°)として扱う三角関数の完全なリストは、
+ラジアンのかわりに度を使うには、三角関数の後ろに`d`をつけます。
+例えば、[`sind(x)`](@ref)は`x`に度が指定されたものとして、計算します。
+変数を度として扱う三角関数の完全なリストは、
 
 ```
 sind   cosd   tand   cotd   secd   cscd

@@ -33,3 +33,7 @@
 	congruent to `x` modulo `2^n`	`2^n`を法として`x`と合同			
 	hyperbolic functions	双曲線関数			
 	magnitude	絶対値			
+	hypotenuse	斜辺			
+	exponent	指数			
+	significand	仮数			
+	mantissa	仮数			
