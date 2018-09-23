@@ -32,3 +32,4 @@
 	provide collection	そろっている			
 	congruent to `x` modulo `2^n`	`2^n`を法として`x`と合同			
 	hyperbolic functions	双曲線関数			
+	magnitude	絶対値			

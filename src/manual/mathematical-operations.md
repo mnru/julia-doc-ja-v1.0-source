@@ -928,8 +928,8 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 | [`div(x,y)`](@ref), `x÷y` | 切り落とし除算 0方向に丸めた商                                                        |
 | [`fld(x,y)`](@ref)        | 床除算　　　`-Inf`方向に丸めた商                                                          |
 | [`cld(x,y)`](@ref)        | 天井除算　　`+Inf`方向に丸めた商                                                               |
-| [`rem(x,y)`](@ref)        | remainder　 `x == div(x,y)*y + rem(x,y)`　 符号は `x` と一致                                       |
-| [`mod(x,y)`](@ref)        | modulus　　 `x == fld(x,y)*y + mod(x,y)`　　符号は `y` と一致                                        |
+| [`rem(x,y)`](@ref)        | 剰余(remainder)　 `x == div(x,y)*y + rem(x,y)`　 符号は `x` と一致                                       |
+| [`mod(x,y)`](@ref)        | 剰余(modulus)　　 `x == fld(x,y)*y + mod(x,y)`　　符号は `y` と一致                                        |
 | [`mod1(x,y)`](@ref)       | 1 オフセットした`mod` `mod(r, y) == mod(x, y)を満たす`r`の中で`y>0`の時`r∈(0,y]``y<0`の時 `r∈[y,0)`のものを返す  |
 | [`mod2pi(x)`](@ref)       | 2piを法とする剰余  `0 <= mod2pi(x)    < 2pi`                                                   |
 | [`divrem(x,y)`](@ref)     | `(div(x,y),rem(x,y))`を返す                                                                             |
@@ -956,12 +956,12 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 
 | 関数                     | 説明                                                |
 |:----------------------- |:---------------------------------------------------------- |
-| [`abs(x)`](@ref)        | a positive value with the magnitude of `x`                 |
-| [`abs2(x)`](@ref)       | the squared magnitude of `x`                               |
-| [`sign(x)`](@ref)       | indicates the sign of `x`, returning -1, 0, or +1          |
-| [`signbit(x)`](@ref)    | indicates whether the sign bit is on (true) or off (false) |
-| [`copysign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `y`      |
-| [`flipsign(x,y)`](@ref) | a value with the magnitude of `x` and the sign of `x*y`    |
+| [`abs(x)`](@ref)        | `x`の絶対値である正の値                 |
+| [`abs2(x)`](@ref)       | `x`の絶対値の2乗                               |
+| [`sign(x)`](@ref)       | `x`の符号。 -1, 0, +1 のいずれかを返す         |
+| [`signbit(x)`](@ref)    | 符号ビットが オン (真) か オフ (偽)かを示す |
+| [`copysign(x,y)`](@ref) | 絶対値が`x`で符号が`y`の値      |
+| [`flipsign(x,y)`](@ref) | 絶対値が`x`で符号が`x*y`の値   |
 
 `[](### Powers, logs and roots)
 ### 巾、対数、平方根
@@ -987,30 +987,46 @@ See [Conversion and Promotion](@ref conversion-and-promotion) for how to define 
 -->
 ```
 
-| Function                 | Description                                                                |
+| 関数                     | 説明                                                                |
 |:------------------------ |:-------------------------------------------------------------------------- |
-| [`sqrt(x)`](@ref), `√x`  | square root of `x`                                                         |
-| [`cbrt(x)`](@ref), `∛x`  | cube root of `x`                                                           |
-| [`hypot(x,y)`](@ref)     | hypotenuse of right-angled triangle with other sides of length `x` and `y` |
-| [`exp(x)`](@ref)         | natural exponential function at `x`                                        |
-| [`expm1(x)`](@ref)       | accurate `exp(x)-1` for `x` near zero                                      |
-| [`ldexp(x,n)`](@ref)     | `x*2^n` computed efficiently for integer values of `n`                     |
-| [`log(x)`](@ref)         | natural logarithm of `x`                                                   |
-| [`log(b,x)`](@ref)       | base `b` logarithm of `x`                                                  |
-| [`log2(x)`](@ref)        | base 2 logarithm of `x`                                                    |
-| [`log10(x)`](@ref)       | base 10 logarithm of `x`                                                   |
-| [`log1p(x)`](@ref)       | accurate `log(1+x)` for `x` near zero                                      |
-| [`exponent(x)`](@ref)    | binary exponent of `x`                                                     |
-| [`significand(x)`](@ref) | binary significand (a.k.a. mantissa) of a floating-point number `x`        |
+| [`sqrt(x)`](@ref), `√x`  | `x`の平方根                                                         |
+| [`cbrt(x)`](@ref), `∛x`  | `x`の三乗根                                                           |
+| [`hypot(x,y)`](@ref)     | 直角をはさむ2辺が `x`,`y`である三角形の斜辺 |
+| [`exp(x)`](@ref)         | 自然指数関数の `x`での値                                        |
+| [`expm1(x)`](@ref)       | 0付近の`x`に対する `exp(x)-1`の正確な値                                      |
+| [`ldexp(x,n)`](@ref)     | 整数`n`にたいして効率的に計算できる`x*2^n`の値                     |
+| [`log(x)`](@ref)         | 自然対数の`x`での値                                                   |
+| [`log(b,x)`](@ref)       | `b`を底とする対数の`x`での値                                                  |
+| [`log2(x)`](@ref)        | 2を底とする対数の`x`での値                                               |
+| [`log10(x)`](@ref)       | 10を底とする対数の`x`での値                                                   |
+| [`log1p(x)`](@ref)       | 0付近の`x`に対する `log(1+x)`の正確な値                                       |
+| [`exponent(x)`](@ref)    | 浮動小数点数の`x`の２を基数とする指数部分                                                     |
+| [`significand(x)`](@ref) | 浮動小数点数の`x`の２を基数とする仮数部分        |
 
+```@raw html
+<!--
 For an overview of why functions like [`hypot`](@ref), [`expm1`](@ref), and [`log1p`](@ref)
 are necessary and useful, see John D. Cook's excellent pair of blog posts on the subject: [expm1, log1p, erfc](https://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/),
 and [hypot](https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/).
 
+-->
+```
+[`hypot`](@ref), [`expm1`](@ref), [`log1p`](@ref)といった関数がなぜ必要で役に立つのを概観するには
+John D. Cook の 優れた2編のブログ投稿を参照のこと。
+ [expm1, log1p, erfc](https://www.johndcook.com/blog/2010/06/07/math-library-functions-that-seem-unnecessary/),
+[hypot](https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/).
+
+
 `[](### Trigonometric and hyperbolic functions)
 ### 三角関数と双曲線関数
 
+```@raw html
+<!--
 All the standard trigonometric and hyperbolic functions are also defined:
+-->
+```
+
+標準的な三角関数と双曲線関数はすべて定義されています。
 
 ```
 sin    cos    tan    cot    sec    csc
@@ -1020,6 +1036,8 @@ asinh  acosh  atanh  acoth  asech  acsch
 sinc   cosc
 ```
 
+```@raw html
+<!--
 These are all single-argument functions, with [`atan`](@ref) also accepting two arguments
 corresponding to a traditional [`atan2`](https://en.wikipedia.org/wiki/Atan2) function.
 
@@ -1030,15 +1048,34 @@ In order to compute trigonometric functions with degrees instead of radians, suf
 with `d`. For example, [`sind(x)`](@ref) computes the sine of `x` where `x` is specified in degrees.
 The complete list of trigonometric functions with degree variants is:
 
+-->
+```
+これらの関数の引数はすべて１つですが、[`atan`](@ref)は２つ引数をとって、従来からある[`atan2`](https://en.wikipedia.org/wiki/Atan2)
+として使うことができます。
+
+さらに、 [`sinpi(x)`](@ref)や[`cospi(x)`](@ref) を、それぞれ[`sin(pi*x)`](@ref)や[`cos(pi*x)`](@ref)よりも
+正確な計算をする関数として使うことができます。
+
+三角関数で、ラジアンのかわりに度(°)を使うには、後ろに`d`をつけます。
+例えば、[`sind(x)`](@ref)は`x`に度(°)が指定されたものとして、計算します。
+変数を度(°)として扱う三角関数の完全なリストは、
+
 ```
 sind   cosd   tand   cotd   secd   cscd
 asind  acosd  atand  acotd  asecd  acscd
 ```
 
 `[](### Special functions)
-`[](### Special functions)
 ### 特殊関数
 
 
+```@raw html
+<!--
 Many other special mathematical functions are provided by the package
 [SpecialFunctions.jl](https://github.com/JuliaMath/SpecialFunctions.jl).
+-->
+```
+
+その他多くの数学の特殊関数がパッケージ
+[SpecialFunctions.jl](https://github.com/JuliaMath/SpecialFunctions.jl).
+によって利用可能です。
