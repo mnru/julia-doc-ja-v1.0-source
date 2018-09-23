@@ -35,11 +35,11 @@ juliaの概要をつかみ、v0.6との違いを知りましょう。
 アップデート用です。
 1.0と0.7の違いは非推奨の警告を消しているかどうかだけです。
 0.6との相違点すべての完全なリストは [バージョン0.7のリリースノート](https://docs.julialang.org/en/v0.7.0/NEWS/)
-をみて下さい。
+を参照して下さい。
 
 
 `[](### [Introduction](@id man-introduction))
-### [まえがき]](@id man-introduction)
+### [まえがき](@id man-introduction)
 
 ```@raw html
 <!--
@@ -54,13 +54,13 @@ with performance comparable to traditional statically-typed languages.
 -->
 ```
 
-科学的な計算には昔から高パフォーマンスが必要でしたが、日常的な作業を行う場合は、
-各領域の専門家もずっと遅い動的言語におおかた移行してしまいました。
+科学的な計算には昔から高パフォーマンスが必要でしたが、各領域の専門家が日常的な作業を行う場合は、
+かなり遅い動的言語にほとんど移行してしまいました。
 そうした用途には動的言語が好まれる理由が数多くあるので、利用が減ることはないでしょう。
 幸い、現代的な言語設計とコンパイラ技術を使えば、パフォーマンスのトレードオフをほとんど解消できるので、
-試験的開発に向いた生産性と、パフォーマンス重視のアプリケーションの利用に向いた効率性を兼ね備えた
-単一の開発環境を実現できます。
-Julia言語ならその役割を果たせます。
+単一の開発環境によって、試験的開発に向いた生産性と、パフォーマンス重視のアプリケーションの利用に向いた効率性を
+兼ね備えることができます。
+Julia言語はその役割を果たせます。
 柔軟な動的言語でありながら、静的型付言語に匹敵するパーフォーマンスを持ち、科学的・数値的計算に向いているのです。
 
 
@@ -96,16 +96,16 @@ and [Ruby](https://en.wikipedia.org/wiki/Ruby_(programming_language)).
 
 -->
 ```
-Juliaの目玉となる特徴としては、省略可能な型付け、多重ディスパッチ、高パフォーマンスがあります。
+Juliaの主だった特徴に、省略可能な型付け、多重ディスパッチ、高パフォーマンスがあります。
 この性能は、型推論と[ジャスト-イン-タイム (JIT) コンパイル](https://en.wikipedia.org/wiki/Just-in-time_compilation)によって
 達成され、[LLVM](https://en.wikipedia.org/wiki/Low_Level_Virtual_Machine)を使って実装されています。
-Juliaはマルチパラダイム言語で、手続型、関数型、オブジェクト指向プログラムをかけ合わせています。
-Juliaでの高水準の数値計算が、容易で表現力も高いのは、R・Matlab・Pythonといった言語と同様ですが、
+Juliaはマルチパラダイム言語で、命令型、関数型、オブジェクト指向プログラムの特徴をかけ合わせています。
+Juliaでの高水準の数値計算が、R・Matlab・Pythonといった言語と同じように、簡単でで表現力も高いですが、
 汎用的なプログラミングも可能です。
 これは、Juliaが数学的プログラム言語の系譜にありながら、人気の動的言語から多くを借り入れているからです。
- 例を挙げると、[Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [Perl](https://en.wikipedia.org/wiki/Perl_(programming_language)),
+具体的には、[Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)), [Perl](https://en.wikipedia.org/wiki/Perl_(programming_language)),
 [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), [Lua](https://en.wikipedia.org/wiki/Lua_(programming_language)),
- [Ruby](https://en.wikipedia.org/wiki/Ruby_(programming_language)) などがあります。
+ [Ruby](https://en.wikipedia.org/wiki/Ruby_(programming_language)) などからです。
 
 
 ```@raw html
@@ -146,7 +146,7 @@ run-time objects, and can also be used to convey information to the compiler.
 -->
 ```
 動的言語には「型がない」という人もいますが、そんなことはありません。
-すべてのオブジェクトは、原始的であれ、ユーザー定義型であれ、型があります。
+すべてのオブジェクトは、プリミティブ型であれ、ユーザー定義型であれ、型があります。
 しかしたいていの動的言語では、型宣言をしなければコンパイラに値の型を伝えることができません。
 明示的に宣言できないものも多数あります。
 一方、静的言語ではコンパイラに対して型注釈をつけることが可能(たいていは必須)です。
