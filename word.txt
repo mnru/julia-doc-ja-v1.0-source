@@ -56,3 +56,5 @@
 	precedent	先例			
 	cumbersome	やっかいな			
 	verbose	冗長な			
+	triple-quotes	3連クオート			
+	dedent	インデントを取り除く			

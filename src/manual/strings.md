@@ -369,7 +369,7 @@ julia> str[4:9]
 Notice that the expressions `str[k]` and `str[k:k]` do not give the same result:
 -->
 ```
-`str[k]`と`str[k:k]`の四季は同じ演算結果を返さないので注意してください。。
+`str[k]`と`str[k:k]`の式は同じ演算結果を返さないので注意してください。。
 
 
 ```jldoctest helloworldstring
@@ -893,11 +893,21 @@ I have $100 in my account.
 ## 三連クオート文字列リテラル
 
 
+```@raw html
+<!--
 When strings are created using triple-quotes (`"""..."""`) they have some special behavior that
 can be useful for creating longer blocks of text.
 
 First, triple-quoted strings are also dedented to the level of the least-indented line.
 This is useful for defining strings within code that is indented. For example:
+-->
+```
+
+３連クオート(`"""..."""`)を使って生成した文字列は、長い文章のブロックを作るのに役立つ特殊な挙動をします。
+
+まず、３連クオート文字列、１番インデントの少ない行に合わせて、インデントを除去します。
+これは、コード内にインデントのある文字列を定義するのに便利です。例えば、
+
 
 ```jldoctest
 julia> str = """
@@ -907,6 +917,8 @@ julia> str = """
 "  Hello,\n  world.\n"
 ```
 
+```@raw html
+<!--
 In this case the final (empty) line before the closing `"""` sets the indentation level.
 
 The dedentation level is determined as the longest common starting sequence of spaces or
@@ -915,6 +927,13 @@ only spaces or tabs (the line containing the closing `"""` is always included).
 Then for all lines, excluding the text following the opening `"""`, the common starting
 sequence is removed (including lines containing only spaces and tabs if they start with
 this sequence), e.g.:
+-->
+```
+
+
+
+
+
 ```jldoctest
 julia> """    This
          is
@@ -922,21 +941,36 @@ julia> """    This
 "    This\nis\n  a test"
 ```
 
+```@raw html
+<!--
 Next, if the opening `"""` is followed by a newline,
 the newline is stripped from the resulting string.
+-->
+```
+
 
 ```julia
 """hello"""
 ```
 
+```@raw html
+<!--
 is equivalent to
+-->
+```
 
 ```julia
 """
 hello"""
 ```
 
+```@raw html
+<!--
 but
+-->
+```
+
+しかし、
 
 ```julia
 """
@@ -944,9 +978,14 @@ but
 hello"""
 ```
 
+```@raw html
+<!--
 will contain a literal newline at the beginning.
 
 Stripping of the newline is performed after the dedentation. For example:
+-->
+```
+
 
 ```jldoctest
 julia> """
@@ -955,6 +994,8 @@ julia> """
 "Hello,\nworld."
 ```
 
+```@raw html
+<!--
 Trailing whitespace is left unaltered.
 
 Triple-quoted string literals can contain `"` symbols without escaping.
@@ -963,7 +1004,11 @@ Note that line breaks in literal strings, whether single- or triple-quoted, resu
 (LF) character `\n` in the string, even if your editor uses a carriage return `\r` (CR) or CRLF
 combination to end lines. To include a CR in a string, use an explicit escape `\r`; for example,
 you can enter the literal string `"a CRLF line ending\r\n"`.
+-->
+```
 
+
+`[](## Common Operations)
 ## Common Operations
 
 You can lexicographically compare strings using the standard comparison operators:
