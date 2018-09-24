@@ -54,3 +54,5 @@
 	for the time being	さしあたり			
 	beyond the scope 	範囲外			
 	precedent	先例			
+	cumbersome	やっかいな			
+	verbose	冗長な			

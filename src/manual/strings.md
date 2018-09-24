@@ -790,31 +790,61 @@ implies commutativity.
 
 
 `[](## [Interpolation](@id string-interpolation))
-## [文字展開](@id string-interpolation)
+## [文字列展開](@id string-interpolation)
 
+```@raw html
+<!--
 Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
-verbose calls to [`string`](@ref) or repeated multiplications, Julia allows interpolation into string literals
+verbose calls to [`string`](@ref) or repeated multiplicaions, Julia allows interpolation into string literals
 using `$`, as in Perl:
+-->
+```
+
+しかし、文字列を連結で構成するが厄介な場合もあります。[`string`](@ref)の冗長な呼び出しや乗算記号の反復をへらすために、
+Juliaでは、Perlのように`$`を使った、文字列リテラルの展開が利用できます。
+
 
 ```jldoctest stringconcat
 julia> "$greet, $whom.\n"
 "Hello, world.\n"
 ```
 
+```@raw html
+<!--
 This is more readable and convenient and equivalent to the above string concatenation -- the system
 rewrites this apparent single string literal into a concatenation of string literals with variables.
 
 The shortest complete expression after the `$` is taken as the expression whose value is to be
 interpolated into the string. Thus, you can interpolate any expression into a string using parentheses:
+-->
+```
+
+これは、読みやすく、便利で、上記の文字列連結と同等ですが、
+しすてむが、見た目は１つの文字列リテラルを、変数と文字列リテラルの連結に書き換えています。
+
+`$`の後ろの最短の完全な式は、展開の対象とみなされるので、任意の式を括弧を使って展開することができます。
+
+
+
+
+
 
 ```jldoctest
 julia> "1 + 2 = $(1 + 2)"
 "1 + 2 = 3"
 ```
 
+```@raw html
+<!--
 Both concatenation and string interpolation call [`string`](@ref) to convert objects into string
 form. Most non-`AbstractString` objects are converted to strings closely corresponding to how
 they are entered as literal expressions:
+-->
+```
+
+連結も文字列展開も[`string`](@ref)を呼び出して、オブジェクトを文字列に変換します。
+たいていの`AbstractString`ではないオブジェクトが文字列に変換されるのは、文字列リテラルとしてどのように入力されたのかに密接に関連します。
+
 
 ```jldoctest
 julia> v = [1,2,3]
@@ -827,8 +857,16 @@ julia> "v: $v"
 "v: [1, 2, 3]"
 ```
 
+```@raw html
+<!--
 [`string`](@ref) is the identity for `AbstractString` and `AbstractChar` values, so these are interpolated
 into strings as themselves, unquoted and unescaped:
+-->
+```
+[`string`](@ref) は `AbstractString` や`AbstractChar`の値と同等です。
+そのため、クオートやエスケープなしに、自身に式展開します。
+
+
 
 ```jldoctest
 julia> c = 'x'
@@ -838,14 +876,22 @@ julia> "hi, $c"
 "hi, x"
 ```
 
+```@raw html
+<!--
 To include a literal `$` in a string literal, escape it with a backslash:
+-->
+```
+
+`$`リテラルを文字列リテラルに含めるには、バックスラッシュでエスケープします。
 
 ```jldoctest
 julia> print("I have \$100 in my account.\n")
 I have $100 in my account.
 ```
 
-## Triple-Quoted String Literals
+`[](## Triple-Quoted String Literals)
+## 三連クオート文字列リテラル
+
 
 When strings are created using triple-quotes (`"""..."""`) they have some special behavior that
 can be useful for creating longer blocks of text.
