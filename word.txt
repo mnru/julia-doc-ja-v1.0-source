@@ -1,5 +1,6 @@
 ﻿前書き	dipatch	選択する			
 	multiple dispatch	多重ディスパッチ			
+	Unobtrusive	控えめな、記述のすくない			
 始めよう					
 変数					                                                
 					
@@ -47,3 +48,8 @@
 	Unicode code point	符号位置			
 	As of this writing	執筆時点では			
 	intelligible	分かりやすい			
+	identity	恒等写像			
+	UTF-8 code unit	UTF-8コードの中の1ﾊﾞｲﾄ			
+	malformed	不正な形式の			
+	for the time being	さしあたり			
+	beyond the scope 	範囲外			
