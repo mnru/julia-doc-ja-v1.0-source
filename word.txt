@@ -44,3 +44,6 @@
 	gamut	全部			
 文字列	definitive	最も信頼のおける			
 	gracefully	潔く			
+	Unicode code point	符号位置			
+	As of this writing	執筆時点では			
+	intelligible	分かりやすい			

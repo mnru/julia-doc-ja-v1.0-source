@@ -104,6 +104,13 @@ input and shown:
 -->
 ```
 
+`Char`の値は1文字を表しています。
+これは32bitのプリミティブ型で特殊なリテラル表現をもち、適当な算術が可能です。
+そして、[符号位置](https://en.wikipedia.org/wiki/Code_point)を表す数値に変換する事ができます。
+ (Juliaのパッケージでは別の`AbstractChar`のサブタイプを定義することができます。
+例えば、別の[文字エンコーディング](https://en.wikipedia.org/wiki/Character_encoding)の操作に最適化されたものなどです)
+以下に`Char`の値の入力・表示の方法を示します。
+
 
 
 ```jldoctest
@@ -130,6 +137,9 @@ On 32-bit architectures, [`typeof(ans)`](@ref) will be [`Int32`](@ref). You can 
 integer value back to a `Char` just as easily:
 -->
 ```
+32bitアーキテクチャなら、[`typeof(ans)`](@ref)は[`Int32`](@ref)になるでしょう。
+整数値を`Char`に戻すことも簡単にできます。
+
 
 ```jldoctest
 julia> Char(120)
@@ -143,6 +153,10 @@ does not check that every character value is valid. If you want to check that ea
 is a valid code point, use the [`isvalid`](@ref) function:
 -->
 ```
+
+すべての整数値に有効なユニコードの符号位置が割り当てられているわけではありません。
+しかしパフォーマンスをあげるため、`Char`の変換は文字の値が有効かどうか検査しません。
+それぞれの変換された値が有効な符号位置かどうか調べるには、[`isvalid`](@ref)関数を使ってください。
 
 
 ```jldoctest
@@ -164,6 +178,12 @@ digits or `\U` followed by up to eight hexadecimal digits (the longest valid val
 six):
 -->
 ```
+
+執筆時点では有効なユニコードの符号位置は、`U+00`から`U+d7ff`までと`U+e000`から`U+10ffff`までです。
+この値は分かりやすい意味があるわけもなく、必ずしもアプリケーションが解釈できるわけではないですが、
+すべて有効なユニコード文字だと考えられています。
+ユニコードを入力するには、`\u`のあとに４桁までの16進数を続けたものか、`\U`のあとに8桁までのの16進数を続けたものを
+一重引用符で囲みます。(最大の有効な桁数は6桁までなのですが)
 
 
 ```jldoctest
@@ -188,6 +208,10 @@ to these Unicode escape forms, all of [C's traditional escaped input forms](http
 can also be used:
 -->
 ```
+Juliaはシステムのロケールや言語設定に従って、どの文字をそのまま印字するか、
+どの文字を`\u`や `\U`でエスケープする汎用的な入力形式で出力するかを判断します。 
+さらに、これらユニコードのエスケープ形式の他に、すべての[C言語の従来のエスケープ入力形式](https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes)も利用可能です。
+
 
 
 ```jldoctest
@@ -215,7 +239,7 @@ julia> Int('\177')
 You can do comparisons and a limited amount of arithmetic with `Char` values:
 -->
 ```
-
+`Char`の値に対して、比較や、数は限られますが算術を行うことができます。
 
 ```jldoctest
 julia> 'A' < 'a'
@@ -237,7 +261,13 @@ julia> 'A' + 1
 `[](## String Basics)
 ## 文字列の基本
 
+```@raw html
+<!--
 String literals are delimited by double quotes or triple double quotes:
+-->
+```
+
+文字列リテラルは、二重引用符、または、３つ続けた二重引用符で区切ることができます。
 
 ```jldoctest helloworldstring
 julia> str = "Hello, world.\n"
@@ -247,7 +277,13 @@ julia> """Contains "quote" characters"""
 "Contains \"quote\" characters"
 ```
 
+```@raw html
+<!--
 If you want to extract a character from a string, you index into it:
+-->
+```
+
+文字列から文字を抜き出したいときは、インデックスが使えます
 
 ```jldoctest helloworldstring
 julia> str[1]
@@ -260,6 +296,8 @@ julia> str[end]
 '\n': ASCII/Unicode U+000a (category Cc: Other, control)
 ```
 
+```@raw html
+<!--
 Many Julia objects, including strings, can be indexed with integers. The index of the first
 element is returned by [`firstindex(str)`](@ref), and the index of the last element
 with [`lastindex(str)`](@ref). The keyword `end` can be used inside an indexing
@@ -270,6 +308,17 @@ at index `n`, where `n` is the length of the string.)
 
 You can perform arithmetic and other operations with [`end`](@ref), just like
 a normal value:
+-->
+```
+
+多くのJuliaのオブジェクトは文字列も含めて、整数のインデックスづけが可能です。
+先頭の要素のインデックスは[`firstindex(str)`](@ref)で、最後の要素のインデックスは[`lastindex(str)`](@ref)で得られます。
+キーワード`end`は、インデックス操作時に該当次元の最後のインデックスを示す簡略記法として利用できます。
+Juliaでは殆どのインデックスが1を基準としています。
+整数でインデックス付けされたオブジェクトの多数で、最初の要素のインデックスは１です。
+(だからといって、下記で見るように、文字列の長さ`n`が、そのまま最後の要素のインデックスとなるわけでは、必ずしもありません。)
+
+
 
 ```jldoctest helloworldstring
 julia> str[end-1]
@@ -279,7 +328,15 @@ julia> str[end÷2]
 ' ': ASCII/Unicode U+0020 (category Zs: Separator, space)
 ```
 
+```@raw html
+<!--
 Using an index less than 1 or greater than `end` raises an error:
+-->
+```
+
+インデックスが1より小さい場合や`end`より大きい場合はエラーが生じます。
+
+
 
 ```jldoctest helloworldstring
 julia> str[0]
@@ -294,14 +351,26 @@ Stacktrace:
 [...]
 ```
 
+```@raw html
+<!--
 You can also extract a substring using range indexing:
+-->
+```
+
+部分文字列を範囲インデックスを使って抜き出すこともできます。
 
 ```jldoctest helloworldstring
 julia> str[4:9]
 "lo, wo"
 ```
 
+```@raw html
+<!--
 Notice that the expressions `str[k]` and `str[k:k]` do not give the same result:
+-->
+```
+`str[k]`と`str[k:k]`の四季は同じ演算結果を返さないので注意してください。。
+
 
 ```jldoctest helloworldstring
 julia> str[6]
@@ -311,12 +380,23 @@ julia> str[6:6]
 ","
 ```
 
+```@raw html
+<!--
 The former is a single character value of type `Char`, while the latter is a string value that
 happens to contain only a single character. In Julia these are very different things.
 
 Range indexing makes a copy of the selected part of the original string.
 Alternatively, it is possible to create a view into a string using the type [`SubString`](@ref),
 for example:
+-->
+```
+
+前者は型`Char`の文字１字の値、他方後者はたまた1文字しか含まない文字列の値です
+Juliaではこれらは全く別物です。
+
+範囲インデックスでは、元の文字列に対して選択部分のコピーを作成します。
+別の方法として、型 [`SubString`](@ref)を使って、文字列に対するビューを作成することも可能です。
+
 
 ```jldoctest
 julia> str = "long string"
@@ -329,10 +409,17 @@ julia> typeof(substr)
 SubString{String}
 ```
 
+```@raw html
+<!--
 Several standard functions like [`chop`](@ref), [`chomp`](@ref) or [`strip`](@ref)
 return a [`SubString`](@ref).
+-->
+```
+いくつかの標準的な関数[`chop`](@ref)、[`chomp`](@ref) 、 [`strip`](@ref)などは、
+ [`SubString`](@ref)の型を返します。
 
-## Unicode and UTF-8
+`[](## Unicode and UTF-8)
+## ユニコードとUTF-8
 
 Julia fully supports Unicode characters and strings. As [discussed above](@ref man-characters), in character
 literals, Unicode code points can be represented using Unicode `\u` and `\U` escape sequences,
