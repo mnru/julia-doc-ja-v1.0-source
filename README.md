@@ -1,30 +1,17 @@
-# Julia Documentation README
+# Julia ver1.0 Manual 日本語訳
 
-Julia's documentation is written in Markdown. A reference of all supported syntax can be found in the [manual](https://docs.julialang.org/en/latest/manual/documentation/#markdown-syntax). All documentation can be found in the Markdown files in `doc/src/` and the docstrings in Julia source files in `base/`.
+とりあえずひとりで訳してます
 
-## Requirements
 
-This documentation is built using the [Documenter.jl](https://github.com/JuliaDocs/Documenter.jl) package.
+[公開場所](https://mnru.github.io/julia-doc-ja-v1.0/)
+[ソース](https://github.com/mnru/julia-doc-ja-v1.0-source)
 
-All dependencies are automatically installed into a sandboxed package directory in `doc/deps/` to avoid interfering with user-installed packages.
 
-## Building
+参考
+[ver0.6和訳](https://hshindo.github.io/julia-doc-ja-v0.6/)
+[ver0.5和訳](http://docs.julia.tokyo/ja/latest/)
 
-To build Julia's documentation run
 
-```sh
-$ make docs
-```
-
-from the root directory. This will build the HTML documentation and output it to the `doc/_build/` folder.
-
-## Testing
-
-To run the doctests found in the manual run
-
-```sh
-$ make -C doc check
-```
-
-from the root directory.
-
+[原文](https://docs.julialang.org/en/stable/)
+[中国語訳](http://docs.juliacn.com/latest/)
+[韓国語訳](https://juliakorea.github.io/ko/latest/)
