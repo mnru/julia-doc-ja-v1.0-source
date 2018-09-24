@@ -53,3 +53,4 @@
 	malformed	不正な形式の			
 	for the time being	さしあたり			
 	beyond the scope 	範囲外			
+	precedent	先例			

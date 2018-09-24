@@ -675,9 +675,16 @@ UTF-8エンコーディングの問題に関するさらなる議論は、下記
 
 
 `[](## Concatenation)
-## 連接
+## 連結
 
+```@raw html
+<!--
 One of the most common and useful string operations is concatenation:
+-->
+```
+
+最も普通で役に立つ文字列操作の一つが、連結です。
+
 
 ```jldoctest stringconcat
 julia> greet = "Hello"
@@ -690,10 +697,18 @@ julia> string(greet, ", ", whom, ".\n")
 "Hello, world.\n"
 ```
 
+```@raw html
+<!--
 It's important to be aware of potentially dangerous situations such as concatenation of invalid UTF-8 strings.
 The resulting string may contain different characters than the input strings,
 and its number of characters may be lower than sum of numbers of characters
 of the concatenated strings, e.g.:
+-->
+```
+
+無効な文字列を連結する場合に起こりうる潜在的な危険に注意を払うことは重要です。
+連結した文字列は、入力した文字列と変わるかもしれないし、もとの文字列の文字数のの合計よりも、文字数が少なくなるかもしれません。
+例えば、
 
 ```julia-repl
 julia> a, b = "\xe2\x88", "\x80"
@@ -715,16 +730,28 @@ julia> length.([a, b, c])
  1
 ```
 
+```@raw html
+<!--
 This situation can happen only for invalid UTF-8 strings. For valid UTF-8 strings
 concatenation preserves all characters in strings and additivity of string lengths.
 
 Julia also provides [`*`](@ref) for string concatenation:
+-->
+```
+
+こういうことが起こりうるのは、無効な UTF-8の文字列のときだけです。
+有効なUTF-8文字列を連結した時は、文字列の文字数の合計が保たれます。
+
+
+
 
 ```jldoctest stringconcat
 julia> greet * ", " * whom * ".\n"
 "Hello, world.\n"
 ```
 
+```@raw html
+<!--
 While `*` may seem like a surprising choice to users of languages that provide `+` for string
 concatenation, this use of `*` has precedent in mathematics, particularly in abstract algebra.
 
@@ -741,8 +768,29 @@ More precisely, the set of all finite-length strings *S* together with the strin
 of this set is the empty string, `""`. Whenever a free monoid is not commutative, the operation is
 typically represented as `\cdot`, `*`, or a similar symbol, rather than `+`, which as stated usually
 implies commutativity.
+-->
+```
 
-## [Interpolation](@id string-interpolation)
+文字列の連結に`+`を使う言語のユーザーは、`*`を使う選択にびっくりするかもしれませんが、
+これには数学、特に抽象代数に先例があります。
+
+数学では、`+`はたいてい **可換的** 操作を表し、演算対象の順序は影響しません。
+例としては、行列の足し算があり、形の同じ任意の行列 `A`と`B`に対して、`A + B == B + A`が成り立ちます。
+一方、`*`ふつうは **可換的** 操作を表し、演算対象の順序は影響します。
+例としては、行列の掛け算があり、一般には、行列 `A`と`B`に対して、`A * B != B * A`が成り立ちます。
+行列の掛け算と同様に文字列の連結も非可換です。
+`greet * whom != whom * greet`です。
+よって、通常の数学での使い方との一貫性を考えると、文字列連結の中置演算には、`*`を選択するほうが、より自然なのです。
+
+更に正確には、すべての有限長の文字列の集合 *S* と 文字列連結演算子 `*`は、　
+[自由モノイド](https://en.wikipedia.org/wiki/Free_monoid) (*S*, `*`)を形成します。
+恒等元は空の文字列`""`です。
+自由モノイドが非可換の時は、演算子は通常、`\cdot`、`*`などの記号で表し、通常、可換性を示唆する`+`は使いません。
+
+
+
+`[](## [Interpolation](@id string-interpolation))
+## [文字展開](@id string-interpolation)
 
 Constructing strings using concatenation can become a bit cumbersome, however. To reduce the need for these
 verbose calls to [`string`](@ref) or repeated multiplications, Julia allows interpolation into string literals
