@@ -9,7 +9,7 @@
 
 参考
 [ver0.6和訳](https://hshindo.github.io/julia-doc-ja-v0.6/)
-[ver0.5和訳](http://docs.julia.tokyo/ja/latest/)
+[ver0.5和訳](https://github.com/hshindo/julia-doc-ja/tree/master/doc/manual)
 
 
 [原文](https://docs.julialang.org/en/stable/)
