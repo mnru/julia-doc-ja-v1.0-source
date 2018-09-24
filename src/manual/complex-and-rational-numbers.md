@@ -9,9 +9,8 @@ so that operations on any combination of predefined numeric types, whether primi
 behave as expected.
 -->
 ```
-Juliaには複素数と有理数が定義済みの型として備わっていて、すべての標準的な[算術演算子と初等関数](@ref)に対応しています。
-プリミティブ型も複合型も、定義済みの型の組み合わせに対しては期待通りに動くように、[変換と昇格](@ref conversion-and-promotion)
-が定義されています。
+Juliaには定義済みの型として複素数型と有理数型を備えており、すべての標準的な[算術演算子と初等関数](@ref)に対応しています。
+[変換と昇格](@ref conversion-and-promotion)が定義されているために、定義済みの型の組み合わせに対しては、プリミティブ型も複合型も、期待通りに動きます。
 
 
 `[](## Complex Numbers)
@@ -26,10 +25,10 @@ this binding suffices to provide convenient syntax for complex numbers, similar 
 mathematical notation:
 -->
 ```
-グローバル定数の [`im`](@ref)には複素数の *i* が束縛されていて、-1の平方根を表しています。
-`i`はよくインデックスに使われる変数のために、グローバル変数にするのは害があると思われます。
+グローバル定数の [`im`](@ref)には複素数の *i* が束縛されており、-1の平方根を表しています。
+インデックスによく使われる変数`i`は、グローバル変数にすると害があるでしょう。
 Juliaでは、数値リテラルを[識別子の前に置くと係数になる](@ref man-numeric-literal-coefficients)ので、
-この定数は、従来の数学表記に似た、便利な複素数の構文として、利用できます。
+複素数の構文を、この定数を使って、便利に、従来の数学表記に似せることができます。
 
 
 ```jldoctest
@@ -159,7 +158,7 @@ is also defined for complex numbers:
 ```
 
 通常通り、複素数の絶対値 ([`abs`](@ref))は０からの距離です。
-[`abs2`](@ref)は、複素数の絶対値の二乗で、特に複素数に対して、平方根の計算をさけるために使われます。
+[`abs2`](@ref)は、複素数の絶対値の二乗で、特に複素数の場合に、平方根の計算をさけるために使われます。
 [`angle`](@ref)はラジアンによる位相角（**偏角**としても知られています）を返します。
 その他すべての[初等関数](@ref)も複素数に対して定義されています。
 
@@ -226,7 +225,7 @@ a complex value directly from its real and imaginary parts:
 -->
 ```
 しかし、これは推奨**されません**。
-実部と虚部から直接、複素数をつくるには、[`complex`](@ref)を使ってください。
+実部と虚部から直接、複素数をつくるには、関数[`complex`](@ref)を使ってください。
 
 
 ```jldoctest
@@ -243,7 +242,7 @@ of a complex number as described in the [Special floating-point values](@ref) se
 -->
 ```
 
-この作り方によって、乗算・加算が避けられます。
+この作り方によって、乗算・加算を除くことができます。
 [特殊な浮動小数点数の値](@ref)のセクションで述べた、[`Inf`](@ref)や[`NaN`](@ref)は、複素数の実部や虚部に
 使うことができます。
 
