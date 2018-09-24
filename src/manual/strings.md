@@ -1,6 +1,8 @@
 `[](# [Strings](@id man-strings))
 # [文字列](@id man-strings)
 
+```@raw html
+<!--
 Strings are finite sequences of characters. Of course, the real trouble comes when one asks what
 a character is. The characters that English speakers are familiar with are the letters `A`, `B`,
 `C`, etc., together with numerals and common punctuation symbols. These characters are standardized
@@ -18,9 +20,36 @@ efficient as possible. In particular, you can write C-style string code to proce
 and they will work as expected, both in terms of performance and semantics. If such code encounters
 non-ASCII text, it will gracefully fail with a clear error message, rather than silently introducing
 corrupt results. When this happens, modifying the code to handle non-ASCII data is straightforward.
+-->
+```
 
+文字列は、文字の有限列です。
+しかし、文字とは何かと自問すると、なかなか厄介です。
+英語圏で馴染みのある文字は、`A`、`B`、`C`などとか、数字とか、句読点などの普通の記号でしょう。
+こうした文字はまとめて、0から127までの整数値を対応付ける[ASCII](https://en.wikipedia.org/wiki/ASCII)
+規格として標準化されています。
+当然、非英語圏には、多数の別の文字があります。
+アクセントや修飾文字をつけた、ASCII文字の変種、近縁の言語のキリル文字やギリシア文字、
+ASCIIや英語に全く無縁の言語のアラビア語、中国語、ヘブライ語、ヒンディ語、日本語、韓国語などです。
+ [ユニコード](https://en.wikipedia.org/wiki/Unicode)規格は、文字とは正確には何なのかという複雑さに挑み、
+ この問題を扱う最も信頼のおける規格として広く受け入れられています。
+必要に応じて、複雑さを全く無視してASCII文字だけしか存在しないように振る舞うこともできますし、
+非ASCIIの文書を扱う際に遭遇する、どんな文字やエンコードでも扱えるコードを書くこともできます。
+Juliaでは、ASCII文書は単純で効率よく扱うこともできますし、Unicodeもできる限り単純で効率的に扱うこともできます。
+特に、C言語流のASCII文字列を処理するコードを書くが可能で、パフォーマンス的にもセマンティック的にも期待通りに動作します。
+こうしたコードは非ASCII文書に出くわすと潔く明快なエラーメッセージを出して失敗し、暗黙のまま壊れた結果を出すことはありません。
+こうした場合に、非ASCIIデータを扱えるようにコードを変更するのは簡単です。
+
+
+```@raw html
+<!--
 There are a few noteworthy high-level features about Julia's strings:
+-->
+```
+Juliaの文字列には、顕著な高水準の特徴がいくつかあります。
 
+```@raw html
+<!--
   * The built-in concrete type used for strings (and string literals) in Julia is [`String`](@ref).
     This supports the full range of [Unicode](https://en.wikipedia.org/wiki/Unicode) characters via
     the [UTF-8](https://en.wikipedia.org/wiki/UTF-8) encoding. (A [`transcode`](@ref) function is
@@ -40,9 +69,31 @@ There are a few noteworthy high-level features about Julia's strings:
     indexing into strings by the byte index of an encoded representation rather than by a character
     index, which cannot be implemented both efficiently and simply for variable-width encodings of
     Unicode strings.
+-->
+```
 
-## [Characters](@id man-characters)
+  * Juliaで文字列（や文字列リテラル）につかう組み込みの複合型が [`String`](@ref)です。
+    [Unicode](https://en.wikipedia.org/wiki/Unicode) 全範囲の文字が[UTF-8](https://en.wikipedia.org/wiki/UTF-8) エンコーディングによって利用可能です。
+    (関数 [`transcode`](@ref) が他のユニコードのエンコーディングとの双方向の変換に利用可能です。)   
+  * すべての文字列型は抽象型`AbstractString`のサブタイプであり、外部パッケージで副次的な(別のエンコーディングなどの  `AbstractString`のサブタイプを定義します。
+    引数として文字列を想定する関数を作るときは、どんな文字列でも受け入れられるように、型宣言は`AbstractString`にすべきでしょう。
+  * C言語やJavaと同様に、しかしおおかたの動的言語とは違って、Juliaには、１字の文字に対して、 [`AbstractChar`](@ref)と呼ばれる、 
+    第一級の型があります。
+    32bitのプリミティブ型である組み込み型の [`Char`](@ref)は、`AbstractChar`のサブタイプで、
+    任意のユニコードの文字を表現できます(UTF-8エンコードに基づいています)。
+  * Javaと同様に文字列は不変です。`AbstractString`オブジェクトの値はかえられません。
+    別の文字列を構成するには別の文字列の一部から構成します。
+  * 概念的には、インデックスから文字への**部分関数**です。
+    インデックスの一部は文字の値を返さず、かわりに例外を投げます。
+    これによって、文字列のインデックスをエンコード表現からのバイトインデックスにして効率的にできます。
+    文字のインデックスだとユニコードのエンコーディングの変数の幅が変わるので、効率性と単純さを両立できないのです。
 
+
+`[](## [Characters](@id man-characters))
+## [文字](@id man-characters)
+
+```@raw html
+<!--
 A `Char` value represents a single character: it is just a 32-bit primitive type with a special literal
 representation and appropriate arithmetic behaviors, and which can be converted
 to a numeric value representing a
@@ -50,6 +101,10 @@ to a numeric value representing a
 other subtypes of `AbstractChar`, e.g. to optimize operations for other
 [text encodings](https://en.wikipedia.org/wiki/Character_encoding).) Here is how `Char` values are
 input and shown:
+-->
+```
+
+
 
 ```jldoctest
 julia> 'x'
@@ -69,17 +124,26 @@ julia> typeof(ans)
 Int64
 ```
 
+```@raw html
+<!--
 On 32-bit architectures, [`typeof(ans)`](@ref) will be [`Int32`](@ref). You can convert an
 integer value back to a `Char` just as easily:
+-->
+```
 
 ```jldoctest
 julia> Char(120)
 'x': ASCII/Unicode U+0078 (category Ll: Letter, lowercase)
 ```
 
+```@raw html
+<!--
 Not all integer values are valid Unicode code points, but for performance, the `Char` conversion
 does not check that every character value is valid. If you want to check that each converted value
 is a valid code point, use the [`isvalid`](@ref) function:
+-->
+```
+
 
 ```jldoctest
 julia> Char(0x110000)
@@ -89,6 +153,8 @@ julia> isvalid(Char, 0x110000)
 false
 ```
 
+```@raw html
+<!--
 As of this writing, the valid Unicode code points are `U+00` through `U+d7ff` and `U+e000` through
 `U+10ffff`. These have not all been assigned intelligible meanings yet, nor are they necessarily
 interpretable by applications, but all of these values are considered to be valid Unicode characters.
@@ -96,6 +162,9 @@ interpretable by applications, but all of these values are considered to be vali
 You can input any Unicode character in single quotes using `\u` followed by up to four hexadecimal
 digits or `\U` followed by up to eight hexadecimal digits (the longest valid value only requires
 six):
+-->
+```
+
 
 ```jldoctest
 julia> '\u0'
@@ -111,10 +180,15 @@ julia> '\U10ffff'
 '\U10ffff': Unicode U+10ffff (category Cn: Other, not assigned)
 ```
 
+```@raw html
+<!--
 Julia uses your system's locale and language settings to determine which characters can be printed
 as-is and which must be output using the generic, escaped `\u` or `\U` input forms. In addition
 to these Unicode escape forms, all of [C's traditional escaped input forms](https://en.wikipedia.org/wiki/C_syntax#Backslash_escapes)
 can also be used:
+-->
+```
+
 
 ```jldoctest
 julia> Int('\0')
@@ -136,7 +210,12 @@ julia> Int('\177')
 127
 ```
 
+```@raw html
+<!--
 You can do comparisons and a limited amount of arithmetic with `Char` values:
+-->
+```
+
 
 ```jldoctest
 julia> 'A' < 'a'
@@ -155,7 +234,8 @@ julia> 'A' + 1
 'B': ASCII/Unicode U+0042 (category Lu: Letter, uppercase)
 ```
 
-## String Basics
+`[](## String Basics)
+## 文字列の基本
 
 String literals are delimited by double quotes or triple double quotes:
 

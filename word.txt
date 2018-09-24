@@ -42,3 +42,5 @@
 	phase angle	位相角			
 	argument	偏角			
 	gamut	全部			
+文字列	definitive	最も信頼のおける			
+	gracefully	潔く			
