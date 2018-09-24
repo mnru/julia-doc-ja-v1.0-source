@@ -1,4 +1,5 @@
-# [Strings](@id man-strings)
+`[](# [Strings](@id man-strings))
+# [文字列](@id man-strings)
 
 Strings are finite sequences of characters. Of course, the real trouble comes when one asks what
 a character is. The characters that English speakers are familiar with are the letters `A`, `B`,
