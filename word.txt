@@ -59,3 +59,6 @@
 	triple-quotes	3連クオート			
 	dedent	インデントを取り除く			
 	handy	便利な			
+	match	一致する			
+	Destructuring　syntax	分割構文			
+	contrived	不自然な			

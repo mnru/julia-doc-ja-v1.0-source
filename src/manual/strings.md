@@ -29,8 +29,8 @@ corrupt results. When this happens, modifying the code to handle non-ASCII data 
 こうした文字はまとめて、0から127までの整数値を対応付ける[ASCII](https://en.wikipedia.org/wiki/ASCII)
 規格として標準化されています。
 当然、非英語圏には、多数の別の文字があります。
-アクセントや修飾文字をつけた、ASCII文字の変種、近縁の言語のキリル文字やギリシア文字、
-ASCIIや英語に全く無縁の言語のアラビア語、中国語、ヘブライ語、ヒンディ語、日本語、韓国語などです。
+アクセントや修飾文字をつけた、ASCII文字の変種、近縁の言語であるキリル文字やギリシア文字、
+ASCIIや英語に全く無縁の言語であるアラビア語、中国語、ヘブライ語、ヒンディ語、日本語、韓国語などです。
  [ユニコード](https://en.wikipedia.org/wiki/Unicode)規格は、文字とは正確には何なのかという複雑さに挑み、
  この問題を扱う最も信頼のおける規格として広く受け入れられています。
 必要に応じて、複雑さを全く無視してASCII文字だけしか存在しないように振る舞うこともできますし、
@@ -1099,10 +1099,8 @@ julia> findnext(isequal('o'), "xylophone", 8)
 <!--
 You can use the [`occursin`](@ref) function to check if a substring is found within a string:
 -->
-``
- [`occursin`](@ref)関数を使うと、文字列の中に部分列があるかどうかを検査することができます。
-
-
+```
+[`occursin`](@ref)関数を使うと、文字列の中に部分列があるかどうかを検査することができます。
 
 
 ```jldoctest
@@ -1126,7 +1124,7 @@ The last example shows that [`occursin`](@ref) can also look for a character lit
 Two other handy string functions are [`repeat`](@ref) and [`join`](@ref):
 -->
 ```
-最後のは、 [`occursin`](@ref)が、文字リテラルを探すのにも使える例です。
+最後の例は、 [`occursin`](@ref)が、文字リテラルを探す時にも利用できることを示しています。
 
 [`repeat`](@ref)や[`join`](@ref)はまた別の便利な文字列関数です。
 
@@ -1190,7 +1188,7 @@ are given in the [Metaprogramming](@ref) section.
 文字列は使いたいけど、通常の使い方では、要求にそぐわないという状況もあるでしょう。
 そんな場合のために、Juliaには、 [非標準文字列リテラル](@ref)が用意されています。
 非標準文字列リテラルは、ふつうの二重引用符による文字列リテラルに似ていますが、識別用の文字が頭についていて、挙動が通常の文字とは異なります。
-正規表現、バイト列リテラル、バージョン番号リテラルなど、非標準文字列リテラルの例をいくつか見ていきます。
+正規表現、バイト列リテラル、バージョン番号リテラルなど、非標準文字列リテラルの例をこれからいくつか見ていきます。
 他の例は[メタプログラミング](@ref) セクションで扱います。
 
 
@@ -1198,6 +1196,8 @@ are given in the [Metaprogramming](@ref) section.
 `[](## Regular Expressions)
 ## 正規表現
 
+```@raw html
+<!--
 Julia has Perl-compatible regular expressions (regexes), as provided by the [PCRE](http://www.pcre.org/)
 library. Regular expressions are related to strings in two ways: the obvious connection is that
 regular expressions are used to find regular patterns in strings; the other connection is that
@@ -1205,6 +1205,17 @@ regular expressions are themselves input as strings, which are parsed into a sta
 can be used to efficiently search for patterns in strings. In Julia, regular expressions are input
 using non-standard string literals prefixed with various identifiers beginning with `r`. The most
 basic regular expression literal without any options turned on just uses `r"..."`:
+
+-->
+```
+
+JuliaではPerl互換の正規表現が利用可能で、[PCRE](http://www.pcre.org/)ライブラリを利用しています。
+正規表現と文字列には２通りの関係があります。
+一つは、文字列から正規パターンを見つけるために正規表現が使われること。
+もう一つは、正規表現自体を文字列として入力して解析し、効率的に文字列内のパターンを探索できるステートマシンを構築することです。
+Juliaでは、正規表現の入力には、`r`で始まる様々な識別子を頭につけた非標準文字列リテラルを利用します。
+最も基本的な正規表現リテラルは、何もオプションを付けない`r"..."`です。
+
 
 ```jldoctest
 julia> r"^\s*(?:#|$)"
@@ -1214,7 +1225,13 @@ julia> typeof(ans)
 Regex
 ```
 
+```@raw html
+<!--
 To check if a regex matches a string, use [`occursin`](@ref):
+-->
+```
+正規表現が文字列に一致するかどうかを調べるには、 [`occursin`](@ref)を使います。
+
 
 ```jldoctest
 julia> occursin(r"^\s*(?:#|$)", "not a comment")
@@ -1224,10 +1241,20 @@ julia> occursin(r"^\s*(?:#|$)", "# a comment")
 true
 ```
 
+```@raw html
+<!--
 As one can see here, [`occursin`](@ref) simply returns true or false, indicating whether a
 match for the given regex occurs in the string. Commonly, however, one wants to know not
 just whether a string matched, but also *how* it matched. To capture this information about
 a match, use the [`match`](@ref) function instead:
+-->
+```
+
+見てのとおり、[`occursin`](@ref)は単に正規表現が文字列と一致するかどうか真偽値を返すだけです。
+しかし、通常は、単に一致しているかどうかだけでなく、**どのように** 一致しているかを知りたいものです。
+一致に関する情報を捕捉するには、 [`match`](@ref) 関数をかわりに使います。
+
+
 
 ```jldoctest
 julia> match(r"^\s*(?:#|$)", "not a comment")
@@ -1236,9 +1263,17 @@ julia> match(r"^\s*(?:#|$)", "# a comment")
 RegexMatch("#")
 ```
 
+```@raw html
+<!--
 If the regular expression does not match the given string, [`match`](@ref) returns [`nothing`](@ref)
 -- a special value that does not print anything at the interactive prompt. Other than not printing,
 it is a completely normal value and you can test for it programmatically:
+-->
+```
+
+正規表現が文字列と一致しない場合、[`match`](@ref) 関数は [`nothing`](@ref)を返します。
+--これは、特殊な値で対話プロンプトでは何も表示されません。表示以外は全く普通の値なので、プログラムによって検査をすることもできます。
+
 
 ```julia
 m = match(r"^\s*(?:#|$)", line)
@@ -1249,19 +1284,35 @@ else
 end
 ```
 
+```@raw html
+<!--
 If a regular expression does match, the value returned by [`match`](@ref) is a `RegexMatch`
 object. These objects record how the expression matches, including the substring that the pattern
 matches and any captured substrings, if there are any. This example only captures the portion
 of the substring that matches, but perhaps we want to capture any non-blank text after the comment
 character. We could do the following:
+-->
+```
+
+正規表現が一致する場合、 [`match`](@ref)の返す値は、`RegexMatch`オブジェクトです。
+このオブジェクトには、式の一致の状態が記録されていて、パターンと一致した部分文字列や、存在する場合には捕捉した文字列がわかります。
+この例では、一致した部分文字列を捕捉しているだけですが、おそらく、コメントのあとの空白ではない文章も捕捉したいでしょう。
+以下のようにすれば、可能です。
 
 ```jldoctest
 julia> m = match(r"^\s*(?:#\s*(.*?)\s*$|$)", "# a comment ")
 RegexMatch("# a comment ", 1="a comment")
 ```
 
+```@raw html
+<!--
 When calling [`match`](@ref), you have the option to specify an index at which to start the
 search. For example:
+-->
+```
+
+[`match`](@ref)を呼び出す時は、必要に応じて、どのインデックスから検索を始めるか指定することができます。
+例えば、
 
 ```jldoctest
 julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",1)
@@ -1274,6 +1325,8 @@ julia> m = match(r"[0-9]","aaaa1aaaa2aaaa3",11)
 RegexMatch("3")
 ```
 
+```@raw html
+<!--
 You can extract the following info from a `RegexMatch` object:
 
   * the entire substring matched: `m.match`
@@ -1284,6 +1337,21 @@ You can extract the following info from a `RegexMatch` object:
 For when a capture doesn't match, instead of a substring, `m.captures` contains `nothing` in that
 position, and `m.offsets` has a zero offset (recall that indices in Julia are 1-based, so a zero
 offset into a string is invalid). Here is a pair of somewhat contrived examples:
+
+-->
+```
+`RegexMatch`オブジェクトから以下のような情報を抽出することができます。
+
+  * 一致した部分文字列全体: `m.match`
+  * 捕捉した部分文字列を入れた文字列の配列: `m.captures`
+  * 一致した部分全体の始まるオフセット: `m.offset`
+  * 捕捉した部分文字列のオフセットからなるベクトル: `m.offsets`
+
+捕捉が一致しない場合、`m.captures`には部分文字列ではなく`nothing`が該当する位置に入れます。
+`m.offsets`のオフセットは0になります。(Juliaのインデックスは基準1なので、
+文字列に対しては、０のインデックスは無効であることを思い出してください)
+ちょっと不自然な例を２，３挙げます。
+
 
 ```jldoctest acdmatch
 julia> m = match(r"(a|b)(c)?(d)", "acd")
@@ -1329,16 +1397,31 @@ julia> m.offsets
  2
 ```
 
+```@raw html
+<!--
 It is convenient to have captures returned as an array so that one can use destructuring syntax
 to bind them to local variables:
+-->
+```
+
+捕捉したものを配列として返すことができれば便利です。
+そうすれば、分割構文によってローカル変数に束縛することができます。
 
 ```jldoctest acdmatch
 julia> first, second, third = m.captures; first
 "a"
 ```
 
+```@raw html
+<!--
 Captures can also be accessed by indexing the `RegexMatch` object with the number or name of the
 capture group:
+-->
+```
+
+捕捉したものは、`RegexMatch`オブジェクトの捕捉したグループを数字や名前でインデックスづけしても、取り出すことができます。
+
+
 
 ```jldoctest
 julia> m=match(r"(?<hour>\d+):(?<minute>\d+)","12:45")
@@ -1351,27 +1434,57 @@ julia> m[2]
 "45"
 ```
 
+```@raw html
+<!--
 Captures can be referenced in a substitution string when using [`replace`](@ref) by using `\n`
 to refer to the nth capture group and prefixing the substitution string with `s`. Capture group
 0 refers to the entire match object. Named capture groups can be referenced in the substitution
 with `g<groupname>`. For example:
+
+-->
+```
+
+[`replace`](@ref)を使った置換文字列に対する捕捉は参照可能です。
+n番目の捕捉グループは`\n`で参照し置換文字列には頭に`s`をつけます。
+0番目の捕捉グループは一致したオブジェクト全体を参照します。
+名前をつけた捕捉グループは、`g<groupname>`という形で置換の中で参照できます。
+例えば、
+
+
 
 ```jldoctest
 julia> replace("first second", r"(\w+) (?<agroup>\w+)" => s"\g<agroup> \1")
 "second first"
 ```
 
+```@raw html
+<!--
 Numbered capture groups can also be referenced as `\g<n>` for disambiguation, as in:
+-->
+```
+
+曖昧さを避けるために、番号のついた捕捉グループは、`\g<n>`のように参照することもできます。
 
 ```jldoctest
 julia> replace("a", r"." => s"\g<0>1")
 "a1"
 ```
 
+```@raw html
+<!--
 You can modify the behavior of regular expressions by some combination of the flags `i`, `m`,
 `s`, and `x` after the closing double quote mark. These flags have the same meaning as they do
 in Perl, as explained in this excerpt from the [perlre manpage](http://perldoc.perl.org/perlre.html#Modifiers):
+-->
+```
 
+正規表現の挙動を変えるには、`i`, `m`,`s`,`x`といったフラグの組み合わせを、閉じるほうの二重引用符の後ろにつけます。
+フラグの意味はPerlと同じなので、説明を [perlre manpage](http://perldoc.perl.org/perlre.html#Modifiers)から抜粋します。
+
+
+
+```@raw html
+<!--
 ```
 i   Do case-insensitive pattern matching.
 
@@ -1401,8 +1514,42 @@ x   Tells the regular expression parser to ignore most whitespace
     treated as a metacharacter introducing a comment, just as in
     ordinary code.
 ```
+-->
+```
 
+```
+i   パターンマッチで大文字小文字を区別しない
+
+    ロケールマッチングルールが有効な場合、ケースマップは、符号位置が255より
+    小さいものは現在のロケールに、大きいものはユニコードのルールに従う。
+    しかし、ユニコード・非ユニコードの境界(ords 255/256)を超える場合は
+    うまくいかないでしょう。
+
+m   文字列を複数行として扱う。つまり、 "^" と "$"は、文字列の先頭と末尾の一致から
+    文字列内の各行の先頭と末尾の一致に変更する。
+
+s   文字列を単一行として扱う。つまり、"."をすべての文字と一致するように変更する。
+    これには、通常は、一致の対象としない改行も含む。
+
+    r""ms のように一緒に使うと、 "."がすべての文字と一致する一方で、
+    "^"と"$"は文字列内の改行の直後と直前に一致します。
+
+x   バックスラッシュがついていたり、文字クラスに含まれていたり
+　　する場合を除く、ほとんどの空白を無視するように、正規表現パーサに、
+  　伝えます。
+    これを利用すると、正規表現が(少し)読みやすくなるように分割することができます。
+ 　　'#'の文字も、普通のコードのように、コメントの始まるメタ文字として
+ 　 扱われます。
+```
+
+
+```@raw html
+<!--
 For example, the following regex has all three flags turned on:
+-->
+```
+
+例えば、以下の正規表現では３つのフラグすべてをオンにしています。
 
 ```jldoctest
 julia> r"a+.*b+.*?d$"ism
@@ -1412,9 +1559,17 @@ julia> match(r"a+.*b+.*?d$"ism, "Goodbye,\nOh, angry,\nBad world\n")
 RegexMatch("angry,\nBad world")
 ```
 
+```@raw html
+<!--
 The `r"..."` literal is constructed without interpolation and unescaping (except for
 quotation mark `"` which still has to be escaped). Here is an example
 showing the difference from standard string literals:
+-->
+```
+
+`r"..."`リテラルでは、文字展開は使えず、エスケープもほとんどありません。（二重引用符`"`のみ、エスケープが必要ですが）
+以下の例は、通常の文字リテラルとの違いを示しています。
+
 
 ```julia-repl
 julia> x = 10
@@ -1433,19 +1588,41 @@ julia> "\x"
 ERROR: syntax: invalid escape sequence
 ```
 
+```@raw html
+<!--
 Triple-quoted regex strings, of the form `r"""..."""`, are also supported (and may be convenient
 for regular expressions containing quotation marks or newlines).
+-->
+```
+３連クオートの正規表現も、`r"""..."""`といった形で利用可能です。
+（二重引用符や改行のある正規表現で便利かもしれません）
 
-## [Byte Array Literals](@id man-byte-array-literals)
 
+`[](## [Byte Array Literals](@id man-byte-array-literals))
+## [バイト列リテラル](@id man-byte-array-literals)
+
+```@raw html
+<!--
 Another useful non-standard string literal is the byte-array string literal: `b"..."`. This
 form lets you use string notation to express read only literal byte arrays -- i.e. arrays of
 [`UInt8`](@ref) values. The type of those objects is `CodeUnits{UInt8, String}`.
 The rules for byte array literals are the following:
+-->
+```
+
+
+```@raw html
+<!--
+  * ASCII characters and ASCII escapes produce a single byte.
+  * `\x` and octal escape sequences produce the *byte* corresponding to the escape value.
+  * Unicode escape sequences produce a sequence of bytes encoding that code point in UTF-8.
+-->
+```
 
   * ASCII characters and ASCII escapes produce a single byte.
   * `\x` and octal escape sequences produce the *byte* corresponding to the escape value.
   * Unicode escape sequences produce a sequence of bytes encoding that code point in UTF-8.
+
 
 There is some overlap between these rules since the behavior of `\x` and octal escapes less than
 0x80 (128) are covered by both of the first two rules, but here these rules agree. Together, these
