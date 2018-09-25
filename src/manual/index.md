@@ -7,7 +7,7 @@
   * [算術演算と初等関数](@ref)
   * [複素数と有理数](@ref)
   * [文字列](@ref)
-  * [関数]](@ref)
+  * [関数](@ref)
   * [Control Flow](@ref)
   * [Scope of Variables](@ref scope-of-variables)
   * [Types](@ref man-types)
