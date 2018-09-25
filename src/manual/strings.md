@@ -1034,9 +1034,14 @@ CRを残したい場合は、明示的にエスケープして`\r`のように�
 
 
 `[](## Common Operations)
-## Common Operations
+## よくある処理
 
+```@raw html
+<!--
 You can lexicographically compare strings using the standard comparison operators:
+-->
+```
+辞書順で比較を行うには、標準の比較演算子を利用できます。
 
 ```jldoctest
 julia> "abracadabra" < "xylophone"
@@ -1052,7 +1057,13 @@ julia> "1 + 2 = 3" == "1 + 2 = $(1 + 2)"
 true
 ```
 
+```@raw html
+<!--
 You can search for the index of a particular character using the [`findfirst`](@ref) function:
+-->
+```
+
+特定の文字のインデックスを[`findfirst`](@ref)関数を使って検索できます。
 
 ```jldoctest
 julia> findfirst(isequal('x'), "xylophone")
