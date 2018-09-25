@@ -776,7 +776,7 @@ implies commutativity.
 
 数学では、`+`はたいてい **可換的** 操作を表し、演算対象の順序は影響しません。
 例としては、行列の足し算があり、形の同じ任意の行列 `A`と`B`に対して、`A + B == B + A`が成り立ちます。
-一方、`*`ふつうは **可換的** 操作を表し、演算対象の順序は影響します。
+一方、`*`ふつうは **非可換的** 操作を表し、演算対象の順序は影響します。
 例としては、行列の掛け算があり、一般には、行列 `A`と`B`に対して、`A * B != B * A`が成り立ちます。
 行列の掛け算と同様に文字列の連結も非可換です。
 `greet * whom != whom * greet`です。
@@ -822,7 +822,7 @@ interpolated into the string. Thus, you can interpolate any expression into a st
 これは、読みやすく、便利で、上記の文字列連結と同等ですが、
 システムが、見た目は１つの文字列リテラルを、変数と文字列リテラルの連結に書き換えています。
 
-`$`の後ろの最短の完全な式は、展開の対象とみなされるので、任意の式を括弧を使って展開することができます。
+`$`に続く最短の完全な式を、展開の対象とみなすので、任意の式を括弧を使って展開することができます。
 
 
 
@@ -843,7 +843,7 @@ they are entered as literal expressions:
 ```
 
 連結も文字列展開も[`string`](@ref)を呼び出して、オブジェクトを文字列に変換します。
-たいていの`AbstractString`ではないオブジェクトが文字列に変換されるのは、文字列リテラルとしてどのように入力されたのかに密接に関連します。
+たいていの`AbstractString`ではないオブジェクトが文字列に変換されるのは、どのようにリテラル式として入力されたのかに密接に関連します。
 
 
 ```jldoctest
@@ -882,7 +882,7 @@ To include a literal `$` in a string literal, escape it with a backslash:
 -->
 ```
 
-`$`リテラルを文字列リテラルに含めるには、バックスラッシュでエスケープします。
+リテラルの`$`を文字列リテラルに含めるには、バックスラッシュでエスケープします。
 
 ```jldoctest
 julia> print("I have \$100 in my account.\n")
@@ -930,8 +930,14 @@ this sequence), e.g.:
 -->
 ```
 
+この場合は、終了の`"""`の前の最後の（空）行 をインデントの基準として設定します。
 
-
+インデント除去の水準は、開始の`"""`の行や、空白かタブしか含まない行を除くすべての行が共通して
+開始の空白やタブであるシーケンスの最も長いものとして決定されます。
+(終了の`"""`の行は常に含まれます)。
+するとすべての行(開始の`"""`はのぞいて)の開始までの共通のシーケンスは除去されます。
+（空白やタブの行も開始までの部分があるものは除去されます）
+例えば、
 
 
 ```jldoctest
@@ -948,6 +954,7 @@ the newline is stripped from the resulting string.
 -->
 ```
 
+次に、開始の `"""`の改行が続く場合、その改行は結果として得られる文字列から除去されます。
 
 ```julia
 """hello"""
@@ -958,6 +965,8 @@ the newline is stripped from the resulting string.
 is equivalent to
 -->
 ```
+
+は下記と同等です。
 
 ```julia
 """
@@ -986,6 +995,11 @@ Stripping of the newline is performed after the dedentation. For example:
 -->
 ```
 
+は改行リテラルが最初に来るかもしれません。
+
+改行の除去はインデントの除去のあとに行います。例えば、
+
+
 
 ```jldoctest
 julia> """
@@ -1006,6 +1020,17 @@ combination to end lines. To include a CR in a string, use an explicit escape `\
 you can enter the literal string `"a CRLF line ending\r\n"`.
 -->
 ```
+
+続きの空白は変わらないままです。
+
+３連クオートには、エスケープなしで`"`記号を入れることができます。
+
+注意が必要なのは、文字列中の改行は、クオートが1連でも3連でも、ラインフィード(LF)文字の`\n`になります。
+エディタの設定がキャリッジリターン(CR)`\r`やC組み合わせのCRLFであってもです。
+CRを残したい場合は、明示的にエスケープして`\r`のようにいれてください。
+例えば、`"a CRLF line ending\r\n"`のように文字列リテラルを入力できます。
+
+
 
 
 `[](## Common Operations)
