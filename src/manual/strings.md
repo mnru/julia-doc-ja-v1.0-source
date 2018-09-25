@@ -864,7 +864,7 @@ into strings as themselves, unquoted and unescaped:
 -->
 ```
 [`string`](@ref) は `AbstractString` や`AbstractChar`の値と同等です。
-そのため、クオートやエスケープなしに、自身に式展開します。
+そのため、そのままクオートやエスケープせずに、展開されます。
 
 
 
@@ -1567,7 +1567,7 @@ showing the difference from standard string literals:
 -->
 ```
 
-`r"..."`リテラルでは、文字展開は使えず、エスケープもほとんどありません。（二重引用符`"`のみ、エスケープが必要ですが）
+`r"..."`リテラルでは、式展開やエスケープの処理をしていません。（エスケープ処理が必要な二重引用符`"`を除きます）
 以下の例は、通常の文字リテラルとの違いを示しています。
 
 
@@ -1778,6 +1778,8 @@ UnicodeとUTF-8に関する優れた入門書なので、その混乱が軽減�
 `[](## [Version Number Literals](@id man-version-number-literals))
 ## [バージョン番号リテラル](@id man-version-number-literals)
 
+```@raw html
+<!--
 Version numbers can easily be expressed with non-standard string literals of the form [`v"..."`](@ref @v_str).
 Version number literals create [`VersionNumber`](@ref) objects which follow the
 specifications of [semantic versioning](http://semver.org),
@@ -1787,10 +1789,27 @@ build alpha-numeric annotations. For example, `v"0.2.1-rc1+win64"` is broken int
 a version literal, everything except the major version number is optional, therefore e.g.  `v"0.2"`
 is equivalent to `v"0.2.0"` (with empty pre-release/build annotations), `v"2"` is equivalent to
 `v"2.0.0"`, and so on.
+-->
+```
+バージョン番号は [`v"..."`](@ref @v_str)という形の非標準文字列リテラルを使って、簡単に表現できます。
+バージョン番号リテラルは、[セマンティックバージョニング](http://semver.org)の仕様に従う[`VersionNumber`](@ref)オブジェクトを生成します。
+これは、メジャー・マイナー・パッチの数値から構成され、プレリリースやビルドのアルファベットや数値による注釈が続きます。
+例えば、`v"0.2.1-rc1+win64"`を分解してみると、メジャーバージョンが`0`、マイナーバージョンが`2`、パッチバージョンが `1`、
+プレリリースが `rc1`、ビルドが `win64`となります。
+バージョンリテラルの入力の際には、メジャーバージョン以外は省略可能なので、例えば、 `v"0.2"`は`v"0.2.0"`（プレリリース/ビルドの注釈は空白）
+と同等、 `v"2"`は`v"2.0.0"`と同等などとなります。
 
+```@raw html
+<!--
 `VersionNumber` objects are mostly useful to easily and correctly compare two (or more) versions.
 For example, the constant [`VERSION`](@ref) holds Julia version number as a `VersionNumber` object, and
 therefore one can define some version-specific behavior using simple statements as:
+-->
+```
+
+`VersionNumber`オブジェクトはたいていの場合、２つ（かそれ以上）のバージョンを簡単かつ正確に比較するのに役立ちます。
+例えば、定数の[`VERSION`](@ref)にはJuliaのバージョン番号が`VersionNumber`オブジェクトとして保持され、
+バージョン固有の挙動を、簡単な文で定義することができます。
 
 ```julia
 if v"0.2" <= VERSION < v"0.3-"
@@ -1798,18 +1817,41 @@ if v"0.2" <= VERSION < v"0.3-"
 end
 ```
 
+```@raw html
+<!--
 Note that in the above example the non-standard version number `v"0.3-"` is used, with a trailing
 `-`: this notation is a Julia extension of the standard, and it's used to indicate a version which
 is lower than any `0.3` release, including all of its pre-releases. So in the above example the
 code would only run with stable `0.2` versions, and exclude such versions as `v"0.3.0-rc1"`. In
 order to also allow for unstable (i.e. pre-release) `0.2` versions, the lower bound check should
 be modified like this: `v"0.2-" <= VERSION`.
+-->
+```
+上記の例では、標準的ではないバージョン番号`v"0.3-"`を使い、`-`で終わっている点に注意してください。
+この表記はJuliaによる標準の拡張で、バージョンが`0.3`のリリースより低いことを示しており、すべてのプレリリースを含みます。
+よって上記の例では、 安定版の`0.2`のみで実行可能で、`v"0.3.0-rc1"`のようなバージョンは対象外です。
+不安定な（つまりプレリリースの） `0.2`のバージョンも許可するには、下限の検査を次のように変えます。
+`v"0.2-" <= VERSION`。
 
+
+
+
+```@raw html
+<!--
 Another non-standard version specification extension allows one to use a trailing `+` to express
 an upper limit on build versions, e.g.  `VERSION > v"0.2-rc1+"` can be used to mean any version
 above `0.2-rc1` and any of its builds: it will return `false` for version `v"0.2-rc1+win64"` and
 `true` for `v"0.2-rc2"`.
+-->
+```
 
+べつの非標準のバージョンの拡張では、末尾に`+` をつけて、ビルドバージョンの上限を表します。
+例えば、`VERSION > v"0.2-rc1+"`は`0.2-rc1`以上の任意のバージョンを意味するために使います。
+`v"0.2-rc1+win64"`に対しては`false`、`v"0.2-rc2"`に対しては`ture`を返します。
+
+
+```@raw html
+<!--
 It is good practice to use such special versions in comparisons (particularly, the trailing `-`
 should always be used on upper bounds unless there's a good reason not to), but they must not
 be used as the actual version number of anything, as they are invalid in the semantic versioning
@@ -1817,28 +1859,63 @@ scheme.
 
 Besides being used for the [`VERSION`](@ref) constant, `VersionNumber` objects are widely used
 in the `Pkg` module, to specify packages versions and their dependencies.
+-->
+```
+このような特殊なバージョンを使った比較は、優れて実践的です(特に末尾に`-`をつけた上限は、理由のない限り常に使うべきでしょう)。
+しかしセマンティックバージョニングの方式としては無効なものなので、実際のバージョン番号にはいずれも使用できません。
+
+[`VERSION`](@ref)定数に使う以外に、`VersionNumber`オブジェクトは`Pkg`モジュールで、
+パッケージのバージョンとその依存関係を指定するために、広く利用されています。
+
 
 `[](## [Raw String Literals](@id man-raw-string-literals))
 ## [生文字列リテラル](@id man-raw-string-literals)
 
+```@raw html
+<!--
 Raw strings without interpolation or unescaping can be expressed with
 non-standard string literals of the form `raw"..."`. Raw string literals create
 ordinary `String` objects which contain the enclosed contents exactly as
 entered with no interpolation or unescaping. This is useful for strings which
 contain code or markup in other languages which use `$` or `\` as special
 characters.
+-->
+```
 
+式展開やエスケープの処理を行わない生文字列は、`raw"..."`という形の非標準の文字列リテラルとして表現可能です。
+生文字列リテラルは、普通の`String`オブジェクトで、引用符の中身を、式展開やエスケープ処理をせず、そのまま含んでいます。
+これは、`$`や `\`を特殊な文字として使う、コードやマークアップ言語を含む文字列に役立ちます。
+
+
+```@raw html
+<!--
 The exception is that quotation marks still must be escaped, e.g. `raw"\""` is equivalent
 to `"\""`.
 To make it possible to express all strings, backslashes then also must be escaped, but
 only when appearing right before a quote character:
+-->
+```
+
+例外として、引用符はエスケープ処理が必要です。
+つまり、`raw"\""`は`"\""`と同等です。
+すべての文字列を表現するには、バックスラッシュにはエスケープ処理が必要ですが、引用符の直前にあるときだけです。
+
+
 
 ```jldoctest
 julia> println(raw"\\ \\\"")
 \\ \"
 ```
 
+```@raw html
+<!--
 Notice that the first two backslashes appear verbatim in the output, since they do not
 precede a quote character.
 However, the next backslash character escapes the backslash that follows it, and the
 last backslash escapes a quote, since these backslashes appear before a quote.
+-->
+```
+始めの２つのバックスラッシュは、、引用符の直前にはないので、そのまま出力される点に注意してください。
+しかし、次のバックスラッシュは直後のバックスラッシュをエスケープし、最後のバックスラッシュは引用符を
+エスケープします。これらのバックスラッシュは引用符の直前に出現するからです。
+

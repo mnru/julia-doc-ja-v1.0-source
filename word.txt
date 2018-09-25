@@ -62,3 +62,6 @@
 	match	一致する			
 	Destructuring　syntax	分割構文			
 	contrived	不自然な			
+	verbatim	言葉通りに、そのまま			
+	specification	仕様			
+	trailing	末尾			
