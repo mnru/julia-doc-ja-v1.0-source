@@ -1,8 +1,18 @@
-# [Functions](@id man-functions)
+`[](# [Functions](@id man-functions))
+# [関数](@id man-functions)
+
+```@raw html
+<!--
+In Julia, a function is an object that maps a tuple of argument values to a return value. Julia
+functions are not pure mathematical functions, in the sense that functions can alter and be affected
+by the global state of the program. The basic syntax for defining functions in Julia is:
+-->
+```
 
 In Julia, a function is an object that maps a tuple of argument values to a return value. Julia
 functions are not pure mathematical functions, in the sense that functions can alter and be affected
 by the global state of the program. The basic syntax for defining functions in Julia is:
+
 
 ```jldoctest
 julia> function f(x,y)
