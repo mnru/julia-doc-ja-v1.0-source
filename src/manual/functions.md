@@ -9,10 +9,10 @@ by the global state of the program. The basic syntax for defining functions in J
 -->
 ```
 
-In Julia, a function is an object that maps a tuple of argument values to a return value. Julia
-functions are not pure mathematical functions, in the sense that functions can alter and be affected
-by the global state of the program. The basic syntax for defining functions in Julia is:
-
+Juliaでは、関数は引数の値のタプルに対して戻り値を返すオブジェクトです。
+Juliaの関数は純粋に数学的な関数では、ありません。
+プログラムのグローバルな状態によって変更されたり、影響を受けたりするという意味です。
+Juliaで関数を定義する基本構文は以下の様になります。
 
 ```jldoctest
 julia> function f(x,y)
@@ -21,28 +21,43 @@ julia> function f(x,y)
 f (generic function with 1 method)
 ```
 
+```@raw html
+<!--
 There is a second, more terse syntax for defining a function in Julia. The traditional function
 declaration syntax demonstrated above is equivalent to the following compact "assignment form":
+-->
+```
+
 
 ```jldoctest fofxy
 julia> f(x,y) = x + y
 f (generic function with 1 method)
 ```
 
+```@raw html
+<!--
 In the assignment form, the body of the function must be a single expression, although it can
 be a compound expression (see [Compound Expressions](@ref man-compound-expressions)). Short, simple function definitions
 are common in Julia. The short function syntax is accordingly quite idiomatic, considerably reducing
 both typing and visual noise.
 
 A function is called using the traditional parenthesis syntax:
+-->
+```
+
 
 ```jldoctest fofxy
 julia> f(2,3)
 5
 ```
 
+```@raw html
+<!--
 Without parentheses, the expression `f` refers to the function object, and can be passed around
 like any value:
+-->
+```
+
 
 ```jldoctest fofxy
 julia> g = f;
@@ -51,7 +66,12 @@ julia> g(2,3)
 5
 ```
 
+```@raw html
+<!--
 As with variables, Unicode can also be used for function names:
+-->
+```
+
 
 ```jldoctest
 julia> ∑(x,y) = x + y
@@ -61,22 +81,33 @@ julia> ∑(2, 3)
 5
 ```
 
+`[](## Argument Passing Behavior)
 ## Argument Passing Behavior
 
+```@raw html
+<!--
 Julia function arguments follow a convention sometimes called "pass-by-sharing", which means that
 values are not copied when they are passed to functions. Function arguments themselves act as
 new variable *bindings* (new locations that can refer to values), but the values they refer to
 are identical to the passed values. Modifications to mutable values (such as `Array`s) made within
 a function will be visible to the caller. This is the same behavior found in Scheme, most Lisps,
 Python, Ruby and Perl, among other dynamic languages.
+-->
+```
 
+
+`[](## The `return` Keyword)
 ## The `return` Keyword
 
+```@raw html
+<!--
 The value returned by a function is the value of the last expression evaluated, which, by default,
 is the last expression in the body of the function definition. In the example function, `f`, from
 the previous section this is the value of the expression `x + y`. As in C and most other imperative
 or functional languages, the `return` keyword causes a function to return immediately, providing
 an expression whose value is returned:
+-->
+```
 
 ```julia
 function g(x,y)
@@ -85,8 +116,13 @@ function g(x,y)
 end
 ```
 
+```@raw html
+<!--
 Since function definitions can be entered into interactive sessions, it is easy to compare these
 definitions:
+-->
+```
+
 
 ```jldoctest
 julia> f(x,y) = x + y
@@ -105,11 +141,16 @@ julia> g(2,3)
 6
 ```
 
+```@raw html
+<!--
 Of course, in a purely linear function body like `g`, the usage of `return` is pointless since
 the expression `x + y` is never evaluated and we could simply make `x * y` the last expression
 in the function and omit the `return`. In conjunction with other control flow, however, `return`
 is of real use. Here, for example, is a function that computes the hypotenuse length of a right
 triangle with sides of length `x` and `y`, avoiding overflow:
+-->
+```
+
 
 ```jldoctest
 julia> function hypot(x,y)
@@ -131,12 +172,17 @@ julia> hypot(3, 4)
 5.0
 ```
 
+```@raw html
+<!--
 There are three possible points of return from this function, returning the values of three different
 expressions, depending on the values of `x` and `y`. The `return` on the last line could be omitted
 since it is the last expression.
 
 A return type can also be specified in the function declaration using the `::` operator. This converts
 the return value to the specified type.
+-->
+```
+
 
 ```jldoctest
 julia> function g(x, y)::Int8
@@ -147,16 +193,26 @@ julia> typeof(g(1, 2))
 Int8
 ```
 
+```@raw html
+<!--
 This function will always return an `Int8` regardless of the types of `x` and `y`.
 See [Type Declarations](@ref) for more on return types.
+-->
+```
 
+
+`[](## Operators Are Functions)
 ## Operators Are Functions
 
+```@raw html
+<!--
 In Julia, most operators are just functions with support for special syntax. (The exceptions are
 operators with special evaluation semantics like `&&` and `||`. These operators cannot be functions
 since [Short-Circuit Evaluation](@ref) requires that their operands are not evaluated before evaluation
 of the operator.) Accordingly, you can also apply them using parenthesized argument lists, just
 as you would any other function:
+-->
+```
 
 ```jldoctest
 julia> 1 + 2 + 3
@@ -166,9 +222,14 @@ julia> +(1,2,3)
 6
 ```
 
+```@raw html
+<!--
 The infix form is exactly equivalent to the function application form -- in fact the former is
 parsed to produce the function call internally. This also means that you can assign and pass around
 operators such as [`+`](@ref) and [`*`](@ref) just like you would with other function values:
+-->
+```
+
 
 ```jldoctest
 julia> f = +;
@@ -177,10 +238,18 @@ julia> f(1,2,3)
 6
 ```
 
+```@raw html
+<!--
 Under the name `f`, the function does not support infix notation, however.
+-->
+```
 
+`[](## Operators With Special Names)
 ## Operators With Special Names
 
+
+```@raw html
+<!--
 A few special expressions correspond to calls to functions with non-obvious names. These are:
 
 | Expression        | Calls                   |
@@ -193,7 +262,22 @@ A few special expressions correspond to calls to functions with non-obvious name
 | `A[i] = x`        | [`setindex!`](@ref)     |
 | `A.n`             | [`getproperty`](@ref Base.getproperty) |
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
+-->
+```
 
+| Expression        | Calls                   |
+|:----------------- |:----------------------- |
+| `[A B C ...]`     | [`hcat`](@ref)          |
+| `[A; B; C; ...]`  | [`vcat`](@ref)          |
+| `[A B; C D; ...]` | [`hvcat`](@ref)         |
+| `A'`              | [`adjoint`](@ref)       |
+| `A[i]`            | [`getindex`](@ref)      |
+| `A[i] = x`        | [`setindex!`](@ref)     |
+| `A.n`             | [`getproperty`](@ref Base.getproperty) |
+| `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
+
+
+`[](## [Anonymous Functions](@id man-anonymous-functions))
 ## [Anonymous Functions](@id man-anonymous-functions)
 
 Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
