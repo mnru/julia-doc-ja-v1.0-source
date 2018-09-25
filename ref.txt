@@ -10,4 +10,4 @@
 ,[Mathematical Operations and Elementary Functions],算術演算子と初等関数
 複素数と有理数,[Elementary Functions],初等関数
 ,[Special floating-point values],特殊な浮動小数点数の値
-文字列,,
+文字列, [non-standard string literals],非標準文字列リテラル

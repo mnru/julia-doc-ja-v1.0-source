@@ -1140,6 +1140,8 @@ julia> join(["apples", "bananas", "pineapples"], ", ", " and ")
 "apples, bananas and pineapples"
 ```
 
+
+
 ```@raw html
 <!--
 Some other useful functions include:
@@ -1153,8 +1155,10 @@ Some other useful functions include:
   * [`thisind(str, i)`](@ref) given an arbitrary index into a string find the first index of the character into which the index points.
   * [`nextind(str, i, n=1)`](@ref) find the start of the `n`th character starting after index `i`.
   * [`prevind(str, i, n=1)`](@ref) find the start of the `n`th character starting before index `i`.
+
 -->
 ```
+
 
 他に、便利な関数を挙げていくと、
 
@@ -1170,8 +1174,10 @@ Some other useful functions include:
 
 
 `[](## [Non-Standard String Literals](@id non-standard-string-literals))
-## [非標準文字リテラル](@id non-standard-string-literals)
+## [非標準文字列リテラル](@id non-standard-string-literals)
 
+```@raw html
+<!--
 There are situations when you want to construct a string or use string semantics, but the behavior
 of the standard string construct is not quite what is needed. For these kinds of situations, Julia
 provides [non-standard string literals](@ref). A non-standard string literal looks like a regular
@@ -1179,8 +1185,18 @@ double-quoted string literal, but is immediately prefixed by an identifier, and 
 quite like a normal string literal.  Regular expressions, byte array literals and version number
 literals, as described below, are some examples of non-standard string literals. Other examples
 are given in the [Metaprogramming](@ref) section.
+-->
+```
+文字列は使いたいけど、通常の使い方では、要求にそぐわないという状況もあるでしょう。
+そんな場合のために、Juliaには、 [非標準文字列リテラル](@ref)が用意されています。
+非標準文字列リテラルは、ふつうの二重引用符による文字列リテラルに似ていますが、識別用の文字が頭についていて、挙動が通常の文字とは異なります。
+正規表現、バイト列リテラル、バージョン番号リテラルなど、非標準文字列リテラルの例をいくつか見ていきます。
+他の例は[メタプログラミング](@ref) セクションで扱います。
 
-## Regular Expressions
+
+
+`[](## Regular Expressions)
+## 正規表現
 
 Julia has Perl-compatible regular expressions (regexes), as provided by the [PCRE](http://www.pcre.org/)
 library. Regular expressions are related to strings in two ways: the obvious connection is that
