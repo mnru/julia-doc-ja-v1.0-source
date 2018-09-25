@@ -1609,6 +1609,11 @@ form lets you use string notation to express read only literal byte arrays -- i.
 The rules for byte array literals are the following:
 -->
 ```
+もう一つの役立つ非標準の文字列リテラルが、`b"..."`といったバイト列文字列リテラルです。
+この形式を使うと、読み取り専用のバイト列リテラル、つまり[`UInt8`](@ref)の値の配列を文字列表記で、
+表現することができます。
+このオブジェクトの型は、`CodeUnits{UInt8, String}`です。
+バイト列リテラルの規則は以下のようになります。
 
 
 ```@raw html
@@ -1619,15 +1624,24 @@ The rules for byte array literals are the following:
 -->
 ```
 
-  * ASCII characters and ASCII escapes produce a single byte.
-  * `\x` and octal escape sequences produce the *byte* corresponding to the escape value.
-  * Unicode escape sequences produce a sequence of bytes encoding that code point in UTF-8.
+  * ASCII文字や、エスケープしたASCII文字は、１バイトを生成する。
+  * `\x` や8進エスケープした文字は、エスケープした値に対応する　**バイト**　を生成する。
+  * ニコードのエスケープ列は、その符号位置をUTF-8でエンコーディングしたバイト列を生成する。
 
 
+```@raw html
+<!--
 There is some overlap between these rules since the behavior of `\x` and octal escapes less than
 0x80 (128) are covered by both of the first two rules, but here these rules agree. Together, these
 rules allow one to easily use ASCII characters, arbitrary byte values, and UTF-8 sequences to
 produce arrays of bytes. Here is an example using all three:
+-->
+```
+
+ この規則には、重なりがあり、`x`と８進エスケープは0x80 (128)では始めの２つの規則があてはまるのですが、実は一致しています。
+ この規則を使って、ASCII文字や、任意のバイト値や、UTF-8のシーケンスから、バイト列を生成できます。
+ ３つすべてを使った例をあげます。
+
 
 ```jldoctest
 julia> b"DATA\xff\u2200"
@@ -1642,17 +1656,35 @@ julia> b"DATA\xff\u2200"
  0x80
 ```
 
+```@raw html
+<!--
 The ASCII string "DATA" corresponds to the bytes 68, 65, 84, 65. `\xff` produces the single byte 255.
 The Unicode escape `\u2200` is encoded in UTF-8 as the three bytes 226, 136, 128. Note that the
 resulting byte array does not correspond to a valid UTF-8 string:
+-->
+```
+
+ASCIIの文字列"DATA"に対応するバイトは 68, 65, 84, 65です。
+ `\xff`からは、１バイト255が生成されます。
+ `\u2200`はUTF-8エンコードの３バイト　226, 136, 128です。
+ 得られるバイト列は有効なUTF-8に対応していない点に注意してください。
 
 ```jldoctest
 julia> isvalid("DATA\xff\u2200")
 false
 ```
 
+```@raw html
+<!--
 As it was mentioned `CodeUnits{UInt8,String}` type behaves like read only array of `UInt8` and
 if you need a standard vector you can convert it using `Vector{UInt8}`:
+-->
+```
+
+前述のように、`CodeUnits{UInt8,String}`型は`UInt8`の読み取り専用の配列として振る舞い、標準的なベクトルが必要なら
+`Vector{UInt8}`を使って変換できます。
+
+
 
 ```jldoctest
 julia> x = b"123"
@@ -1675,9 +1707,19 @@ julia> Vector{UInt8}(x)
  0x33
 ```
 
+```@raw html
+<!--
 Also observe the significant distinction between `\xff` and `\uff`: the former escape sequence
 encodes the *byte 255*, whereas the latter escape sequence represents the *code point 255*, which
 is encoded as two bytes in UTF-8:
+-->
+```
+
+また、`\xff`と`\uff`には重大な違いがあります。
+前者のエスケープシーケンスは **バイト 255** にエンコードされ、後者はエスケープシーケンスは **符号位置 255**を表現し
+UTF-8は２バイトにエンコードされます。
+
+
 
 ```jldoctest
 julia> b"\xff"
@@ -1690,6 +1732,8 @@ julia> b"\uff"
  0xbf
 ```
 
+```@raw html
+<!--
 Character literals use the same behavior.
 
 For code points less than `\u80`, it happens that the
@@ -1698,14 +1742,40 @@ so the distinction can safely be ignored. For the escapes `\x80` through `\xff` 
 `\u80` through `\uff`, however, there is a major difference: the former escapes all encode single
 bytes, which -- unless followed by very specific continuation bytes -- do not form valid UTF-8
 data, whereas the latter escapes all represent Unicode code points with two-byte encodings.
+-->
+```
+文字リテラルも同じような挙動をします。
 
+符号位置が`\u80`より小さい時は、UTF-8 エンコーディングは１バイトで、対応する `\x`エスケープで生成されます。
+そのため、この違いを無視しても安全です。
+ しかし`\x80`から`\xff`までと、`\u80`から`\uff`までを比較すると、大きな違いがあります。
+前者はすべて１バイトにエンコードされますが、ごく一部の連なりを除いて、有効なUTF-8のデータではありません。
+一方、後者は、すべてユニコードの符号位置を表現し、２バイトにエンコードされます。
+
+
+
+
+```@raw html
+<!--
 If this is all extremely confusing, try reading ["The Absolute Minimum Every
 Software Developer Absolutely, Positively Must Know About Unicode and Character
 Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/).
 It's an excellent introduction to Unicode and UTF-8, and may help alleviate
 some confusion regarding the matter.
+-->
+```
 
-## [Version Number Literals](@id man-version-number-literals)
+もし大混乱しているようなら、
+ ["The Absolute Minimum Every
+Software Developer Absolutely, Positively Must Know About Unicode and Character
+Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)
+を試しに読むといいでしょう。
+UnicodeとUTF-8に関する優れた入門書なので、その混乱が軽減するかもしれません
+
+
+
+`[](## [Version Number Literals](@id man-version-number-literals))
+## [バージョン番号リテラル](@id man-version-number-literals)
 
 Version numbers can easily be expressed with non-standard string literals of the form [`v"..."`](@ref @v_str).
 Version number literals create [`VersionNumber`](@ref) objects which follow the
@@ -1747,7 +1817,8 @@ scheme.
 Besides being used for the [`VERSION`](@ref) constant, `VersionNumber` objects are widely used
 in the `Pkg` module, to specify packages versions and their dependencies.
 
-## [Raw String Literals](@id man-raw-string-literals)
+`[](## [Raw String Literals](@id man-raw-string-literals))
+## [生文字列リテラル](@id man-raw-string-literals)
 
 Raw strings without interpolation or unescaping can be expressed with
 non-standard string literals of the form `raw"..."`. Raw string literals create
