@@ -1770,7 +1770,8 @@ some confusion regarding the matter.
 Software Developer Absolutely, Positively Must Know About Unicode and Character
 Sets"](https://www.joelonsoftware.com/2003/10/08/the-absolute-minimum-every-software-developer-absolutely-positively-must-know-about-unicode-and-character-sets-no-excuses/)
 を試しに読むといいでしょう。
-UnicodeとUTF-8に関する優れた入門書なので、その混乱が軽減するかもしれません
+UnicodeとUTF-8に関する優れた入門書なので、その混乱が軽減するかもしれません。
+
 
 
 
