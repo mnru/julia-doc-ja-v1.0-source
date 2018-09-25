@@ -645,11 +645,11 @@ one too high code point.
 -->
 ```
 
-`s`の始めの２バイト、はスペースの冗長なエンコーディングです。
+`s`の始めの２符号単位、はスペースの冗長なエンコーディングです。
 これは無効なものですが、１字の文字として、文字列として受け入れられます。
-次の２バイトは、3バイトのUTF-8の始まりとして有効ですが、５番目の`\xe2`はその続きとして無効です。
-よって３バイト目と４バイト目も文字列として不正な形式のものです。
-同様に、５バイト目も`|`が続きとして無効なので、不正な形式の文字です。
+次の２符号単位は、3符号単位のUTF-8の始まりとして有効ですが、５番目の`\xe2`はその続きとして無効です。
+よって３符号単位目と４符号単位目も文字列として不正な形式のものです。
+同様に、５符号単位目も`|`が続きとして無効なので、不正な形式の文字です。
 最後に文字列`s2`は符号位置が大きすぎます。
 
 
@@ -1075,8 +1075,15 @@ julia> findfirst(isequal('p'), "xylophone")
 julia> findfirst(isequal('z'), "xylophone")
 ```
 
+```@raw html
+<!--
 You can start the search for a character at a given offset by using [`findnext`](@ref)
 with a third argument:
+-->
+```
+ [`findnext`](@ref)は３番目の引数で指定した数だけ、検索の開始位置をずらすことができます。
+
+
 
 ```jldoctest
 julia> findnext(isequal('o'), "xylophone", 1)
@@ -1088,7 +1095,15 @@ julia> findnext(isequal('o'), "xylophone", 5)
 julia> findnext(isequal('o'), "xylophone", 8)
 ```
 
+```@raw html
+<!--
 You can use the [`occursin`](@ref) function to check if a substring is found within a string:
+-->
+``
+ [`occursin`](@ref)関数を使うと、文字列の中に部分列があるかどうかを検査することができます。
+
+
+
 
 ```jldoctest
 julia> occursin("world", "Hello, world.")
@@ -1104,9 +1119,18 @@ julia> occursin('o', "Xylophon")
 true
 ```
 
+```@raw html
+<!--
 The last example shows that [`occursin`](@ref) can also look for a character literal.
 
 Two other handy string functions are [`repeat`](@ref) and [`join`](@ref):
+-->
+```
+最後のは、 [`occursin`](@ref)が、文字リテラルを探すのにも使える例です。
+
+[`repeat`](@ref)や[`join`](@ref)はまた別の便利な文字列関数です。
+
+
 
 ```jldoctest
 julia> repeat(".:Z:.", 10)
@@ -1116,6 +1140,8 @@ julia> join(["apples", "bananas", "pineapples"], ", ", " and ")
 "apples, bananas and pineapples"
 ```
 
+```@raw html
+<!--
 Some other useful functions include:
 
   * [`firstindex(str)`](@ref) gives the minimal (byte) index that can be used to index into `str` (always 1 for strings, not necessarily true for other containers).
@@ -1127,8 +1153,24 @@ Some other useful functions include:
   * [`thisind(str, i)`](@ref) given an arbitrary index into a string find the first index of the character into which the index points.
   * [`nextind(str, i, n=1)`](@ref) find the start of the `n`th character starting after index `i`.
   * [`prevind(str, i, n=1)`](@ref) find the start of the `n`th character starting before index `i`.
+-->
+```
 
-## [Non-Standard String Literals](@id non-standard-string-literals)
+他に、便利な関数を挙げていくと、
+
+  * [`firstindex(str)`](@ref) では、`str`の最小の(バイト)インデックスが得られます。(文字列に対しては常に１になりますが、他のコンテナではそうとは限りません)。
+  * [`lastindex(str)`](@ref) では、`str`の最大の(バイト)インデックスが得られます。
+  * [`length(str)`](@ref) では、`str`の文字数が得られます。
+  * [`length(str, i, j)`](@ref) では、 `str` の `i` から `j`までで有効なインデックスの数が得られます・
+  * [`ncodeunits(str)`](@ref)では、 文字列中の[符号単位](https://en.wikipedia.org/wiki/Character_encoding#Terminology)の数が得られます。
+  * [`codeunit(str, i)`](@ref)では、文字列`str`のインデックスが`i`符号単位の値が得られます。
+  * [`thisind(str, i)`](@ref) では、任意のインデックスに対して、その指し示す文字に対する最初のインデックスが得られます。
+  * [`nextind(str, i, n=1)`](@ref) インデックス `i`の文字の'`n`個後ろの文字の先頭のインデックスか得られます。
+  * [`prevind(str, i, n=1)`](@ref) インデックス `i`の文字の'`n`個前の文字の先頭のインデックスか得られます。
+
+
+`[](## [Non-Standard String Literals](@id non-standard-string-literals))
+## [非標準文字リテラル](@id non-standard-string-literals)
 
 There are situations when you want to construct a string or use string semantics, but the behavior
 of the standard string construct is not quite what is needed. For these kinds of situations, Julia

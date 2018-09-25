@@ -58,3 +58,4 @@
 	verbose	冗長な			
 	triple-quotes	3連クオート			
 	dedent	インデントを取り除く			
+	handy	便利な			
