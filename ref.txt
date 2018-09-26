@@ -1,13 +1,14 @@
-‘O‘‚«,,
+å‰æ›¸ã,,
 ,,
-n‚ß‚æ‚¤,,
-•Ï”,,
-®”‚Æ•‚“®¬”“_”,[Numeric Comparisons],”’l‚Ì”äŠr
-,[Interpolation],®“WŠJ
-,[`RoundNearest`],Å‹ßÚŠÛ‚ß
-Zp‰‰Z‚Æ‰“™ŠÖ”,[Short-Circuit Evaluation],’Z—•]‰¿
+å§‹ã‚ã‚ˆã†,,
+å¤‰æ•°,,
+æ•´æ•°ã¨æµ®å‹•å°æ•°ç‚¹æ•°,[Numeric Comparisons],æ•°å€¤ã®æ¯”è¼ƒ
+,[Interpolation],å¼å±•é–‹
+,[`RoundNearest`],æœ€è¿‘æ¥ä¸¸ã‚
+ç®—è¡“æ¼”ç®—ã¨åˆç­‰é–¢æ•°,[Short-Circuit Evaluation],çŸ­çµ¡è©•ä¾¡
 ,[Rounding functions],
-,[Mathematical Operations and Elementary Functions],Zp‰‰Zq‚Æ‰“™ŠÖ”
-•¡‘f”‚Æ—L—”,[Elementary Functions],‰“™ŠÖ”
-,[Special floating-point values],“Áê‚È•‚“®¬”“_”‚Ì’l
-•¶š—ñ, [non-standard string literals],”ñ•W€•¶š—ñƒŠƒeƒ‰ƒ‹
+,[Mathematical Operations and Elementary Functions],ç®—è¡“æ¼”ç®—å­ã¨åˆç­‰é–¢æ•°
+è¤‡ç´ æ•°ã¨æœ‰ç†æ•°,[Elementary Functions],åˆç­‰é–¢æ•°
+,[Special floating-point values],ç‰¹æ®Šãªæµ®å‹•å°æ•°ç‚¹æ•°ã®å€¤
+æ–‡å­—åˆ—, [non-standard string literals],éæ¨™æº–æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«
+é–¢æ•°,[Compound Expressions],è¤‡åˆå¼
