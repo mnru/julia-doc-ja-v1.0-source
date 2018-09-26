@@ -113,7 +113,7 @@ Juliaの引数は"共有渡し"と呼ばれる慣例に従ています。
 
 
 `[](## The `return` Keyword)
-## The `return` Keyword
+## `return` キーワード
 
 ```@raw html
 <!--
@@ -124,6 +124,8 @@ or functional languages, the `return` keyword causes a function to return immedi
 an expression whose value is returned:
 -->
 ```
+
+
 
 ```julia
 function g(x,y)
