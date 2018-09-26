@@ -11,7 +11,7 @@ by the global state of the program. The basic syntax for defining functions in J
 
 Juliaでは、関数は引数の値のタプルに対して戻り値を返すオブジェクトです。
 Juliaの関数は純粋に数学的な関数では、ありません。
-プログラムのグローバルな状態によって変更されたり、影響を受けたりするという意味です。
+これは、プログラムのグローバルな状態によって変更されたり、影響を受けたりするという意味です。
 Juliaで関数を定義する基本構文は以下の様になります。
 
 ```jldoctest
@@ -27,6 +27,9 @@ There is a second, more terse syntax for defining a function in Julia. The tradi
 declaration syntax demonstrated above is equivalent to the following compact "assignment form":
 -->
 ```
+Juliaには、第二の簡潔な関数定義の構文があります。
+上記の従来からある関数宣言の構文と下記のコンパクトな"代入形式"は同等です。
+
 
 
 ```jldoctest fofxy
@@ -45,6 +48,12 @@ A function is called using the traditional parenthesis syntax:
 -->
 ```
 
+代入形式では、関数の本体は単一の式でなければなりませんが、複合式[複合式](@ref man-compound-expressions))でも構いません。
+短くて単純な定義はJuliaでよく使われます。
+短い関数構文は慣用的によく使われ、打鍵数や見た目のわずらわしさをかなり減らしてくれます。
+
+関数の呼び出しには、従来通り、括弧を使います。
+
 
 ```jldoctest fofxy
 julia> f(2,3)
@@ -58,6 +67,7 @@ like any value:
 -->
 ```
 
+括弧がない場合は、式`f`は関数オブジェクトを参照し、他の値と同じように受け渡しができます。
 
 ```jldoctest fofxy
 julia> g = f;
@@ -72,6 +82,7 @@ As with variables, Unicode can also be used for function names:
 -->
 ```
 
+変数と同じように関数名にはユニコードを利用可能です。
 
 ```jldoctest
 julia> ∑(x,y) = x + y
@@ -82,7 +93,7 @@ julia> ∑(2, 3)
 ```
 
 `[](## Argument Passing Behavior)
-## Argument Passing Behavior
+## 引数引き渡しの挙動
 
 ```@raw html
 <!--
@@ -94,6 +105,9 @@ a function will be visible to the caller. This is the same behavior found in Sch
 Python, Ruby and Perl, among other dynamic languages.
 -->
 ```
+Juliaの引数は"共有渡し"と呼ばれる慣例に従ています。
+これは、関数に渡されるときに複写されないという意味です。
+関数の引数自体は新しい変数 **束縛** のように挙動しますが、参照先の値は
 
 
 `[](## The `return` Keyword)
