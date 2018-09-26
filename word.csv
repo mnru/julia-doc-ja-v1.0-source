@@ -1,0 +1,68 @@
+﻿前書き	dipatch	選択する			
+	multiple dispatch	多重ディスパッチ			
+	Unobtrusive	控えめな、記述のすくない			
+始めよう					
+変数					                                                
+					
+					
+					
+					
+					
+					
+					
+					
+整数と浮動小数点数	support	対応する			
+	effectively	事実上			
+	a full complement of 	全ての			
+	Interpolation	式展開			
+	wraparound	循環する			
+	modular arithmetic	合同算術			
+	Rounding mode	端数処理			
+	Rounding modes	丸めモード			
+	ieee standard	ieee 規格			
+	least significant bit	最下位ビット			
+	significand	仮数			
+	exponential	巾関数			
+	engineering notation	指数表記			
+算術演算と初等関数	Updating operator	代入演算子			
+	specifically	具体的には			
+	adjacent	隣接した			
+	additional	補助的な			
+	complete	一通り			
+	comprehensive	一通り			
+	provide collection	そろっている			
+	congruent to `x` modulo `2^n`	`2^n`を法として`x`と合同			
+	hyperbolic functions	双曲線関数			
+	magnitude	絶対値			
+	hypotenuse	斜辺			
+	exponent	指数			
+	significand	仮数			
+	mantissa	仮数			
+複素数と有理数	deem	～と思う			
+	co-opt	選出する			
+	phase angle	位相角			
+	argument	偏角			
+	gamut	全部			
+文字列	definitive	最も信頼のおける			
+	gracefully	潔く			
+	Unicode code point	符号位置			
+	As of this writing	執筆時点では			
+	intelligible	分かりやすい			
+	identity	恒等写像			
+	UTF-8 code unit	UTF-8コードの中の1ﾊﾞｲﾄ			
+	malformed	不正な形式の			
+	for the time being	さしあたり			
+	beyond the scope 	範囲外			
+	precedent	先例			
+	cumbersome	やっかいな			
+	verbose	冗長な			
+	triple-quotes	3連クオート			
+	dedent	インデントを取り除く			
+	handy	便利な			
+	match	一致する			
+	Destructuring　syntax	分割構文			
+	contrived	不自然な			
+	verbatim	言葉通りに、そのまま			
+	specification	仕様			
+	trailing	末尾			
+関数	terse	簡潔な			
