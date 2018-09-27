@@ -9,7 +9,7 @@ by the global state of the program. The basic syntax for defining functions in J
 -->
 ```
 
-Juliaでは、関数は引数の値のタプルに対して戻り値を返すオブジェクトです。
+Juliaでは、関数とは引数の値のタプルに対して戻り値を返すオブジェクトです。
 Juliaの関数は純粋に数学的な関数では、ありません。
 これは、プログラムのグローバルな状態によって変更されたり、影響を受けたりするという意味です。
 Juliaで関数を定義する基本構文は以下の様になります。
@@ -28,7 +28,7 @@ declaration syntax demonstrated above is equivalent to the following compact "as
 -->
 ```
 Juliaには、第二の簡潔な関数定義の構文があります。
-上記の従来からある関数宣言の構文と下記のコンパクトな"代入形式"は同等です。
+上記の従来の関数宣言の構文と下記のコンパクトな"代入形式"は同等です。
 
 
 
@@ -106,7 +106,7 @@ Python, Ruby and Perl, among other dynamic languages.
 -->
 ```
 Juliaの引数は"共有渡し"と呼ばれる慣例に従ています。
-これは、関数に渡されるときに複写されないという意味です。
+これは、関数に渡すときに複写をしないという意味です。
 関数の引数自体は新しい変数 **束縛** のように振る舞いますが、値は受け取る値と同じものを参照しています。
 （配列のような）可変な値を関数内で変更すると、呼び出し側からも見えます。
 こうした挙動は、Scheme、ほとんどのLisp、Python、Ruby、Perlその他の動的言語でみられるものと同じです。

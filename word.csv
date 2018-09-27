@@ -3,14 +3,6 @@
 ,Unobtrusive,控えめな、記述のすくない
 始めよう,,
 変数,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
 整数と浮動小数点数,support,対応する
 ,effectively,事実上
 ,a full complement of ,全ての
@@ -44,7 +36,7 @@
 ,argument,偏角
 ,gamut,全部
 文字列,definitive,最も信頼のおける
-,gracefully,潔く
+,gracefully fail,制御のもと終了する
 ,Unicode code point,符号位置
 ,As of this writing,執筆時点では
 ,intelligible,分かりやすい
@@ -65,4 +57,5 @@
 ,verbatim,言葉通りに、そのまま
 ,specification,仕様
 ,trailing,末尾
+,unescaped,エスケープ処理しないで
 関数,terse,簡潔な
