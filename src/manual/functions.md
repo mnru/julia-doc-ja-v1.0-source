@@ -125,6 +125,10 @@ an expression whose value is returned:
 -->
 ```
 
+関数の戻り値は最後に評価された式の値で、デフォルトでは関数定義本体の最後の式です。
+前セクションで例示した関数`f`の場合、式`x + y`の値がこれに当たります。
+C言語その他の命令型・関数型言語の大部分が、`return`キーワードによって、即時終了し、指定した式の値を戻り値とします。
+
 
 
 ```julia
@@ -140,6 +144,8 @@ Since function definitions can be entered into interactive sessions, it is easy 
 definitions:
 -->
 ```
+
+関数定義を対話セッションで入力できるので、これらの定義を比較するのは簡単です。
 
 
 ```jldoctest
@@ -168,6 +174,11 @@ is of real use. Here, for example, is a function that computes the hypotenuse le
 triangle with sides of length `x` and `y`, avoiding overflow:
 -->
 ```
+
+当然、`g`のように順次処理だけを行う関数の本体で、`ruturn`という用法をつかっても意味がありません。
+というのも、式`x + y` は決して評価されず、単に`x * y`を関数内の最後の式にして`return`を省いてもいいからです。
+しかし他の制御フローとつなぎ合わせる場合、`return`は実用的です。
+直角を挟む２辺が`x`、`y`の三角形の斜辺をオーバーフローを避けながら計算する関数を書いてみると、
 
 
 ```jldoctest
@@ -201,6 +212,13 @@ the return value to the specified type.
 -->
 ```
 
+この関数には３箇所、終了しうる場所があり、３つの異なる式の値を戻しますが、`x`と`y`の値に依存します。
+最終行の`return`は最後の式なので省略可能です。
+
+関数の戻り値の型は、関数宣言の中で、`::`演算子を使って指定できます。
+これによって、戻り値を指定した型に変換します。
+
+
 
 ```jldoctest
 julia> function g(x, y)::Int8
@@ -218,9 +236,12 @@ See [Type Declarations](@ref) for more on return types.
 -->
 ```
 
+この関数は`x`や`y`の型にかかわらず`Int8`を返します。
+戻り値の型の詳細については、[型宣言](@ref)を参照してください。
+
 
 `[](## Operators Are Functions)
-## Operators Are Functions
+## 演算子は関数
 
 ```@raw html
 <!--
@@ -263,7 +284,7 @@ Under the name `f`, the function does not support infix notation, however.
 ```
 
 `[](## Operators With Special Names)
-## Operators With Special Names
+## 特殊な名前の演算子
 
 
 ```@raw html
@@ -282,8 +303,9 @@ A few special expressions correspond to calls to functions with non-obvious name
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
 -->
 ```
+非自明な名前による関数呼び出しに対応した特殊な式がいくつかあります。それらは
 
-| Expression        | Calls                   |
+| 式                | 呼び出し名                   |
 |:----------------- |:----------------------- |
 | `[A B C ...]`     | [`hcat`](@ref)          |
 | `[A; B; C; ...]`  | [`vcat`](@ref)          |
@@ -296,7 +318,7 @@ A few special expressions correspond to calls to functions with non-obvious name
 
 
 `[](## [Anonymous Functions](@id man-anonymous-functions))
-## [Anonymous Functions](@id man-anonymous-functions)
+## [匿名関数](@id man-anonymous-functions)
 
 Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
 they can be assigned to variables, and called using the standard function call syntax from the
@@ -348,7 +370,8 @@ A zero-argument anonymous function is written as `()->3`. The idea of a function
 may seem strange, but is useful for "delaying" a computation. In this usage, a block of code is
 wrapped in a zero-argument function, which is later invoked by calling it as `f`.
 
-## Tuples
+`[](## Tuples)
+## タプル
 
 Julia has a built-in data structure called a *tuple* that is closely related to function
 arguments and return values.
@@ -374,7 +397,8 @@ Notice that a length-1 tuple must be written with a comma, `(1,)`, since `(1)` w
 be a parenthesized value.
 `()` represents the empty (length-0) tuple.
 
-## Named Tuples
+`[](## Named Tuples)
+## 名前付きタプル
 
 The components of tuples can optionally be named, in which case a *named tuple* is
 constructed:
@@ -390,7 +414,8 @@ julia> x.a
 Named tuples are very similar to tuples, except that fields can additionally be accessed by name
 using dot syntax (`x.a`).
 
-## Multiple Return Values
+`[](## Multiple Return Values)
+## 複数戻り値
 
 In Julia, one returns a tuple of values to simulate returning multiple values. However, tuples
 can be created and destructured without needing parentheses, thereby providing an illusion that
@@ -436,7 +461,8 @@ end
 
 This has the exact same effect as the previous definition of `foo`.
 
-## Argument destructuring
+`[](## Argument destructuring)
+## 引数分割
 
 The destructuring feature can also be used within a function argument.
 If a function argument name is written as a tuple (e.g. `(x, y)`) instead of just
@@ -455,7 +481,8 @@ Notice the extra set of parentheses in the definition of `range`.
 Without those, `range` would be a two-argument function, and this example would
 not work.
 
-## Varargs Functions
+`[](## Varargs Functions)
+## 可変引数関数
 
 It is often convenient to be able to write functions taking an arbitrary number of arguments.
 Such functions are traditionally known as "varargs" functions, which is short for "variable number
@@ -569,7 +596,8 @@ Closest candidates are:
 As you can see, if the wrong number of elements are in the splatted container, then the function
 call will fail, just as it would if too many arguments were given explicitly.
 
-## Optional Arguments
+`[](## Optional Arguments)
+## 省略可能な引数
 
 In many cases, function arguments have sensible default values and therefore might not need to
 be passed explicitly in every call. For example, the function [`Date(y, [m, d])`](@ref)
@@ -608,7 +636,8 @@ Optional arguments are actually just a convenient syntax for writing multiple me
 with different numbers of arguments (see [Note on Optional and keyword Arguments](@ref)).
 This can be checked for our `Date` function example by calling `methods` function.
 
-## Keyword Arguments
+`[](## Keyword Arguments)
+## キーワード引数
 
 Some functions need a large number of arguments, or have a large number of behaviors. Remembering
 how to call such functions can be difficult. Keyword arguments can make these complex interfaces
@@ -678,7 +707,8 @@ this example, `width` is certain to have the value `2`. However, explicitly spec
 argument multiple times, for example `plot(x, y, width=2, width=3)`, is not allowed and results in
 a syntax error.
 
-## Evaluation Scope of Default Values
+`[](## Evaluation Scope of Default Values)
+## デフォルト値の評価スコープ
 
 When optional and keyword argument default expressions are evaluated, only *previous* arguments are in
 scope.
@@ -692,7 +722,8 @@ end
 
 the `b` in `a=b` refers to a `b` in an outer scope, not the subsequent argument `b`.
 
-## Do-Block Syntax for Function Arguments
+`[](## Do-Block Syntax for Function Arguments)
+## 関数引数のDoブロック構文
 
 Passing functions as arguments to other functions is a powerful technique, but the syntax for
 it is not always convenient. Such calls are especially awkward to write when the function argument
@@ -772,7 +803,8 @@ enclosing scope. For example, the variable `data` in the above example of
 can create performance challenges as discussed in [performance tips](@ref man-performance-tips).
 
 
-## [Dot Syntax for Vectorizing Functions](@id man-vectorized)
+`[](## [Dot Syntax for Vectorizing Functions](@id man-vectorized))
+## [関数をベクトル化するDot構文](@id man-vectorized)
 
 In technical-computing languages, it is common to have "vectorized" versions of functions, which
 simply apply a given function `f(x)` to each element of an array `A` to yield a new array via
@@ -883,7 +915,8 @@ julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
  true
 ```
 
-## Further Reading
+`[](## Further Reading)
+## 関連項目
 
 We should mention here that this is far from a complete picture of defining functions. Julia has
 a sophisticated type system and allows multiple dispatch on argument types. None of the examples
