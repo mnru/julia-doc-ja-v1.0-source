@@ -315,9 +315,9 @@ A few special expressions correspond to calls to functions with non-obvious name
 | `A.n = x`         | [`setproperty!`](@ref Base.setproperty!) |
 -->
 ```
-非自明な名前による関数呼び出しに対応した特殊な式がいくつかあります。それらは
+見た目からはわからない名前で関数呼び出しできる特殊な式がいくつかあります。それらは
 
-| 式                | 呼び出し名                   |
+| 式                | 呼び出し名               |
 |:----------------- |:----------------------- |
 | `[A B C ...]`     | [`hcat`](@ref)          |
 | `[A; B; C; ...]`  | [`vcat`](@ref)          |
@@ -623,18 +623,36 @@ not work.
 `[](## Varargs Functions)
 ## 可変引数関数
 
+```@raw html
+<!--
 It is often convenient to be able to write functions taking an arbitrary number of arguments.
 Such functions are traditionally known as "varargs" functions, which is short for "variable number
 of arguments". You can define a varargs function by following the last argument with an ellipsis:
+-->
+```
+
+引数の数が任意個の関数が書けると便利なことがよくあります。
+そういった関数は従来、”可変引数”関数として知られ、これは”可変個の引数”の略です。
+可変引数関数は、最後の引数のあとに省略記号をつけると定義できます。
+
+
 
 ```jldoctest barfunc
 julia> bar(a,b,x...) = (a,b,x)
 bar (generic function with 1 method)
 ```
 
+```@raw html
+<!--
 The variables `a` and `b` are bound to the first two argument values as usual, and the variable
 `x` is bound to an iterable collection of the zero or more values passed to `bar` after its first
 two arguments:
+-->
+```
+
+変数`a`と`b`は、通常通り、最初の２つの変数に束縛されています。
+変数`x`は、最初の２つの引数に続いて`bar`に渡された引数からなる、０個以上のイテラブルコレクションが束縛される。 
+
 
 ```jldoctest barfunc
 julia> bar(1,2)
@@ -650,6 +668,8 @@ julia> bar(1,2,3,4,5,6)
 (1, 2, (3, 4, 5, 6))
 ```
 
+```@raw html
+<!--
 In all these cases, `x` is bound to a tuple of the trailing values passed to `bar`.
 
 It is possible to constrain the number of values passed as a variable argument; this will be discussed
@@ -658,6 +678,16 @@ later in [Parametrically-constrained Varargs methods](@ref).
 On the flip side, it is often handy to "splat" the values contained in an iterable collection
 into a function call as individual arguments. To do this, one also uses `...` but in the function
 call instead:
+-->
+```
+
+すべての場合で、`x`は`bar`に渡された後続の値からなるタプルに束縛されます。
+
+可変引数として渡される値の個数を制限することも可能ます。
+これは後述の[パラメータ制限つきの可変引数メソッド](@ref)で議論します。
+
+また、イテラブルコレクションに含まれる値と、関数呼び出しの各引数とは、簡単に"接合"できるので、よく使われます。
+
 
 ```jldoctest barfunc
 julia> x = (3, 4)
@@ -667,8 +697,16 @@ julia> bar(1,2,x...)
 (1, 2, (3, 4))
 ```
 
+```@raw html
+<!--
 In this case a tuple of values is spliced into a varargs call precisely where the variable number
 of arguments go. This need not be the case, however:
+-->
+```
+
+この接合は、引数の個数とタプルの要素数がちょう等しいので、する必要はありません。
+
+
 
 ```jldoctest barfunc
 julia> x = (2, 3, 4)
@@ -684,7 +722,13 @@ julia> bar(x...)
 (1, 2, (3, 4))
 ```
 
+```@raw html
+<!--
 Furthermore, the iterable object splatted into a function call need not be a tuple:
+-->
+```
+
+さらに、関数呼び出しと接合するイテラブルオブジェクトはタプルである必要はありません。
 
 ```jldoctest barfunc
 julia> x = [3,4]
@@ -706,8 +750,14 @@ julia> bar(x...)
 (1, 2, (3, 4))
 ```
 
+```@raw html
+<!--
 Also, the function that arguments are splatted into need not be a varargs function (although it
 often is):
+-->
+```
+
+引数を接合する関数は可変引数関数でなくてもかまいません（可変引数関数である方が多いですが）。
 
 ```jldoctest
 julia> baz(a,b) = a + b;
@@ -732,8 +782,16 @@ Closest candidates are:
   baz(::Any, ::Any) at none:1
 ```
 
+```@raw html
+<!--
 As you can see, if the wrong number of elements are in the splatted container, then the function
 call will fail, just as it would if too many arguments were given explicitly.
+-->
+```
+
+接合するコンテナの要素の数が適切ではない場合は、関数呼び出しは失敗します。
+明示的に与える引数が多すぎる場合と同じです。
+
 
 `[](## Optional Arguments)
 ## 省略可能な引数

@@ -14,3 +14,4 @@
 関数,[Compound Expressions],複合式
 ,[Type Declarations],型宣言
 ,[Short-Circuit Evaluation],短絡評価
+,[Parametrically-constrained Varargs methods],パラメータ制限つきの可変引数メソッド
