@@ -212,7 +212,7 @@ the return value to the specified type.
 -->
 ```
 
-この関数には３箇所、終了しうる場所があり、３つの異なる式の値を戻しますが、`x`と`y`の値に依存します。
+この関数には３箇所、終了しうる場所があり、３つの異なる式の値を返しますが、`x`と`y`の値に依存します。
 最終行の`return`は最後の式なので省略可能です。
 
 関数の戻り値の型は、関数宣言の中で、`::`演算子を使って指定できます。
@@ -330,13 +330,22 @@ A few special expressions correspond to calls to functions with non-obvious name
 
 
 `[](## [Anonymous Functions](@id man-anonymous-functions))
-## [匿名関数](@id man-anonymous-functions)
+## [無名関数](@id man-anonymous-functions)
 
+```@raw html
+<!--
 Functions in Julia are [first-class objects](https://en.wikipedia.org/wiki/First-class_citizen):
 they can be assigned to variables, and called using the standard function call syntax from the
 variable they have been assigned to. They can be used as arguments, and they can be returned as
 values. They can also be created anonymously, without being given a name, using either of these
 syntaxes:
+-->
+```
+
+Juliaにおいて関数は [第一級オブジェクトです](https://en.wikipedia.org/wiki/First-class_citizen)。
+関数を変数に代入し、標準的な関数を呼び出す構文で、束縛されている変数から呼び出すことができます。
+また関数は、引数としても戻り値としても利用することができます。
+また無名のまま、つまり名前をつけないで生成することができ、下記の構文のうちのどれかで作成できます。
 
 ```jldoctest
 julia> x -> x^2 + 2x - 1
@@ -348,6 +357,8 @@ julia> function (x)
 #3 (generic function with 1 method)
 ```
 
+```@raw html
+<!--
 This creates a function taking one argument `x` and returning the value of the polynomial `x^2 +
 2x - 1` at that value. Notice that the result is a generic function, but with a compiler-generated
 name based on consecutive numbering.
@@ -355,6 +366,14 @@ name based on consecutive numbering.
 The primary use for anonymous functions is passing them to functions which take other functions
 as arguments. A classic example is [`map`](@ref), which applies a function to each value of
 an array and returns a new array containing the resulting values:
+-->
+```
+この構文から、引数が`x`で、戻り値が その値に対する多項式`x^2 +2x - 1`の値となる関数が生成されます、。
+ここで生成される関数は、汎化関数ですが、コンパイラの生成した通し番号が名付けられている点に注意してください。
+
+無名関数の主な用途は、他の関数を引数にとる関数に渡すことです。
+典型的な例は [`map`](@ref)で、この関数は、配列の各値に対して関数を適用し、その結果を新しい配列として返します。
+
 
 ```jldoctest
 julia> map(round, [1.2,3.5,1.7])
@@ -364,10 +383,21 @@ julia> map(round, [1.2,3.5,1.7])
  2.0
 ```
 
+
+
+```@raw html
+<!--
 This is fine if a named function effecting the transform already exists to pass as the first argument
 to [`map`](@ref). Often, however, a ready-to-use, named function does not exist. In these
 situations, the anonymous function construct allows easy creation of a single-use function object
 without needing a name:
+-->
+```
+
+これは、変換を行う名前付き関数がすでに存在し、 [`map`](@ref)の第1引数に渡せる場合は申し分ありません。
+しかし、すぐに使える既存の関数がないことは、よくあります。
+そんな時は、無名関数の構文で、名前を必要としない使い捨ての関数オブジェクトを簡単に作ることができます。
+
 
 ```jldoctest
 julia> map(x -> x^2 + 2x - 1, [1,3,-1])
@@ -377,10 +407,22 @@ julia> map(x -> x^2 + 2x - 1, [1,3,-1])
  -2
 ```
 
+```@raw html
+<!--
 An anonymous function accepting multiple arguments can be written using the syntax `(x,y,z)->2x+y-z`.
 A zero-argument anonymous function is written as `()->3`. The idea of a function with no arguments
 may seem strange, but is useful for "delaying" a computation. In this usage, a block of code is
 wrapped in a zero-argument function, which is later invoked by calling it as `f`.
+-->
+```
+
+複数の引数をとる無名関数は、 `(x,y,z)->2x+y-z`といった構文で書くことができます。
+引数のない関数の場合は、`()->3`のように書けます。
+
+引数のない関数という考えは奇妙に思えるかもしれませんが、計算を”遅延させる”時に役立ちます。
+この記法で、コードの塊を引数のない関数を囲って、'f'として後で呼び出します。
+
+
 
 `[](## Tuples)
 ## タプル
