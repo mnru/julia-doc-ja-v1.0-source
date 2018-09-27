@@ -842,8 +842,7 @@ they are entered as literal expressions:
 ```
 
 連結も文字列展開も[`string`](@ref)を呼び出して、オブジェクトを文字列に変換します。
-たいていの`AbstractString`ではないオブジェクトが文字列に変換されるのは、どのようにリテラル式として入力されたのかに密接に関連します。
-
+`AbstractString`ではない、ほとんどのオブジェクトは、リテラル式の入力方法と密接に関連して文字列に変換されます。
 
 ```jldoctest
 julia> v = [1,2,3]
@@ -881,7 +880,7 @@ To include a literal `$` in a string literal, escape it with a backslash:
 -->
 ```
 
-リテラルの`$`を文字列リテラルに含めるには、バックスラッシュでエスケープします。
+文字列リテラルに、リテラル`$`を含めるには、バックスラッシュでエスケープします。
 
 ```jldoctest
 julia> print("I have \$100 in my account.\n")
