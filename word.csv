@@ -38,7 +38,7 @@
 文字列,definitive,最も信頼のおける
 ,gracefully fail,制御のもと終了する
 ,Unicode code point,符号位置
-,As of this writing,執筆時点では
+,As of this writing,執筆時点では、現時点では
 ,intelligible,分かりやすい
 ,identity,恒等写像
 ,awkward,ぎこちない
@@ -60,3 +60,10 @@
 ,trailing,末尾
 ,unescaped,エスケープ処理しないで
 関数,terse,簡潔な
+,pointless,意味がない
+,pure liner function,順次処理だけを行う関数
+,anonymous function,無名関数
+,function body,関数本体
+,omit,省く
+,In conjunction with,～とつなぎ合わせる
+,of real use,実用的

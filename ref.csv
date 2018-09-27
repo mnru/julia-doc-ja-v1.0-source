@@ -12,3 +12,4 @@
 ,[Special floating-point values],特殊な浮動小数点数の値
 文字列, [non-standard string literals],非標準文字列リテラル
 関数,[Compound Expressions],複合式
+,[Type Declarations],型宣言
