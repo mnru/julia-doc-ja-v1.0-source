@@ -503,10 +503,19 @@ using dot syntax (`x.a`).
 `[](## Multiple Return Values)
 ## 複数の戻り値
 
+```@raw html
+<!--
 In Julia, one returns a tuple of values to simulate returning multiple values. However, tuples
 can be created and destructured without needing parentheses, thereby providing an illusion that
 multiple values are being returned, rather than a single tuple value. For example, the following
 function returns a pair of values:
+-->
+```
+
+Juliaでは値をタプルで返すことで、複数の値を返すまねるができますが、
+タプルは括弧なしで、生成・分割ができるので、単一のタプルの値ではなく複数の値を返しているような錯覚を与えます。
+下記の関数では値の組を返しています。
+
 
 ```jldoctest foofunc
 julia> function foo(a,b)
