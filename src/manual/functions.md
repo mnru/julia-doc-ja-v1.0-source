@@ -512,8 +512,8 @@ function returns a pair of values:
 -->
 ```
 
-Juliaでは値をタプルで返すことで、複数の値を返すまねるができますが、
-タプルは括弧なしで、生成・分割ができるので、単一のタプルの値ではなく複数の値を返しているような錯覚を与えます。
+Juliaでは値をタプルを使って、擬似的に複数の値を返すことができますが、
+タプルは括弧をつかわなくても、生成・分割ができるので、単一のタプルの値ではなく複数の値を返しているような錯覚を与えるでしょう。
 下記の関数では値の組を返しています。
 
 
@@ -524,16 +524,31 @@ julia> function foo(a,b)
 foo (generic function with 1 method)
 ```
 
+```@raw html
+<!--
 If you call it in an interactive session without assigning the return value anywhere, you will
 see the tuple returned:
+-->
+```
+
+この関数を対話セッションで戻り値をどこにも代入しない場合は、タプルが返ってくるのを確認できます。
+
 
 ```jldoctest foofunc
 julia> foo(2,3)
 (5, 6)
 ```
 
+```@raw html
+<!--
 A typical usage of such a pair of return values, however, extracts each value into a variable.
 Julia supports simple tuple "destructuring" that facilitates this:
+-->
+```
+
+しかし、こういった戻り値を組みにして返す用法をよく使うのは、それぞれの値を取り出して変数に代入する場合でしょう。
+Juliaでは、これを簡単にするタプルの"分割"に対応しています。
+
 
 ```jldoctest foofunc
 julia> x, y = foo(2,3)
@@ -546,7 +561,12 @@ julia> y
 6
 ```
 
+```@raw html
+<!--
 You can also return multiple values via an explicit usage of the `return` keyword:
+-->
+```
+Juliaでは`return`キーワードを明示した用法で、複数の値を返すこともできます。
 
 ```julia
 function foo(a,b)
@@ -554,14 +574,30 @@ function foo(a,b)
 end
 ```
 
+```@raw html
+<!--
 This has the exact same effect as the previous definition of `foo`.
+-->
+```
+
+これは前に出てきた`foo`の定義と全く同じ効果があります。
+
 
 `[](## Argument destructuring)
 ## 引数分割
 
+```@raw html
+<!--
 The destructuring feature can also be used within a function argument.
 If a function argument name is written as a tuple (e.g. `(x, y)`) instead of just
 a symbol, then an assignment `(x, y) = argument` will be inserted for you:
+-->
+```
+
+分割の機能は、関数の引数の中でも利用できます。
+関数の引数の位置にそれぞれの記号(例えば `(x, y)`)ではなくタプルを書くと、
+`(x, y) = 引数のタプル`という代入が実行されます。
+
 
 ```julia
 julia> minmax(x, y) = (y < x) ? (y, x) : (x, y)
@@ -572,9 +608,17 @@ julia> range(minmax(10, 2))
 8
 ```
 
+```@raw html
+<!--
 Notice the extra set of parentheses in the definition of `range`.
 Without those, `range` would be a two-argument function, and this example would
 not work.
+-->
+```
+
+ `range`の定義で余計な括弧があるのに注意してください。
+ これがなければ、`range`は引数が２個の関数となり、この例はうまく動作しません。
+
 
 `[](## Varargs Functions)
 ## 可変引数関数
