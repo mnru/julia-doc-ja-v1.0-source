@@ -419,19 +419,29 @@ wrapped in a zero-argument function, which is later invoked by calling it as `f`
 複数の引数をとる無名関数は、 `(x,y,z)->2x+y-z`といった構文で書くことができます。
 引数のない関数の場合は、`()->3`のように書けます。
 
-引数のない関数という考えは奇妙に思えるかもしれませんが、計算を”遅延させる”時に役立ちます。
-この記法で、コードの塊を引数のない関数を囲って、'f'として後で呼び出します。
+引数のない関数という考えは奇妙に思えるかもしれませんが、計算を”遅らせる”時に役立ちます。
+この記法で、コードの塊を引数のない関数で囲って、'f'のように後で呼び出します。
 
 
 
 `[](## Tuples)
 ## タプル
 
+```@raw html
+<!--
 Julia has a built-in data structure called a *tuple* that is closely related to function
 arguments and return values.
 A tuple is a fixed-length container that can hold any values, but cannot be modified
 (it is *immutable*).
 Tuples are constructed with commas and parentheses, and can be accessed via indexing:
+-->
+```
+
+Juliaには、組込みの **タプル** と呼ばれるデータ型があり、関数の引数や戻り値と密接に関係しています。
+タプルは長さの決まったコンテナで、任意の値を保持しますが、変更はできません。（つまり **不変** です）。
+タプルはコンマと括弧で構成され、インデックスを使ってアクセスできます。
+
+
 
 ```jldoctest
 julia> (1, 1+1)
@@ -447,15 +457,30 @@ julia> x[2]
 "hello"
 ```
 
+```@raw html
+<!--
 Notice that a length-1 tuple must be written with a comma, `(1,)`, since `(1)` would just
 be a parenthesized value.
 `()` represents the empty (length-0) tuple.
+-->
+```
+
+長さ１のタプルは、コンマをつけて`(1,)`のように書く必要がある点に気をつけてください。
+`(1)`は括弧をつけた単なる値です。
+`()`だと空の（長さ０）のタプルを表します。
 
 `[](## Named Tuples)
 ## 名前付きタプル
 
+```@raw html
+<!--
 The components of tuples can optionally be named, in which case a *named tuple* is
 constructed:
+-->
+```
+タプルの要素には、必要に応じて名前をつけることができます。
+この場合 **名前付きタプル**が生成されます。
+
 
 ```jldoctest
 julia> x = (a=1, b=1+1)
@@ -465,11 +490,18 @@ julia> x.a
 1
 ```
 
+```@raw html
+<!--
 Named tuples are very similar to tuples, except that fields can additionally be accessed by name
 using dot syntax (`x.a`).
+-->
+```
+
+名前付きタプルはタプルと非常に似ていますが、そのフィールドに対しては更に、ドット構文(`x.a`)を使って名前でアクセスできます。
+
 
 `[](## Multiple Return Values)
-## 複数戻り値
+## 複数の戻り値
 
 In Julia, one returns a tuple of values to simulate returning multiple values. However, tuples
 can be created and destructured without needing parentheses, thereby providing an illusion that
