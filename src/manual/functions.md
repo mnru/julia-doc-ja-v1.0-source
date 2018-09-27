@@ -252,6 +252,11 @@ of the operator.) Accordingly, you can also apply them using parenthesized argum
 as you would any other function:
 -->
 ```
+Juliaではほとんどの演算子が特殊な構文を利用できる単なる関数です。
+（例外は特殊な評価セマンティックを持つ`&&`や`||`などの演算子です。
+これらは、関数とはなりえません。
+というのも、[短絡評価](@ref)では、演算子の評価の前に被演算子の評価はされないからです。）
+したがって、演算子を、他の関数と同じように、パラメータ付きの引数リストに適用することができます。
 
 ```jldoctest
 julia> 1 + 2 + 3
@@ -269,6 +274,10 @@ operators such as [`+`](@ref) and [`*`](@ref) just like you would with other fun
 -->
 ```
 
+中置形式は関数適用形式と全く同等です。
+実のところ前者は内部で関数呼び出しを行っています。
+これは、[`+`](@ref) や [`*`](@ref)といった演算子に対して、他の関数とおなじように、代入や受け渡しが可能だと言うことです。
+
 
 ```jldoctest
 julia> f = +;
@@ -282,6 +291,9 @@ julia> f(1,2,3)
 Under the name `f`, the function does not support infix notation, however.
 -->
 ```
+
+しかし、`f`という名前では、関数は中置記法を利用できません。
+
 
 `[](## Operators With Special Names)
 ## 特殊な名前の演算子
