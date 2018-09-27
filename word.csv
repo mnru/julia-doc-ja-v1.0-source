@@ -41,7 +41,8 @@
 ,As of this writing,執筆時点では
 ,intelligible,分かりやすい
 ,identity,恒等写像
-,UTF-8 code unit,UTF-8コードの中の1ﾊﾞｲﾄ
+,awkward,ぎこちない
+,UTF-8 code unit,UTF-8の符号単位(コードの中の1ﾊﾞｲﾄ)
 ,malformed,不正な形式の
 ,for the time being,さしあたり
 ,beyond the scope ,範囲外
