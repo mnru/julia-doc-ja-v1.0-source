@@ -796,11 +796,17 @@ call will fail, just as it would if too many arguments were given explicitly.
 `[](## Optional Arguments)
 ## 省略可能な引数
 
+```@raw html
+<!--
 In many cases, function arguments have sensible default values and therefore might not need to
 be passed explicitly in every call. For example, the function [`Date(y, [m, d])`](@ref)
 from `Dates` module constructs a `Date` type for a given year `y`, month `m` and day `d`.
 However, `m` and `d` arguments are optional and their default value is `1`.
 This behavior can be expressed concisely as:
+-->
+```
+
+
 
 ```julia
 function Date(y::Int64, m::Int64=1, d::Int64=1)
