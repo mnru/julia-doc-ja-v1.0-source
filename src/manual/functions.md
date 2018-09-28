@@ -580,7 +580,7 @@ This has the exact same effect as the previous definition of `foo`.
 -->
 ```
 
-これは前に出てきた`foo`の定義と全く同じ効果があります。
+これは既出の`foo`の定義と全く同じ効果があります。
 
 
 `[](## Argument destructuring)
@@ -806,14 +806,10 @@ This behavior can be expressed concisely as:
 -->
 ```
 
-<<<<<<< HEAD
-
-=======
 多くの場合、関数の引数には適切なデフォルト値があり、すべての呼び出しでわざわざ値を渡す必要はないかもしれません。
 例えば、`Dates`モジュールにある[`Date(y, [m, d])`](@ref)関数は、年`y`・月`m`・日`d`から`Date`型を構成します。
 しかし、`m`と`d`は省略可能で、デフォルト値は`1`です。
 この挙動は簡単にこう表現できます。
->>>>>>> 523059c12289694e999c204ec6eb7810bb80a805
 
 ```julia
 function Date(y::Int64, m::Int64=1, d::Int64=1)
@@ -888,6 +884,11 @@ Functions with keyword arguments are defined using a semicolon in the signature:
 おそらく、この関数には、線の形状、幅、色など、たくさんのオプションがあるでしょう。
 キーワード引数を使えば、線の幅だけを指定するような`plot(x, y, width=2)`といった呼び出し方が可能でしょう。
 これには2つの役割がある点に注意してください。
+まずは、関数呼び出しが読みやすくなります。
+というのも、引数に何を意味するかラベル付けできるからです。
+次に、多数の引数のなかから、任意の部分集合を任意の順序で受け渡しできます。
+
+キーワード引数を持つ関数は、シグネチャの中でセミコロンを使って定義します。
 
 ```julia
 function plot(x, y; style="solid", width=1, color="black")
@@ -895,6 +896,8 @@ function plot(x, y; style="solid", width=1, color="black")
 end
 ```
 
+```@raw html
+<!--
 When the function is called, the semicolon is optional: one can either call `plot(x, y, width=2)`
 or `plot(x, y; width=2)`, but the former style is more common. An explicit semicolon is required
 only for passing varargs or computed keywords as described below.
@@ -904,6 +907,17 @@ argument is not passed), and in left-to-right order. Therefore default expressio
 prior keyword arguments.
 
 The types of keyword arguments can be made explicit as follows:
+-->
+```
+
+関数を呼び出す時に、セミコロンは省略できます。
+呼び出し方は`plot(x, y, width=2)`か`plot(x, y; width=2)`ですが、前者のほうがよく使われます。
+明示的にセミコロンを使う必要があるのは、下記のような、可変引数を渡す場合か計算結果のキーワードを渡すときです。
+
+キーワード引数のデフォルト値は必要な時だけ左から右へ評価されます（対応するキーワード引数が渡されないときです）。
+そのため、デフォルト式は先にでたのキーワード参照可能です。
+
+
 
 ```julia
 function f(;x::Int=1)
@@ -911,7 +925,13 @@ function f(;x::Int=1)
 end
 ```
 
+```@raw html
+<!--
 Extra keyword arguments can be collected using `...`, as in varargs functions:
+-->
+```
+
+余分のキーワード引数は、可変引数関数を同じように`...`を使ってひとまとめにすることができます。
 
 ```julia
 function f(x; y=0, kwargs...)
@@ -919,9 +939,17 @@ function f(x; y=0, kwargs...)
 end
 ```
 
+```@raw html
+<!--
 If a keyword argument is not assigned a default value in the method definition,
 then it is *required*: an [`UndefKeywordError`](@ref) exception will be thrown
 if the caller does not assign it a value:
+-->
+```
+
+キーワード引数がメソッドの定義でデフォルト値を設定されていない場合は、 **入力必須** となります。
+呼び出し側が値を代入しない時には、 [`UndefKeywordError`](@ref)が投げられます。
+
 ```julia
 function f(x; y)
     ###
@@ -930,26 +958,57 @@ f(3, y=5) # ok, y is assigned
 f(3)      # throws UndefKeywordError(:y)
 ```
 
+```@raw html
+<!--
 Inside `f`, `kwargs` will be a named tuple. Named tuples (as well as dictionaries) can be passed as
 keyword arguments using a semicolon in a call, e.g. `f(x, z=1; kwargs...)`.
 
 One can also pass `key => value` expressions after a semicolon. For example, `plot(x, y; :width => 2)`
 is equivalent to `plot(x, y, width=2)`. This is useful in situations where the keyword name is computed
 at runtime.
+-->
+```
 
+`f`の内部で`kwargs`は名前付きタプルになります。
+名前付きタプルは（辞書と同じように）、キーワード引数として関数に渡すことができて、呼び出す時にセミコロンを使います。
+`f(x, z=1; kwargs...)`のように。
+ `key => value`といった式もセミコロンのあとに続けて、渡すこともできます。
+ 例えば、`plot(x, y; :width => 2)`は`plot(x, y, width=2)`と同等です。
+ これは、キーワードが実行時に算出される状況で便利です。
+
+
+
+```@raw html
+<!--
 The nature of keyword arguments makes it possible to specify the same argument more than once.
 For example, in the call `plot(x, y; options..., width=2)` it is possible that the `options` structure
 also contains a value for `width`. In such a case the rightmost occurrence takes precedence; in
 this example, `width` is certain to have the value `2`. However, explicitly specifying the same keyword
 argument multiple times, for example `plot(x, y, width=2, width=3)`, is not allowed and results in
 a syntax error.
+-->
+```
+キーワード変数の特質から、同一の引数に対して、複数回指定をすることが可能です。
+例えば、`plot(x, y; options..., width=2)`のように関数を呼び出すとき、`options`の中にも`width`の値が含まれます。
+こういう場合は、一番右側の出現が優先されます。この例では、`width`は必ず２になります。
+しかし、例えば`plot(x, y, width=2, width=3)`のように、同一のキーワード引数を明示的に複数回指定することは、禁止されており
+構文エラーとなります。
+
+
 
 `[](## Evaluation Scope of Default Values)
 ## デフォルト値の評価スコープ
 
+```@raw html
+<!--
 When optional and keyword argument default expressions are evaluated, only *previous* arguments are in
 scope.
 For example, given this definition:
+-->
+```
+
+オプション引数やキーワード引数のデフォルトの式が評価される時、スコープに入るのは **既出の** 引数だけです。
+例えば、この式の場合
 
 ```julia
 function f(x, a=b, b=1)
@@ -957,7 +1016,13 @@ function f(x, a=b, b=1)
 end
 ```
 
+```@raw html
+<!--
 the `b` in `a=b` refers to a `b` in an outer scope, not the subsequent argument `b`.
+-->
+```
+`a=b` の`b`は外側のスコープの`b`を参照して、後続の引数`b`は参照しません。
+
 
 `[](## Do-Block Syntax for Function Arguments)
 ## 関数引数のDoブロック構文
