@@ -794,7 +794,7 @@ call will fail, just as it would if too many arguments were given explicitly.
 
 
 `[](## Optional Arguments)
-## 省略可能な引数
+## オプション引数
 
 ```@raw html
 <!--
@@ -806,7 +806,14 @@ This behavior can be expressed concisely as:
 -->
 ```
 
+<<<<<<< HEAD
 
+=======
+多くの場合、関数の引数には適切なデフォルト値があり、すべての呼び出しでわざわざ値を渡す必要はないかもしれません。
+例えば、`Dates`モジュールにある[`Date(y, [m, d])`](@ref)関数は、年`y`・月`m`・日`d`から`Date`型を構成します。
+しかし、`m`と`d`は省略可能で、デフォルト値は`1`です。
+この挙動は簡単にこう表現できます。
+>>>>>>> 523059c12289694e999c204ec6eb7810bb80a805
 
 ```julia
 function Date(y::Int64, m::Int64=1, d::Int64=1)
@@ -816,11 +823,18 @@ function Date(y::Int64, m::Int64=1, d::Int64=1)
 end
 ```
 
+```@raw html
+<!--
 Observe, that this definition calls another method of `Date` function that takes one argument
 of `UTInstant{Day}` type.
 
 With this definition, the function can be called with either one, two or three arguments, and
 `1` is automatically passed when any of the arguments is not specified:
+-->
+```
+見ての通り、この定義では`Date`関数の別メソッドで、`UTInstant{Day}`型の1個引数にとるものを呼び出しています。
+この定義によって、関数は１個または２個または３個の引数を取り、指定しなかった引数には、自動的に`1`を渡します。
+
 
 ```jldoctest
 julia> using Dates
@@ -835,13 +849,22 @@ julia> Date(2000)
 2000-01-01
 ```
 
+```@raw html
+<!--
 Optional arguments are actually just a convenient syntax for writing multiple method definitions
 with different numbers of arguments (see [Note on Optional and keyword Arguments](@ref)).
 This can be checked for our `Date` function example by calling `methods` function.
+-->
+```
+
+省略可能な引数は実際には引数の異なる複数のメソッドを定義する、簡便な記法です。
+([オプション引数・キーワード引数に関する注記](@ref)を参照)
+これは`methods`関数から、例に挙げた`Date`関数呼び出して、確認することができます。
 
 `[](## Keyword Arguments)
 ## キーワード引数
-
+```@raw html
+<!--
 Some functions need a large number of arguments, or have a large number of behaviors. Remembering
 how to call such functions can be difficult. Keyword arguments can make these complex interfaces
 easier to use and extend by allowing arguments to be identified by name instead of only by position.
@@ -854,6 +877,17 @@ its meaning. It also becomes possible to pass any subset of a large number of ar
 order.
 
 Functions with keyword arguments are defined using a semicolon in the signature:
+-->
+```
+
+関数の中には引数の数が多いものや、挙動の数が多いものがあります。
+そういった関数の呼び出し方を覚えるのは難しくなることがあります。
+キーワード引数を使うと、位置ではなく名前で引数を指定できるので、使用や拡張が簡単になります。
+
+例えば線を引く`plot`関数を考えてみます。
+おそらく、この関数には、線の形状、幅、色など、たくさんのオプションがあるでしょう。
+キーワード引数を使えば、線の幅だけを指定するような`plot(x, y, width=2)`といった呼び出し方が可能でしょう。
+これには2つの役割がある点に注意してください。
 
 ```julia
 function plot(x, y; style="solid", width=1, color="black")

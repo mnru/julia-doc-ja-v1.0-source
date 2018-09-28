@@ -1,4 +1,4 @@
-﻿前書き,,
+前書き,,
 ,,
 始めよう,,
 変数,,
@@ -15,3 +15,4 @@
 ,[Type Declarations],型宣言
 ,[Short-Circuit Evaluation],短絡評価
 ,[Parametrically-constrained Varargs methods],パラメータ制限つきの可変引数メソッド
+,[Note on Optional and keyword Arguments],オプション引数・キーワード引数に関する注記
