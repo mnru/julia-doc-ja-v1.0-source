@@ -1,4 +1,6 @@
-# Control Flow
+`[](# Control Flow)
+# 制御フロー
+
 
 Julia provides a variety of control flow constructs:
 
@@ -15,7 +17,8 @@ temporarily-suspended computations. This is a powerful construct: both exception
 cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no
 direct usage of tasks, but certain problems can be solved much more easily by using tasks.
 
-## [Compound Expressions](@id man-compound-expressions)
+`[](## [Compound Expressions](@id man-compound-expressions))
+## [複合式](@id man-compound-expressions)
 
 Sometimes it is convenient to have a single expression which evaluates several subexpressions
 in order, returning the value of the last subexpression as its value. There are two Julia constructs
@@ -53,7 +56,8 @@ julia> (x = 1;
 3
 ```
 
-## [Conditional Evaluation](@id man-conditional-evaluation)
+`[](## [Conditional Evaluation](@id man-conditional-evaluation))
+## [条件評価](@id man-conditional-evaluation)
 
 Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the
 value of a boolean expression. Here is the anatomy of the `if`-`elseif`-`else` conditional syntax:
@@ -245,7 +249,8 @@ no
 "no"
 ```
 
-## Short-Circuit Evaluation
+`[](## Short-Circuit Evaluation)
+## 短絡評価
 
 Short-circuit evaluation is quite similar to conditional evaluation. The behavior is found in
 most imperative programming languages having the `&&` and `||` boolean operators: in a series
@@ -373,7 +378,8 @@ julia> false && (x = (1, 2, 3))
 false
 ```
 
-## [Repeated Evaluation: Loops](@id man-loops)
+`[](## [Repeated Evaluation: Loops](@id man-loops))
+## [反復評価：ループ](@id man-loops)
 
 There are two constructs for repeated evaluation of expressions: the `while` loop and the `for`
 loop. Here is an example of a `while` loop:
@@ -547,14 +553,16 @@ julia> for i = 1:2, j = 3:4
 If this example were rewritten to use a `for` keyword for each variable, then the output would
 be different: the second and fourth values would contain `0`.
 
-## Exception Handling
+`[](## Exception Handling)
+## 例外の取扱い
 
 When an unexpected condition occurs, a function may be unable to return a reasonable value to
 its caller. In such cases, it may be best for the exceptional condition to either terminate the
 program while printing a diagnostic error message, or if the programmer has provided code to handle
 such exceptional circumstances then allow that code to take the appropriate action.
 
-### Built-in `Exception`s
+`[](### Built-in `Exception`s)
+### 組込みの`例外`
 
 `Exception`s are thrown when an unexpected condition has occurred. The built-in `Exception`s listed
 below all interrupt the normal flow of control.
@@ -603,7 +611,8 @@ You may define your own exceptions in the following way:
 julia> struct MyCustomException <: Exception end
 ```
 
-### The [`throw`](@ref) function
+`[](### The [`throw`](@ref) function)
+### [`throw`](@ref)関数
 
 Exceptions can be created explicitly with [`throw`](@ref). For example, a function defined only
 for nonnegative numbers could be written to [`throw`](@ref) a [`DomainError`](@ref) if the argument
@@ -663,7 +672,7 @@ julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defin
     However, sometimes it makes sense to keep the uppercase first letter, for instance if an argument
     to a function is a capital letter: `size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))`.
 
-### Errors
+### エラー
 
 The [`error`](@ref) function is used to produce an [`ErrorException`](@ref) that interrupts
 the normal flow of control.
@@ -715,7 +724,8 @@ Stacktrace:
  [4] top-level scope
 ```
 
-### The `try/catch` statement
+`[](### The `try/catch` statement)
+### `try/catch` 文
 
 The `try/catch` statement allows for `Exception`s to be tested for. For example, a customized
 square root function can be written to automatically call either the real or complex square root
@@ -796,7 +806,8 @@ no error has occurred, but the ability to unwind the stack and pass a value to a
 is desirable. Julia provides the [`rethrow`](@ref), [`backtrace`](@ref) and [`catch_backtrace`](@ref)
 functions for more advanced error handling.
 
-### `finally` Clauses
+`[](### `finally` Clauses)
+### `finally` 句
 
 In code that performs state changes or uses resources like files, there is typically clean-up
 work (such as closing files) that needs to be done when the code is finished. Exceptions potentially
@@ -820,7 +831,8 @@ When control leaves the `try` block (for example due to a `return`, or just fini
 continue propagating. A `catch` block may be combined with `try` and `finally` as well. In this
 case the `finally` block will run after `catch` has handled the error.
 
-## [Tasks (aka Coroutines)](@id man-tasks)
+`[](## [Tasks (aka Coroutines)](@id man-tasks))
+## [タスク (別名　コルーチン)](@id man-tasks)
 
 Tasks are a control flow feature that allows computations to be suspended and resumed in a flexible
 manner. This feature is sometimes called by other names, such as symmetric coroutines, lightweight
@@ -928,7 +940,8 @@ constructors to explicitly link a set of channels with a set of producer/consume
 Note that currently Julia tasks are not scheduled to run on separate CPU cores.
 True kernel threads are discussed under the topic of [Parallel Computing](@ref).
 
-### Core task operations
+　`[](　### Core task operations)
+### 核となるタスク演算子
 
 Let us explore the low level construct [`yieldto`](@ref) to understand how task switching works.
 `yieldto(task,value)` suspends the current task, switches to the specified `task`, and causes
@@ -952,7 +965,8 @@ In addition to [`yieldto`](@ref), a few other basic functions are needed to use 
   * [`istaskstarted`](@ref) queries whether a task has run yet.
   * [`task_local_storage`](@ref) manipulates a key-value store specific to the current task.
 
-### Tasks and events
+`[](### Tasks and events)
+### タスクとイベント
 
 Most task switches occur as a result of waiting for events such as I/O requests, and are performed
 by a scheduler included in Julia Base. The scheduler maintains a queue of runnable tasks,
@@ -977,7 +991,8 @@ would expect. It is also possible to make the scheduler run a task whenever it c
 waiting for any events. This is done by calling [`schedule`](@ref), or using the [`@async`](@ref)
 macro (see [Parallel Computing](@ref) for more details).
 
-### Task states
+`[](### Task states)
+### タスクの状態
 
 Tasks have a `state` field that describes their execution status. A [`Task`](@ref) `state` is one of the following
 symbols:
