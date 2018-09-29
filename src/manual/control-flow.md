@@ -52,6 +52,11 @@ is that of the last subexpression. Here's an example of a `begin` block:
 -->
 ```
 
+単一の式で、何個かの部分式を順に評価し、最後の部分式の値をその式の値として返す、といったことができると便利なことが時々あります。
+Juliaにはこれを実現する２つの構文があります。`begin`ブロックとセミコロン`(;)`連鎖です。 
+共に複合式の値は、最後の部分式の値です。
+ここに`begin`ブロックの例を挙げます。
+
 
 ```jldoctest
 julia> z = begin
@@ -62,17 +67,31 @@ julia> z = begin
 3
 ```
 
+```@raw html
+<!--
 Since these are fairly small, simple expressions, they could easily be placed onto a single line,
 which is where the `(;)` chain syntax comes in handy:
+-->
+```
+
+これはかなり小さな単一式なので、簡単にセミコロン`(;)`連鎖の構文を使って一行にすることができます。
+
 
 ```jldoctest
 julia> z = (x = 1; y = 2; x + y)
 3
 ```
 
+```@raw html
+<!--
 This syntax is particularly useful with the terse single-line function definition form introduced
 in [Functions](@ref). Although it is typical, there is no requirement that `begin` blocks be multiline
 or that `(;)` chains be single-line:
+-->
+```
+この構文は、特に[関数](@ref)で導入した、簡潔な１行での関数の定義に役立ちます。
+`begin`ブロックは複数行で、セミコロン`(;)`連鎖は１行で使うのが一般的ですが、これに従う必要はありません。
+
 
 ```jldoctest
 julia> begin x = 1; y = 2; x + y end
@@ -87,8 +106,13 @@ julia> (x = 1;
 `[](## [Conditional Evaluation](@id man-conditional-evaluation))
 ## [条件評価](@id man-conditional-evaluation)
 
+```@raw html
+<!--
 Conditional evaluation allows portions of code to be evaluated or not evaluated depending on the
 value of a boolean expression. Here is the anatomy of the `if`-`elseif`-`else` conditional syntax:
+-->
+```
+
 
 ```julia
 if x < y

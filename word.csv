@@ -94,3 +94,4 @@
 ,mechanism,しくみ
 ,allocate,割り当てる
 制御フロー,suspended,中断した
+,construct,構文
