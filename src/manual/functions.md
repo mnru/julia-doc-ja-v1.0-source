@@ -1165,6 +1165,8 @@ can create performance challenges as discussed in [performance tips](@ref man-pe
 `[](## [Dot Syntax for Vectorizing Functions](@id man-vectorized))
 ## [関数をベクトル化するDot構文](@id man-vectorized)
 
+```@raw html
+<!--
 In technical-computing languages, it is common to have "vectorized" versions of functions, which
 simply apply a given function `f(x)` to each element of an array `A` to yield a new array via
 `f(A)`. This kind of syntax is convenient for data processing, but in other languages vectorization
@@ -1174,6 +1176,19 @@ can call fast library code written in a low-level language. In Julia, vectorized
 [Performance Tips](@ref man-performance-tips)), but they can still be convenient. Therefore, *any* Julia function
 `f` can be applied elementwise to any array (or other collection) with the syntax `f.(A)`.
 For example `sin` can be applied to all elements in the vector `A`, like so:
+-->
+```
+
+技術計算向けのプログラム言語では、関数の"ベクトル化"版があることが多く、これは所与の`f(x)`を、配列`A`の各要素に適用して、`f(A)`と書かれる新しい配列を生成するものです。
+
+この種の構文は、データ処理に便利ですが、他の言語では、パフォーマンスのためによく必要になります。
+ループが遅い場合に、"ベクトル化"版の関数を、低級言語で書かれた速いライブラリから呼びます。
+Juliaでは、パフォーマンスのためには、”ベクトル化”版の関数は必要なく、それどころか、自分でループ書いた方がいいことがよくありますが
+（[パフォーマンス・ティップス](@ref man-performance-tips)参照）、それでも便利です。
+そのため、**すべての** Juliaの関数 `f`は、`f.(A)`という構文を使って、任意の配列（やその他のコレクション）に対して要素ごとの適用が可能です。
+例えば、`sin`は、以下のように、ベクトル`A`のすべての要素に適用できます。
+
+
 
 ```jldoctest
 julia> A = [1.0, 2.0, 3.0]
@@ -1189,6 +1204,8 @@ julia> sin.(A)
  0.1411200080598672
 ```
 
+```@raw html
+<!--
 Of course, you can omit the dot if you write a specialized "vector" method of `f`, e.g. via `f(A::AbstractArray) = map(f, A)`,
 and this is just as efficient as `f.(A)`. But that approach requires you to decide in advance
 which functions you want to vectorize.
@@ -1199,6 +1216,18 @@ you to operate on multiple arrays (even of different shapes), or a mix of arrays
 a new array consisting of `f(pi,a)` for each `a` in `A`, and `f.(vector1,vector2)` will return
 a new vector consisting of `f(vector1[i],vector2[i])` for each index `i` (throwing an exception
 if the vectors have different length).
+-->
+```
+
+もちろん、ドットを省略して、"ベクトル"に特化した`f`のメソッドを 、`f(A::AbstractArray) = map(f, A)`のように書くこともできて、
+この場合`f.(A)`と全く同じ効率になります。しかし、この方法だと前もってどの関数をベクトル化したいかを決めておく必要があります。
+
+さらに一般的には、`f.(args...)`は`broadcast(f, args...)`と実質的に同等で、これは、複数の配列(形さえ違っていてもかまわない)や、
+さらに配列とスカラーの混合に対して操作するものです（[ブロードキャスティング](@ref)参照）。
+たとえば、`f(x,y) = 3x + 4y`に対して、`f.(pi,A)`の場合は、 `A`の各要素`a`に対する`f(pi,a)`からなる新しい配列を返し、
+ `f.(vector1,vector2)`の場合は、各インデックス `f(vector1[i],vector2[i])`からなる新しいベクトルを返します。
+ （ベクトルの長さが異なる時は、例外を投げます）
+
 
 ```jldoctest
 julia> f(x,y) = 3x + 4y;
@@ -1220,6 +1249,8 @@ julia> f.(A, B)
  33.0
 ```
 
+```@raw html
+<!--
 Moreover, *nested* `f.(args...)` calls are *fused* into a single `broadcast` loop. For example,
 `sin.(cos.(X))` is equivalent to `broadcast(x -> sin(cos(x)), X)`, similar to `[sin(cos(x)) for x in X]`:
 there is only a single loop over `X`, and a single array is allocated for the result. [In contrast,
@@ -1230,6 +1261,21 @@ whenever nested `f.(args...)` calls are encountered. Technically, the fusion sto
 a "non-dot" function call is encountered; for example, in `sin.(sort(cos.(X)))` the `sin` and `cos`
 loops cannot be merged because of the intervening `sort` function.
 
+-->
+```
+
+さらに、**ネストした** `f.(args...)`の呼び出しは単一の `ブロードキャスト`のループに **融合**　します。
+例えば、`sin.(cos.(X))`は`broadcast(x -> sin(cos(x)), X)`と同等で、`[sin(cos(x)) for x in X]`に似ています。
+これは`x`に関する一重のループで、配列１個を結果に割り当てます。
+[対照的に、`sin(cos(X))`は通常の"ベクトル化した"言語では、まず一時的な配列を`tmp=cos(X)`に割り当て、次に`sin(tmp)` を別のループで計算して第２の配列を割り当てます]
+このループ融合は、コンパイラの最適化（おこる場合もおこらない場合もある）ではなく、ネストした`f.(args...)`呼び出しがある時に **構文的に保証されている**ものです。
+技術的には、融合は"ドットをつかわない"関数呼び出しに出会うと直ちに停止します。
+例えば、`sin.(sort(cos.(X)))` では`sin`と `cos`のループは、`sort`関数を挟んでいるために、融合できません。
+
+
+
+```@raw html
+<!--
 Finally, the maximum efficiency is typically achieved when the output array of a vectorized operation
 is *pre-allocated*, so that repeated calls do not allocate new arrays over and over again for
 the results (see [Pre-allocating outputs](@ref)). A convenient syntax for this is `X .= ...`, which
@@ -1240,10 +1286,30 @@ e.g. `X[2:end] .= sin.(Y)`, then it translates to `broadcast!` on a `view`, e.g.
 `broadcast!(sin, view(X, 2:lastindex(X)), Y)`,
 so that the left-hand side is updated in-place.
 
+-->
+```
+
+最後に、効率が最大となるのは、通常、ベクトル化した操作の出力が **事前に割り当てられている**ときで、関数を何度も呼び出すたびに、新しい配列の割り当てが何度もおこるのを防ぐためです。（[出力の事前割り当て](@ref)を参照）
+このための簡単な構文は、`X .= ...`で、これは `broadcast!(identity, X, ...)`とほぼ同等ですが、上記のように
+ `broadcast!`ループは、どんなにネストした"ドット"呼び出しとも融合する点が違います。
+ 例えば、`X .= sin.(Y)` は`broadcast!(sin, X, Y)`と同等で、`X`を`sin.(Y)`で上書きします。
+ もし左辺が配列インデックスの式、例えば`X[2:end] .= sin.(Y)`であれば、`view`にたいする`broadcast!`、つまり、`broadcast!(sin, view(X, 2:lastindex(X)), Y)`に変換され、左辺が上書き更新されるようにします。
+
+
+
+```@raw html
+<!--
 Since adding dots to many operations and function calls in an expression
 can be tedious and lead to code that is difficult to read, the macro
 [`@.`](@ref @__dot__) is provided to convert *every* function call,
 operation, and assignment in an expression into the "dotted" version.
+
+-->
+```
+多数の演算子や関数の呼び出しにドットをつけると式が長々しくなり、コードが読みづらくなりがちです。
+マクロの[`@.`](@ref @__dot__)を使うと、式の中にある **すべての** 関数呼び出し・演算子・代入を、"ドット付き"バージョンに変換します。
+
+
 
 ```jldoctest
 julia> Y = [1.0, 2.0, 3.0, 4.0];
@@ -1258,12 +1324,22 @@ julia> @. X = sin(cos(Y)) # equivalent to X .= sin.(cos.(Y))
  -0.6080830096407656
 ```
 
+```@raw html
+<!--
 Binary (or unary) operators like `.+` are handled with the same mechanism:
 they are equivalent to `broadcast` calls and are fused with other nested "dot" calls.
  `X .+= Y` etcetera is equivalent to `X .= X .+ Y` and results in a fused in-place assignment;
  see also [dot operators](@ref man-dot-operators).
 
 You can also combine dot operations with function chaining using [`|>`](@ref), as in this example:
+-->
+```
+`.+`のような二項（や単項）演算子は同じしくみで扱われます。
+これは`broadcast`呼び出しと同等で、他のネストした"ドット"呼び出しと融合します。
+ `X .+= Y`などは`X .= X .+ Y`と同等で、融合した上書き代入を行います。
+[ドット演算子](@ref man-dot-operators)も参照してください。
+
+
 ```jldoctest
 julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 5-element Array{Real,1}:
@@ -1277,8 +1353,21 @@ julia> [1:5;] .|> [x->x^2, inv, x->2*x, -, isodd]
 `[](## Further Reading)
 ## 関連項目
 
+```@raw html
+<!--
 We should mention here that this is far from a complete picture of defining functions. Julia has
 a sophisticated type system and allows multiple dispatch on argument types. None of the examples
 given here provide any type annotations on their arguments, meaning that they are applicable to
 all types of arguments. The type system is described in [Types](@ref man-types) and defining a function
 in terms of methods chosen by multiple dispatch on run-time argument types is described in [Methods](@ref).
+-->
+```
+ここでの関数定義は全体像から程遠いことを、言わねばなりません。
+Juliaには洗練された型システムがあり、引数の型に対する多重ディスパッチが利用可能です。
+このセクションでの例には引数に全く型注釈をつけていません。
+これは、すべての型を適用可能だということを意味します。
+型システムの記述は[型](@ref man-types)にあり、
+関数の定義にメソッドを使い、実行時の引数の型に多重ディスパッチで選択する記述は[Methods](@ref)にあります。
+
+
+

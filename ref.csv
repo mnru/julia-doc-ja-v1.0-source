@@ -17,3 +17,5 @@
 ,[Parametrically-constrained Varargs methods],パラメータ制限つきの可変引数メソッド
 ,[Note on Optional and keyword Arguments],オプション引数・キーワード引数に関する注記
 ,[Control Flow],制御フロー
+,[Broadcasting],ブロードキャスティング
+,[Pre-allocating outputs],出力の事前割り当て
