@@ -2,6 +2,8 @@
 # 制御フロー
 
 
+```@raw html
+<!--
 Julia provides a variety of control flow constructs:
 
   * [Compound Expressions](@ref man-compound-expressions): `begin` and `(;)`.
@@ -10,20 +12,46 @@ Julia provides a variety of control flow constructs:
   * [Repeated Evaluation: Loops](@ref man-loops): `while` and `for`.
   * [Exception Handling](@ref): `try`-`catch`, [`error`](@ref) and [`throw`](@ref).
   * [Tasks (aka Coroutines)](@ref man-tasks): [`yieldto`](@ref).
+-->
+```
 
+Juliaには様々な制御フローがあります。
+  * [複合式](@ref man-compound-expressions): `begin`と `(;)`
+  * [条件評価](@ref man-conditional-evaluation): `if`-`elseif`-`else` と `?:` (三項演算子)
+  * [短絡評価](@ref): `&&`, `||` と　比較の連鎖
+  * [反復評価：ループ](@ref man-loops): `while` と `for`.
+  * [例外処理](@ref): `try`-`catch`, [`error`](@ref) と [`throw`](@ref).
+  * [タスク (別名コルーチン)](@ref man-tasks): [`yieldto`](@ref).
+
+
+```@raw html
+<!--
 The first five control flow mechanisms are standard to high-level programming languages. [`Task`](@ref)s
 are not so standard: they provide non-local control flow, making it possible to switch between
 temporarily-suspended computations. This is a powerful construct: both exception handling and
 cooperative multitasking are implemented in Julia using tasks. Everyday programming requires no
 direct usage of tasks, but certain problems can be solved much more easily by using tasks.
+-->
+```
+
+最初の５つの制御フローのしくみは高水準のプログラム言語に標準的なものです。
+タスクはそれほど標準的ではありませんが、非ローカルの制御フローで一時的に中断した計算を切り替える事ができます。
+これは強力で、例外処理や協調的マルチタスクは、Juliaでは、タスクを使って実装されています。
+日々のプログラムでタスクを直接使うわけではないですが、ある種のプログラムの問題ではタスクを使うと簡単に解決できます。
+
 
 `[](## [Compound Expressions](@id man-compound-expressions))
 ## [複合式](@id man-compound-expressions)
 
+```@raw html
+<!--
 Sometimes it is convenient to have a single expression which evaluates several subexpressions
 in order, returning the value of the last subexpression as its value. There are two Julia constructs
 that accomplish this: `begin` blocks and `(;)` chains. The value of both compound expression constructs
 is that of the last subexpression. Here's an example of a `begin` block:
+-->
+```
+
 
 ```jldoctest
 julia> z = begin

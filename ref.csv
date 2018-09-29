@@ -19,3 +19,5 @@
 ,[Control Flow],制御フロー
 ,[Broadcasting],ブロードキャスティング
 ,[Pre-allocating outputs],出力の事前割り当て
+制御フロー,[Exception Handling],例外処理
+,[`Task`],タスク
