@@ -1025,12 +1025,23 @@ the `b` in `a=b` refers to a `b` in an outer scope, not the subsequent argument 
 
 
 `[](## Do-Block Syntax for Function Arguments)
-## 関数引数のDoブロック構文
+## 関数の引数に対するDoブロック構文
 
+```@raw html
+<!--
 Passing functions as arguments to other functions is a powerful technique, but the syntax for
 it is not always convenient. Such calls are especially awkward to write when the function argument
 requires multiple lines. As an example, consider calling [`map`](@ref) on a function with several
 cases:
+-->
+```
+
+他の関数に対して関数を引数として渡すことは、強力な技法ですが、その構文は必ずしも便利ではありません。
+関数の引数が何行にも渡る場合、特に不格好になります。
+例として、 [`map`](@ref)関数が、場合分けがいくつかある関数を呼び出す場合を考えてみると、
+
+
+
 
 ```julia
 map(x->begin
@@ -1045,7 +1056,13 @@ map(x->begin
     [A, B, C])
 ```
 
+```@raw html
+<!--
 Julia provides a reserved word `do` for rewriting this code more clearly:
+-->
+```
+
+Juliaにある予約語`do`を使ってこのコードをもっと明快に書き直すことができます。
 
 ```julia
 map([A, B, C]) do x
@@ -1059,6 +1076,8 @@ map([A, B, C]) do x
 end
 ```
 
+```@raw html
+<!--
 The `do x` syntax creates an anonymous function with argument `x` and passes it as the first argument
 to [`map`](@ref). Similarly, `do a,b` would create a two-argument anonymous function, and a
 plain `do` would declare that what follows is an anonymous function of the form `() -> ...`.
@@ -1071,6 +1090,24 @@ This syntax makes it easier to use functions to effectively extend the language,
 like normal code blocks. There are many possible uses quite different from [`map`](@ref), such
 as managing system state. For example, there is a version of [`open`](@ref) that runs code ensuring
 that the opened file is eventually closed:
+-->
+```
+
+`do x`構文は、引数が`x`である無名関数を生成して、[`map`](@ref)に1番目の引数として渡します。
+同様に、`do a,b`では、引数が２個の無名関数を生成します。
+また、単に`do`と書いた場合、`do`に続く記述を `...`とすると、 その記述が`() -> ...`という形の無名関数だという宣言になります。
+
+
+これらの引数がどのように初期化されるかは、"外側"の関数に依存します。
+ここでは、[`map`](@ref)は、`x` に `A`、`B`、`C`を順に代入しから、無名関数を呼び出して、`map(func, [A, B, C])`
+の構文とおなじような結果になります。
+
+この構文を使うと、簡単に、関数を使ってげんごを効率的に拡張できます。というのも、関数呼び出しが通常のコードブロックのような
+外見をしているからです。
+ [`map`](@ref)とはかなり違う使い方も多数ありえます。、例えばシステムの状態の管理などです。
+例えば、開いたファイルは最後に閉じることを保証する[`open`](@ref)のバージョンがあります。
+
+
 
 ```julia
 open("outfile", "w") do io
@@ -1078,7 +1115,13 @@ open("outfile", "w") do io
 end
 ```
 
+```@raw html
+<!--
 This is accomplished by the following definition:
+-->
+```
+
+これは、以下の定義で達成できます。
 
 ```julia
 function open(f::Function, args...)
@@ -1091,6 +1134,8 @@ function open(f::Function, args...)
 end
 ```
 
+```@raw html
+<!--
 Here, [`open`](@ref) first opens the file for writing and then passes the resulting output stream
 to the anonymous function you defined in the `do ... end` block. After your function exits, [`open`](@ref)
 will make sure that the stream is properly closed, regardless of whether your function exited
@@ -1103,6 +1148,18 @@ A `do` block, like any other inner function, can "capture" variables from its
 enclosing scope. For example, the variable `data` in the above example of
 `open...do` is captured from the outer scope. Captured variables
 can create performance challenges as discussed in [performance tips](@ref man-performance-tips).
+-->
+```
+ここでは、[`open`](@ref)はまず書き込み用にファイルを開き、`do ... end`で定義した無名関数の演算結果を出力ストリームに渡します。
+関数を終了したあとは、ストリームが適切に終了したかを確認します。
+これは、正常終了の場合も、例外を投げた場合も同様です。
+(`try/finally`構文については、[制御フロー](@ref)で記述します)
+
+`do` ブロック構文に関しては、ユーザー関数の引数が同初期化されるのかを知るには、ドキュメントや実装を確認すると役に立ちます。
+
+`do` ブロックは、他の内部関数と同様に、取り囲むスコープの変数を"捕捉"することができます。
+例えば、上述の`open...do`の中の変数`data`は、外側のスコープから補足しています。
+変数を捕捉すると、 [パフォーマンス・ティップス](@ref man-performance-tips)で議論するように、パフォーマンス上の困難が生じる可能性があります。
 
 
 `[](## [Dot Syntax for Vectorizing Functions](@id man-vectorized))
