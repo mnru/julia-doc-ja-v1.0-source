@@ -865,20 +865,67 @@ be different: the second and fourth values would contain `0`.
 2番目と4番目の出力は`0`を含むでしょう。
 
 `[](## Exception Handling)
-## 例外の取扱い
+## 例外処理
 
+```@raw html
+<!--
 When an unexpected condition occurs, a function may be unable to return a reasonable value to
 its caller. In such cases, it may be best for the exceptional condition to either terminate the
 program while printing a diagnostic error message, or if the programmer has provided code to handle
 such exceptional circumstances then allow that code to take the appropriate action.
+-->
+```
+不測の事態が発生した場合、関数は呼び出し側に応えて、適切な値を返すことができないかもしれません。
+そんな場合、例外的な状況に対する最善策は、プログラムを終了する一方で、状況を診断するエラーメッセージを表示することかもしれないし、
+例外的な事態に対処するコードが用意されている場合は、そのコードを適切に動作させることかもしれません。
+
 
 `[](### Built-in `Exception`s)
 ### 組込みの`例外`
 
+```@raw html
+<!--
 `Exception`s are thrown when an unexpected condition has occurred. The built-in `Exception`s listed
 below all interrupt the normal flow of control.
+-->
+```
+`例外`は不測の事態が発生した時に投げられます。
+下記の組込みの`例外`のリストはすべて、通常の制御フローを中断します。
 
+
+```@raw html
+<!--
 | `Exception`                   |
+|:----------------------------- |
+| [`ArgumentError`](@ref)       |
+| [`BoundsError`](@ref)         |
+| [`CompositeException`](@ref)  |
+| [`DivideError`](@ref)         |
+| [`DomainError`](@ref)         |
+| [`EOFError`](@ref)            |
+| [`ErrorException`](@ref)      |
+| [`InexactError`](@ref)        |
+| [`InitError`](@ref)           |
+| [`InterruptException`](@ref)  |
+| `InvalidStateException`       |
+| [`KeyError`](@ref)            |
+| [`LoadError`](@ref)           |
+| [`OutOfMemoryError`](@ref)    |
+| [`ReadOnlyMemoryError`](@ref) |
+| [`RemoteException`](@ref)     |
+| [`MethodError`](@ref)         |
+| [`OverflowError`](@ref)       |
+| [`Meta.ParseError`](@ref)     |
+| [`SystemError`](@ref)         |
+| [`TypeError`](@ref)           |
+| [`UndefRefError`](@ref)       |
+| [`UndefVarError`](@ref)       |
+| [`StringIndexError`](@ref)    |
+
+-->
+```
+
+| `例外`                   |
 |:----------------------------- |
 | [`ArgumentError`](@ref)       |
 | [`BoundsError`](@ref)         |
