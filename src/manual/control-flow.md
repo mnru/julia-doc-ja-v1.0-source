@@ -413,19 +413,45 @@ no
 `[](## Short-Circuit Evaluation)
 ## 短絡評価
 
+```@raw html
+<!--
 Short-circuit evaluation is quite similar to conditional evaluation. The behavior is found in
 most imperative programming languages having the `&&` and `||` boolean operators: in a series
 of boolean expressions connected by these operators, only the minimum number of expressions are
 evaluated as are necessary to determine the final boolean value of the entire chain. Explicitly,
 this means that:
+-->
+```
 
+短絡評価は条件評価ととても良く似ています。
+この挙動は、ほとんどの命令型言語が持っているブール値の演算子`&&`と`||`で見られます。
+これらの演算子でつなげたブール式の中で、連鎖全体の最終的なブール値を決めるのに必要な最低限の数の式だけが評価されます。
+この意味を具体的に書くと、
+
+```@raw html
+<!--
   * In the expression `a && b`, the subexpression `b` is only evaluated if `a` evaluates to `true`.
   * In the expression `a || b`, the subexpression `b` is only evaluated if `a` evaluates to `false`.
+-->
+```
 
+  * 式`a && b`の部分式`b`は、`a`の評価が`true`の時だけ評価される。
+  * 式`a || b`の部分式`b`は、`a`の評価が`false`の時だけ評価される。
+
+
+```@raw html
+<!--
 The reasoning is that `a && b` must be `false` if `a` is `false`, regardless of the value of
 `b`, and likewise, the value of `a || b` must be true if `a` is `true`, regardless of the value
 of `b`. Both `&&` and `||` associate to the right, but `&&` has higher precedence than `||` does.
 It's easy to experiment with this behavior:
+-->
+```
+この論拠としては、`a && b`は`a`が`false`の時は`b`の値にかかわらず必ず`false`になり、同様に
+`a && b`は`a`が`ture`の時は`b`の値にかかわらず必ず`true`からです。
+`&&`と`||`は両方とも右結合ですが、`&&`のほうが `||`より優先順位が高いです。
+この挙動は簡単に実験できます。
+
 
 ```jldoctest tandf
 julia> t(x) = (println(x); true)
@@ -471,6 +497,8 @@ julia> f(1) || f(2)
 false
 ```
 
+```@raw html
+<!--
 You can easily experiment in the same way with the associativity and precedence of various combinations
 of `&&` and `||` operators.
 
@@ -480,6 +508,18 @@ read as: <cond> *and then* <statement>). Similarly, instead of `if ! <cond> <sta
 one can write `<cond> || <statement>` (which could be read as: <cond> *or else* <statement>).
 
 For example, a recursive factorial routine could be defined like this:
+-->
+```
+
+`&&`や`||`の様々な結合について、結合性や優先順位を、同じ方法で簡単に実験することができます。
+
+この挙動は、Juliaではよく利用されて、とても短い`if`文の代わりになっています。
+`if <条件> <文> end`, の代わりに`<条件> && <文>`と書くことができます。
+これは（<条件>ならば<文>）と読むことができます。
+同様に `if ! <条件> <文> end`は `<条件> || <文>`と書くことができます。
+これは（<条件>でなけば<文>）と読むことができます。
+
+例えば、再帰的な階乗の計算はこのように定義できます。
 
 ```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
 julia> function fact(n::Int)
@@ -503,9 +543,16 @@ Stacktrace:
  [3] top-level scope
 ```
 
+```@raw html
+<!--
 Boolean operations *without* short-circuit evaluation can be done with the bitwise boolean operators
 introduced in [Mathematical Operations and Elementary Functions](@ref): `&` and `|`. These are
 normal functions, which happen to support infix operator syntax, but always evaluate their arguments:
+-->
+```
+短絡評価を **しない** ブール演算子は、[算術演算子と初等関数](@ref)で紹介したビット演算子の`&`と`|`を使って処理することができます。
+これらは通常の関数で、たまたま中置記法の演算子を持ち、しかし引数を常に評価します。
+
 
 ```jldoctest tandf
 julia> f(1) & t(2)
@@ -519,17 +566,33 @@ julia> t(1) | t(2)
 true
 ```
 
+```@raw html
+<!--
 Just like condition expressions used in `if`, `elseif` or the ternary operator, the operands of
 `&&` or `||` must be boolean values (`true` or `false`). Using a non-boolean value anywhere except
 for the last entry in a conditional chain is an error:
+-->
+```
+
+`if`、`elseif`や三項演算子の中で使われる条件式と同じように、`&&`や`||`で使われる被演算子はブール値(`true`か `false`)
+でなければなりません。
+ブール値以外を条件連鎖の末尾以外で使うとエラーが発生します。
+
 
 ```jldoctest
 julia> 1 && true
 ERROR: TypeError: non-boolean (Int64) used in boolean context
 ```
 
+```@raw html
+<!--
 On the other hand, any type of expression can be used at the end of a conditional chain. It will
 be evaluated and returned depending on the preceding conditionals:
+-->
+```
+一方、条件連鎖の末尾では、どんな型の式でも使えます。
+これは先行する条件式に応じて評価され、戻り値として返されます。
+
 
 ```jldoctest
 julia> true && (x = (1, 2, 3))
