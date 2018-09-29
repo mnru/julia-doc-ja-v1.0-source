@@ -95,3 +95,5 @@
 ,allocate,割り当てる
 制御フロー,suspended,中断した
 ,construct,構文
+,introduce,採用する
+,mandatory,必須の
