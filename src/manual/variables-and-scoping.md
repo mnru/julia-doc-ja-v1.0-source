@@ -33,9 +33,17 @@ constructs introducing scope blocks are:
 -->
 ```
 
+言語の構文の中には **スコープブロック**　、つまり変数に対するスコープとして適切なコード領域が決まっているものがあります。
+変数のスコープはソースの任意の行を割当てることはできません。以下のいずれかを割り当てます。
+Juliaには主に２種類のスコープがあります。 **グローバルスコープ** と **ローカルスコープ** です。
+後者はネストすることができます。
+各構文の導入しているスコープは、
+
 
 # [](@id man-scope-table)
 
+```@raw html
+<!--
   * Scope blocks that may nest only in other global scope blocks:
 
     - global scope
@@ -58,15 +66,57 @@ constructs introducing scope blocks are:
 
       + comprehensions, broadcast-fusing
 
+-->
+```
+
+  * 他のグローバルスコープ内でのみネストが可能なスコープブロック
+
+    - グローバルスコープ
+
+      + モジュール、ベアモジュール
+
+      + 対話プロンプト(REPL)
+
+    - ローカルスコープ (ネスト禁止)
+
+      + (可変な) struct, マクロ
+
+  * どこでもネストが可能なスコープブロック（グローバルでもローカルでも）
+  
+    - ローカルスコープ
+
+      + for, while, try-catch-finally, let
+
+      + 関数 (構文、無名関数 、ブロック)
+
+      + 内包表記, ブロードキャスト-融合
+
+```@raw html
+<!--
 Notably missing from this table are
 [begin blocks](@ref man-compound-expressions) and [if blocks](@ref man-conditional-evaluation)
 which do *not* introduce new scope blocks.
 Both types of scopes follow somewhat different rules which will be explained below.
+-->
+```
+この表に記載のない注目すべきものは、
+[begin ブロック](@ref man-compound-expressions)と[if ブロック](@ref man-conditional-evaluation)です。
+これらは、新たなスコープブロックを **導入しません**。
+どちらのスコープも後述のような少し違った規則に従います。
 
+
+```@raw html
+<!--
 Julia uses [lexical scoping](https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping),
 meaning that a function's scope does not inherit from its caller's scope, but from the scope in
 which the function was defined. For example, in the following code the `x` inside `foo` refers
 to the `x` in the global scope of its module `Bar`:
+-->
+```
+
+Juliaは[レキシカルスコープ](https://en.wikipedia.org/wiki/Scope_%28computer_science%29#Lexical_scoping_vs._dynamic_scoping)を
+使用しています。これは、呼び出し側のスコープを引き継がず、定義されたスコープを引き継ぐという意味です。
+例えば、以下のコードでは、`foo`の中の`x`は、モジュール`Bar`のグローバルスコープにある`x`を参照しています。
 
 ```jldoctest moduleBar
 julia> module Bar
@@ -75,7 +125,13 @@ julia> module Bar
        end;
 ```
 
+```@raw html
+<!--
 and not a `x` in the scope where `foo` is used:
+-->
+```
+
+そして、`foo`が使われる場所のスコープにある `x`は参照しません。
 
 ```jldoctest moduleBar
 julia> import .Bar
@@ -86,16 +142,33 @@ julia> Bar.foo()
 1
 ```
 
+```@raw html
+<!--
 Thus *lexical scope* means that the scope of variables can be inferred from the source code alone.
+-->
+```
+
+このように、**レキシカルスコープ** は変数のスコープは、ソースコードのみから推論できることを意味します。
 
 `[](## Global Scope)
 ## グローバルスコープ
 
+```@raw html
+<!--
 Each module introduces a new global scope, separate from the global scope of all other modules;
 there is no all-encompassing global scope. Modules can introduce variables of other modules into
 their scope through the [using or import](@ref modules) statements or through qualified access using the
 dot-notation, i.e. each module is a so-called *namespace*. Note that variable bindings can only
 be changed within their global scope and not from an outside module.
+-->
+```
+各モジュールは新しいグローバルスコープを導入するので、他のすべてのモジュールと分離しています。
+すべてを包括するグローバルスコープは存在しません。
+モジュールには他のモジュールの変数を自身のスコープに導入することができます。
+これは[using または import](@ref modules)文を通じて、あるいはドット表記を使った限定的なアクセスを通じて導入できます。
+つまり各モジュールはいわゆる **名前空間** です。
+変数の束縛を変更できるのは、グローバルスコープ内のみで、モジュール外では、できない点に注意してください。
+
 
 ```jldoctest
 julia> module A
@@ -124,11 +197,18 @@ julia> module E
 ERROR: cannot assign variables in other modules
 ```
 
+```@raw html
+<!--
 Note that the interactive prompt (aka REPL) is in the global scope of the module `Main`.
+-->
+```
+対話プロンプト(別名 REPL)はモジュール`Main`のグローバルスコープである点に注意してください。
 
 `[](## Local Scope)
 ## ローカルスコープ
 
+```@raw html
+<!--
 A new local scope is introduced by most code blocks (see above
 [table](@ref man-scope-table) for a complete list).
 A local scope inherits all the variables from a parent local scope,
@@ -138,11 +218,25 @@ to in its parent global scope block (if it is surrounded by a global `if` or `be
 Unlike global scopes, local scopes are not namespaces,
 thus variables in an inner scope cannot be retrieved from the parent scope through some sort of
 qualified access.
+-->
+```
+ほとんどのコードブロックで新しいローカルスコープが導入されます。（完全なリストは上の[表](@ref man-scope-table)を参照）
+ローカルスコープは親のローカルスコープにあるすべての変数を、読み書きともに引き継ぎます。
+さらに、親のグローバルスコープブロック（グローバルな`if`や`begin`に囲まれたブロック）に割り当てられたグローバル変数を引き継ぎます。
+また、内側のスコープにある変数は親のスコープからなんらかの限定的なアクセスによって取り出すことはできません。
 
+```@raw html
+<!--
 The following rules and examples pertain to local scopes.
 A newly introduced variable in a local scope does not
 back-propagate to its parent scope.
 For example, here the ``z`` is not introduced into the top-level scope:
+-->
+```
+以下の規則と例はローカルスコープに関するものです。
+ローカルスコープに新しく導入される変数は、親のスコープに逆伝播しません。
+例えば、ここにある``z``はトップレベルのスコープに導入されません。
+
 
 ```jldoctest
 julia> for i = 1:10
@@ -153,10 +247,19 @@ julia> z
 ERROR: UndefVarError: z not defined
 ```
 
+```@raw html
+<!--
 (Note, in this and all following examples it is assumed that their top-level is a global scope
 with a clean workspace, for instance a newly started REPL.)
 
 Inside a local scope a variable can be forced to be a new local variable using the `local` keyword:
+-->
+```
+（これ以降の例では、トップレベルが、新規に起動されたREPLなどの潔白な作業領域をもつ、グローバルスコープであることを想定している点に、
+注意してください。）
+
+ローカルスコープ内で、`local`キーワードを使って、変数を強制的に新しいローカル変数にすることができます。
+
 
 ```jldoctest
 julia> x = 0;
@@ -170,7 +273,13 @@ julia> x
 0
 ```
 
+```@raw html
+<!--
 Inside a local scope a global variable can be assigned to by using the keyword `global`:
+-->
+```
+
+ローカルスコープ内で`global`変数を使ってグローバル変数に代入することができます。
 
 ```jldoctest
 julia> for i = 1:10
@@ -182,8 +291,15 @@ julia> z
 10
 ```
 
+```@raw html
+<!--
 The location of both the `local` and `global` keywords within the scope block is irrelevant.
 The following is equivalent to the last example (although stylistically worse):
+-->
+```
+スコープブロック内の`local`と`global`のキーワードの位置は共に無関係です。
+下記のものは、直前の例と同等です（表記としては良くないですが）
+
 
 ```jldoctest
 julia> for i = 1:10
@@ -195,19 +311,44 @@ julia> z
 10
 ```
 
+```@raw html
+<!--
 The `local` and `global` keywords can also be applied to destructuring assignments, e.g.
 `local x, y = 1, 2`. In this case the keyword affects all listed variables.
 
 Local scopes are introduced by most block keywords,
 with notable exceptions of `begin` and `if`.
+-->
+```
+`local`と`global`のキーワードは、例えば`local x, y = 1, 2`のように、分割代入にも適用されます。
+この場合、キーワードはすべての列挙した変数に影響します。
 
+ローカルスコープは大抵のブロックキーワードで導入されますが、注目すべき例外は`begin`と`if`です。
+
+
+
+```@raw html
+<!--
 In a local scope, all variables are inherited from its parent
 global scope block unless:
 
   * an assignment would result in a modified *global* variable, or
   * a variable is specifically marked with the keyword `local`.
+-->
+```
+ローカルスコープでは、すべての変数を親のグローバルスコープブロックから、以下の場合を除き引き継ぎます。
 
+  * 代入によって **グローバル** 変数が変更されている
+  * 変数にキーワード`local`をわざわざつけている。
+
+
+```@raw html
+<!--
 Thus global variables are only inherited for reading but not for writing:
+-->
+```
+このように、グローバル変数が引き継ぐのは、読取りだけで、書込みは引き継ぎません。
+
 
 ```jldoctest
 julia> x, y = 1, 2;
@@ -224,8 +365,16 @@ julia> x
 1
 ```
 
+```@raw html
+<!--
 An explicit `global` is needed to assign to a global variable:
+-->
+```
 
+グローバル変数に代入するには、わざわざ`global`を付ける必要があります。
+
+```@raw html
+<!--
 !!! sidebar "Avoiding globals"
     Avoiding changing the value of global variables is considered by many
     to be a programming best-practice.
@@ -233,8 +382,17 @@ An explicit `global` is needed to assign to a global variable:
     modules should be done with care as it makes the local behavior of the program hard to reason about.
     This is why the scope blocks that introduce local scope require the ``global``
     keyword to declare the intent to modify a global variable.
+-->
+```
 
-```jldoctest
+!!! sidebar "グローバル変数を避ける"
+    グローバル変数の値の変更を避けることは、多くの人がベストプラクティスだと考えています。
+    他のモジュールのグローバル変数の状態を遠隔で変更すると、プログラムのローカルな挙動を推論するのが困難になるので
+    注意を払うべきだ、というのが理由の一つです。
+    ローカルスコープを導入したブロックで グローバル変数を変更する旨を宣言するには、``global``キーワードが必要なのは、
+    このためです。
+
+```jldoctest    
 julia> x = 1;
 
 julia> function foobar()
@@ -247,7 +405,13 @@ julia> x
 2
 ```
 
+```@raw html
+<!--
 Note that *nested functions* can modify their parent scope's *local* variables:
+-->
+```
+
+**ネストした関数** は親のスコープの **local** 変数を変更できる点に注意してください。
 
 ```jldoctest
 julia> x, y = 1, 2;
@@ -256,7 +420,8 @@ julia> function baz()
            x = 2 # introduces a new local
            function bar()
                x = 10       # modifies the parent's x
-               return x + y # y is global
+               ret
+               urn x + y # y is global
            end
            return bar() + x # 12 + 10 (x is modified in call of bar())
        end;
@@ -268,10 +433,19 @@ julia> x, y # verify that global x and y are unchanged
 (1, 2)
 ```
 
+```@raw html
+<!--
 The reason to allow *modifying local* variables of parent scopes in
 nested functions is to allow constructing [`closures`](https://en.wikipedia.org/wiki/Closure_%28computer_programming%29)
 which have a private state, for instance the ``state`` variable in the
 following example:
+-->
+```
+
+ネストした関数で親のスコープの **ローカル変数を変更できる**　理由は、
+プライベートな状態を保持する [`閉包`](https://en.wikipedia.org/wiki/Closure_%28computer_programming%29)
+を構成できるようにするためです。
+以下の例の ``state`` 変数が具体例です。
 
 ```jldoctest
 julia> let state = 0
@@ -285,16 +459,27 @@ julia> counter()
 2
 ```
 
+```@raw html
+<!--
 See also the closures in the examples in the next two sections. A variable
 such as `x` in the first example and `state` in the second that is inherited
 from the enclosing scope by the inner function is sometimes called a
 *captured* variable. Captured variables can present performance challenges
 discussed in [performance tips](@ref man-performance-tips).
+-->
+```
 
+
+
+```@raw html
+<!--
 The distinction between inheriting global scope and nesting local scope
 can lead to some slight differences between functions
 defined in local vs. global scopes for variable assignments.
 Consider the modification of the last example by moving `bar` to the global scope:
+-->
+```
+
 
 ```jldoctest
 julia> x, y = 1, 2;
@@ -316,12 +501,17 @@ julia> x, y # verify that global x and y are unchanged
 (1, 2)
 ```
 
+```@raw html
+<!--
 Note that the above nesting rules do not pertain to type and macro definitions as they can only appear
 at the global scope. There are special scoping rules concerning the evaluation of default and
 keyword function arguments which are described in the [Function section](@ref man-functions).
 
 An assignment introducing a variable used inside a function, type or macro definition need not
 come before its inner usage:
+-->
+```
+
 
 ```jldoctest
 julia> f = y -> y + a;
@@ -338,12 +528,17 @@ julia> f(3)
 4
 ```
 
+```@raw html
+<!--
 This behavior may seem slightly odd for a normal variable, but allows for named functions -- which
 are just normal variables holding function objects -- to be used before they are defined. This
 allows functions to be defined in whatever order is intuitive and convenient, rather than forcing
 bottom up ordering or requiring forward declarations, as long as they are defined by the time
 they are actually called. As an example, here is an inefficient, mutually recursive way to test
 if positive integers are even or odd:
+-->
+```
+
 
 ```jldoctest
 julia> even(n) = (n == 0) ? true : odd(n - 1);
@@ -357,9 +552,14 @@ julia> odd(3)
 true
 ```
 
+```@raw html
+<!--
 Julia provides built-in, efficient functions to test for oddness and evenness called [`iseven`](@ref)
 and [`isodd`](@ref) so the above definitions should only be considered to be examples of scope,
 not efficient design.
+-->
+```
+
 
 `[](### Let Blocks)
 ### Let ブロック

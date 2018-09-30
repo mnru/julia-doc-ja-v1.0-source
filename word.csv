@@ -121,3 +121,7 @@
 ,passing values back and forth,値をやりとりする
 ,in conjunction with ～,～と一緒に
 変数のスコープ,conflict,競合
+,irrelevant,無関係な
+,inherit,(親スコープから変数を)受け継ぐ
+,specifically marked,わざわざ(local・global などの語句を)つける
+,visible,(変数を)参照できる
