@@ -1,4 +1,5 @@
-# [Scope of Variables](@id scope-of-variables)
+`[](# [Scope of Variables](@id scope-of-variables))
+# [変数のスコープ](@id scope-of-variables)
 
 The *scope* of a variable is the region of code within which a variable is visible. Variable scoping
 helps avoid variable naming conflicts. The concept is intuitive: two functions can both have arguments
@@ -67,7 +68,8 @@ julia> Bar.foo()
 
 Thus *lexical scope* means that the scope of variables can be inferred from the source code alone.
 
-## Global Scope
+`[](## Global Scope)
+## グローバルスコープ
 
 Each module introduces a new global scope, separate from the global scope of all other modules;
 there is no all-encompassing global scope. Modules can introduce variables of other modules into
@@ -104,7 +106,8 @@ ERROR: cannot assign variables in other modules
 
 Note that the interactive prompt (aka REPL) is in the global scope of the module `Main`.
 
-## Local Scope
+`[](## Local Scope)
+## ローカルスコープ
 
 A new local scope is introduced by most code blocks (see above
 [table](@ref man-scope-table) for a complete list).
@@ -338,7 +341,8 @@ Julia provides built-in, efficient functions to test for oddness and evenness ca
 and [`isodd`](@ref) so the above definitions should only be considered to be examples of scope,
 not efficient design.
 
-### Let Blocks
+`[](### Let Blocks)
+### Let ブロック
 
 Unlike assignments to local variables, `let` statements allocate new variable bindings each time
 they run. An assignment modifies an existing value location, and `let` creates new locations.
@@ -415,7 +419,8 @@ julia> let
 Since `let` introduces a new scope block, the inner local `x` is a different variable than the
 outer local `x`.
 
-### For Loops and Comprehensions
+`[](### For Loops and Comprehensions)
+### For ループと内包表記
 
 `for` loops, `while` loops, and [Comprehensions](@ref) have the following behavior: any new variables
 introduced in their body scopes are freshly allocated for each loop iteration, as if the loop body
@@ -464,7 +469,8 @@ julia> f()
 3
 ```
 
-## Constants
+`[](## Constants)
+## 定数
 
 A common use of variables is giving names to specific, unchanging values. Such variables are only
 assigned once. This intent can be conveyed to the compiler using the `const` keyword:
