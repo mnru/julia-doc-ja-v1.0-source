@@ -881,7 +881,7 @@ such exceptional circumstances then allow that code to take the appropriate acti
 
 
 `[](### Built-in `Exception`s)
-### 組込みの`例外`
+### 組込みの **例外**
 
 ```@raw html
 <!--
