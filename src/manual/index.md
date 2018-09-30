@@ -21,7 +21,7 @@
   * [Multi-dimensional Arrays](@ref man-multi-dim-arrays)
   * [Missing Values](@ref missing)
   * [Networking and Streams](@ref)
-  * [Parallel Computing](@ref)
+  * [並列コンピューティング](@ref)
   * [Dates](@ref)
   * [Running External Programs](@ref)
   * [Calling C and Fortran Code](@ref)
