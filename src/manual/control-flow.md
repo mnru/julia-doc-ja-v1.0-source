@@ -1533,7 +1533,7 @@ True kernel threads are discussed under the topic of [Parallel Computing](@ref).
 
 
 　`[](　### Core task operations)
-### 核となるタスク演算子
+### コアタスク処理
 
 ```@raw html
 <!--
@@ -1545,6 +1545,13 @@ we are always just switching to a different task. This is why this feature is al
 coroutines"; each task is switched to and from using the same mechanism.
 -->
 ```
+タスクの切り替える方法について理解するために、低レベル関数の[`yieldto`](@ref)を探索してみましょう。
+`yieldto(task,value)`は現在のタスクを中断し、指定した`task`に切り替えます。
+そして、タスクの最後の[`yieldto`](@ref)呼び出しに対して、指定した`value`を返します。
+[`yieldto`](@ref)だけがタスク型の制御フローに唯一必要な操作だということに注意してください。
+関数を呼び出したり、値を返したりする代わりに、タスクを別のものに切り替えているだけです。
+これはこの機能が「対象コルーチン」と呼ばれる理由です。
+それぞれのタスクの切替が全く同じ仕組みを使っているからです。
 
 
 ```@raw html
@@ -1558,6 +1565,12 @@ who the consumers are. Not needing to manually keep track of the consuming task 
 easier to use than the low-level [`yieldto`](@ref).
 -->
 ```
+[`yieldto`](@ref)は強力ですが、たいていは直接呼び出されることはありません。これはなぜなのか、考えてみましょう。
+現時点のタスクを中断する場合、おそらくいつか再開するでしょうが、それがいつで、再開に対して責任を持つタスクがどれなのかを知るには、
+相当な調整が必要になるでしょう。
+例えば[`put!`](@ref)や[`take!`](@ref)は他を中断する操作ですが、チャネルと共に使う場合は、状態を保持して、誰がが消費者なのかを覚えます。
+手動で消費者タスクを追跡する必要がないため、[`put!`](@ref)は低レベルの[`yieldto`](@ref)よりも使いやすくなっています。
+
 
 ```@raw html
 <!--
@@ -1569,6 +1582,13 @@ In addition to [`yieldto`](@ref), a few other basic functions are needed to use 
   * [`task_local_storage`](@ref) manipulates a key-value store specific to the current task.
 -->
 ```
+[`yieldto`](@ref)の他に、タスクを効率的に使うために必要な基本的な別の関数がいくつかあります。
+
+
+  * [`current_task`](@ref) 現在実行しているタスクへの参照を取得します。
+  * [`istaskdone`](@ref) タスクが終了しているかどうか問い合わせをします。
+  * [`istaskstarted`](@ref) タスクがまだ実行中かどうか問い合わせをします。
+  * [`task_local_storage`](@ref) 現在のタスクに固有の、キーバリューの保存を操作します。
 
 
 `[](### Tasks and events)
@@ -1586,6 +1606,15 @@ is often implicit; for example, a [`wait`](@ref) can happen inside a call to [`r
 to wait for data to be available.
 -->
 ```
+ほとんどのタスクの切替はI/O要求などのイベントを待機した結果として発生し、
+JuliaのBaseライブラリに含まれるスケジューラによって実行されます。
+スケジューラは実行可能なタスクのキューを保持し、イベントループを実行します。
+このイベントループは、メッセージの到着など、外部のイベントに基づいてタスクを再開します。
+イベントを待機する基本的な関数は[`wait`](@ref)です。
+オブジェクトの中には[`wait`](@ref)が実装されているものがいくつかあります。
+例えば、`Process`オブジェクトの場合は、 [`wait`](@ref)は終了まで待機します。
+ [`wait`](@ref)暗黙裏に使われることもあります。
+ 例えば、[`read`](@ref)を呼び出した際に、データが利用可能になるまで待機するために内部的に使うことがあります。
 
 
 ```@raw html
@@ -1605,7 +1634,20 @@ waiting for any events. This is done by calling [`schedule`](@ref), or using the
 macro (see [Parallel Computing](@ref) for more details).
 -->
 ```
+これらの場合すべてで、 [`wait`](@ref)は最終的に[`Condition`](@ref)オブジェクトに作用します。
+このオブジェクトはタスクのキューの管理とタスクの再開に対する責務を負っています。
+タスクが[`Condition`](@ref)に作用する[`wait`](@ref)を呼び出すと、
+タスクは非実行可能とマークされ、状態のキューに加えられ、スケジューラに切り替わります。
+スケジューラは別のタスクを実行したり、外部イベントに対して待機するためにブロックしたりします。
+すべてうまくいくと、最終的に、イベントハンドラは状態に作用する [`notify`](@ref) を呼び出し、
+その結果、待機状態だったタスクが再び実行可能となります。
 
+ [`Task`](@ref)を呼び出して明示的に生成したタスクは、始めはスケジューラに認識されていません。
+ このため、望むのであれば、[`yieldto`](@ref)を使って手動でタスクを管理することも可能です。
+ しかし、イベントを待機するタスクは、予測されるように、イベントが発生すると自動的に再開します。
+ また、どんなイベントも待つことなく、可能な場合はいつでも、スケジューラがタスクを実行するようにもできます。
+これは、 [`schedule`](@ref)を呼び出したり、 [`@async`](@ref)マクロを使うことで可能です。
+（詳細は[並列コンピューティング](@ref)を参照）
 
 `[](### Task states)
 ### タスクの状態
@@ -1617,6 +1659,9 @@ symbols:
 -->
 ```
 
+タスクには実行状態を示す`state`フィールドがあります。
+[`Task`](@ref)の`state`は以下のシンボルのいずれかです。
+
 
 ```@raw html
 <!--
@@ -1630,10 +1675,10 @@ symbols:
 -->
 ```
 
-| Symbol      | Meaning                                            |
-|:----------- |:-------------------------------------------------- |
-| `:runnable` | Currently running, or available to be switched to  |
-| `:waiting`  | Blocked waiting for a specific event               |
-| `:queued`   | In the scheduler's run queue about to be restarted |
-| `:done`     | Successfully finished executing                    |
-| `:failed`   | Finished with an uncaught exception                |
+| シンボル     |意味                                              |
+|:----------- |:-------------------------------------------------|
+| `:runnable` | 現在実行中、または切替可能                         |
+| `:waiting`  | 特定のイベントを待機しているためブロックされている   |
+| `:queued`   | スケジューラの実行キューにあり、再開しようとしている |
+| `:done`     | 実行が正常終了                                    |
+| `:failed`   | 例外が捕捉されないまま終了                         |
