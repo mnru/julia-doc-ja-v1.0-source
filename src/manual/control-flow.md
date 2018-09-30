@@ -185,7 +185,7 @@ before. So, we could have defined the `test` function above as
 
 `if`ブロックには、"漏れ"があります。
 つまり、ローカルスコープを採用していません。
-これは、`if`句の中で定義した新しい変数は、`if`句の後ろで、たとえ`if`文の前に定義がないときでさえ、利用できることを意味します。
+これは、`if`節の中で定義した新しい変数は、`if`句の後ろで、たとえ`if`文の前に定義がないときでさえ、利用できることを意味します。
 そのため、上述の`test`関数を以下のようにも定義できるのです。
 
 
@@ -952,8 +952,14 @@ below all interrupt the normal flow of control.
 | [`UndefVarError`](@ref)       |
 | [`StringIndexError`](@ref)    |
 
+```@raw html
+<!--
 For example, the [`sqrt`](@ref) function throws a [`DomainError`](@ref) if applied to a negative
 real value:
+-->
+```
+例えば、[`sqrt`](@ref)関数は、負の実数に適用しようとすると [`DomainError`](@ref)を投げます。
+
 
 ```jldoctest
 julia> sqrt(-1)
@@ -963,7 +969,13 @@ Stacktrace:
 [...]
 ```
 
+```@raw html
+<!--
 You may define your own exceptions in the following way:
+-->
+```
+以下のようにして、自分で例外を定義することができます。
+
 
 ```jldoctest
 julia> struct MyCustomException <: Exception end
@@ -972,9 +984,17 @@ julia> struct MyCustomException <: Exception end
 `[](### The [`throw`](@ref) function)
 ### [`throw`](@ref)関数
 
+```@raw html
+<!--
 Exceptions can be created explicitly with [`throw`](@ref). For example, a function defined only
 for nonnegative numbers could be written to [`throw`](@ref) a [`DomainError`](@ref) if the argument
 is negative:
+-->
+```
+
+例外は[`throw`](@ref)を使って明示的に生成することができます。
+例えば、非負の数にのみ定義されている関数を、引数が負の時に [`DomainError`](@ref)を[`throw`](@ref)することで定義できます。
+
 
 ```jldoctest; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
 julia> f(x) = x>=0 ? exp(-x) : throw(DomainError(x, "argument must be nonnegative"))
@@ -990,8 +1010,15 @@ Stacktrace:
  [1] f(::Int64) at ./none:1
 ```
 
+```@raw html
+<!--
 Note that [`DomainError`](@ref) without parentheses is not an exception, but a type of exception.
 It needs to be called to obtain an `Exception` object:
+-->
+```
+
+[`DomainError`](@ref)に括弧を付けないと例外ではなく、例外の型になります。
+`Exception`オブジェクトを補足する時に必要となり呼び出されます。
 
 ```jldoctest
 julia> typeof(DomainError(nothing)) <: Exception
@@ -1001,15 +1028,27 @@ julia> typeof(DomainError) <: Exception
 false
 ```
 
+```@raw html
+<!--
 Additionally, some exception types take one or more arguments that are used for error reporting:
+-->
+```
+さらに、例外の型の中には、エラー報告のために、1個以上の引数を取るものがあります。
 
 ```jldoctest
 julia> throw(UndefVarError(:x))
 ERROR: UndefVarError: x not defined
 ```
 
+```@raw html
+<!--
 This mechanism can be implemented easily by custom exception types following the way [`UndefVarError`](@ref)
 is written:
+-->
+```
+このしくみは、[`UndefVarError`](@ref)の書き方に従って、独自の型を作ると、簡単に実装できます。
+
+
 
 ```jldoctest
 julia> struct MyUndefVarError <: Exception
@@ -1019,6 +1058,8 @@ julia> struct MyUndefVarError <: Exception
 julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defined")
 ```
 
+```@raw html
+<!--
 !!! note
     When writing an error message, it is preferred to make the first word lowercase. For example,
     `size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))`
@@ -1030,14 +1071,42 @@ julia> Base.showerror(io::IO, e::MyUndefVarError) = print(io, e.var, " not defin
     However, sometimes it makes sense to keep the uppercase first letter, for instance if an argument
     to a function is a capital letter: `size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))`.
 
+-->
+```
+
+!!! 注意
+    エラーメッセージを書く時は、小文字で始めるのが好ましいです。例えば、
+
+    `size(A) == size(B) || throw(DimensionMismatch("size of A not equal to size of B"))`
+
+    の方が、下記のものより好ましいです。
+
+    `size(A) == size(B) || throw(DimensionMismatch("Size of A not equal to size of B"))`
+
+    しかし、意図的に、出だしの文字を大文字のままにする場合もたまにあります。
+    例えば、関数の引数が大文字の場合の時です。
+
+     `size(A,1) == size(B,2) || throw(DimensionMismatch("A has first dimension..."))`
+
+
 ### エラー
 
+```@raw html
+<!--
 The [`error`](@ref) function is used to produce an [`ErrorException`](@ref) that interrupts
 the normal flow of control.
 
 Suppose we want to stop execution immediately if the square root of a negative number is taken.
 To do this, we can define a fussy version of the [`sqrt`](@ref) function that raises an error
 if its argument is negative:
+-->
+```
+
+[`error`](@ref)関数は、通常の制御フローを中断する[`ErrorException`](@ref)を生成するために利用されます。
+
+平方根の関数の引数に負の数を受け取ると即座に実行を停止したいとします。
+これを行うために、引数が負の時にエラーをおこす小うるさい[`sqrt`](@ref)を定義できます。
+
 
 ```jldoctest fussy_sqrt; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
 julia> fussy_sqrt(x) = x >= 0 ? sqrt(x) : error("negative x not allowed")
@@ -1054,9 +1123,16 @@ Stacktrace:
  [3] top-level scope
 ```
 
+```@raw html
+<!--
 If `fussy_sqrt` is called with a negative value from another function, instead of trying to continue
 execution of the calling function, it returns immediately, displaying the error message in the
 interactive session:
+-->
+```
+`fussy_sqrt`が負の数と共に、他の関数から呼ばれると、関数を呼び出して実行しようとする代わりに、
+即座に終了して対話セッションにエラーメッセージを表示します。 
+
 
 ```jldoctest fussy_sqrt; filter = r"Stacktrace:(\n \[[0-9]+\].*)*"
 julia> function verbose_fussy_sqrt(x)
@@ -1085,9 +1161,16 @@ Stacktrace:
 `[](### The `try/catch` statement)
 ### `try/catch` 文
 
+```@raw html
+<!--
 The `try/catch` statement allows for `Exception`s to be tested for. For example, a customized
 square root function can be written to automatically call either the real or complex square root
 method on demand using `Exception`s :
+-->
+```
+`try/catch`文では、`例外`を試行することができます。
+例えば、`例外`を使って、実数と複素数のどちらかの平方根メソッドを要求次第で自動で呼び出す、独自の平方根関数を書くことができます。
+
 
 ```jldoctest
 julia> f(x) = try
@@ -1104,12 +1187,23 @@ julia> f(-1)
 0.0 + 1.0im
 ```
 
+```@raw html
+<!--
 It is important to note that in real code computing this function, one would compare `x` to zero
 instead of catching an exception. The exception is much slower than simply comparing and branching.
 
 `try/catch` statements also allow the `Exception` to be saved in a variable. The following
 contrived example calculates the square root of the second element of `x` if `x`
 is indexable, otherwise assumes `x` is a real number and returns its square root:
+-->
+```
+
+重要なので注意しておきたい点は、関数を実際のコードの中で計算する時は、例外を補足するのではなくて、`x`を０と比較する点です。
+単に比較して分岐するよりも、はるかに例外は遅いのです。
+
+`try/catch`文では、`例外`を変数に保存することができます。
+以下の不自然な例では、`x`にインデックスがある場合には、`x`の第２要素の平方根を計算し、
+そうでなければ`x`を実数とみなしてその平方根を返します。
 
 ```jldoctest
 julia> sqrt_second(x) = try
@@ -1139,15 +1233,29 @@ Stacktrace:
 [...]
 ```
 
+```@raw html
+<!--
 Note that the symbol following `catch` will always be interpreted as a name for the exception,
 so care is needed when writing `try/catch` expressions on a single line. The following code will
 *not* work to return the value of `x` in case of an error:
+-->
+```
+
+`catch`に続く記号は常に例外の名前として解釈されることに注意してください。
+そのため、`try/catch`式を１行で書く場合は、注意が必要です。
+以下のコードはエラーの場合には`x`の値を返しません。
+
 
 ```julia
 try bad() catch x end
 ```
 
+```@raw html
+<!--
 Instead, use a semicolon or insert a line break after `catch`:
+-->
+```
+代替策として、セミコロンを使ったり、`catch`のあとに改行を入れたりします。
 
 ```julia
 try bad() catch; x end
@@ -1158,22 +1266,47 @@ catch
 end
 ```
 
+```@raw html
+<!--
 The power of the `try/catch` construct lies in the ability to unwind a deeply nested computation
 immediately to a much higher level in the stack of calling functions. There are situations where
 no error has occurred, but the ability to unwind the stack and pass a value to a higher level
 is desirable. Julia provides the [`rethrow`](@ref), [`backtrace`](@ref) and [`catch_backtrace`](@ref)
 functions for more advanced error handling.
+-->
+```
+
+`try/catch`構文の威力は、深くネストした計算を直ちに巻き戻して、
+関数呼び出しスタックのはるかに高水準まで戻って来ることが可能な点にあります。
+
+
 
 `[](### `finally` Clauses)
-### `finally` 句
+### `finally` 節
 
+```@raw html
+<!--
 In code that performs state changes or uses resources like files, there is typically clean-up
 work (such as closing files) that needs to be done when the code is finished. Exceptions potentially
 complicate this task, since they can cause a block of code to exit before reaching its normal
 end. The `finally` keyword provides a way to run some code when a given block of code exits, regardless
 of how it exits.
+-->
+```
 
+状態の変化やファイルのようなリソースの使用を伴うコードには、通常、コードの終了時にすべき整理作業(ファイルを閉じるなど)
+があります。
+例外があるとこの作業が複雑になる可能性があります。というのも、最後に達して正常終了する前に、例外がコードブロックを実行することもあるからです。
+`finally`キーワードは、どのように終了しようとも、コードブロックが終了する前に、何らかのコードを実行する手段を提供します。
+
+
+```@raw html
+<!--
 For example, here is how we can guarantee that an opened file is closed:
+-->
+```
+ここで、開いたファイルを必ず閉じることを保証する例を挙げます。
+
 
 ```julia
 f = open("file")
@@ -1184,10 +1317,19 @@ finally
 end
 ```
 
+```@raw html
+<!--
 When control leaves the `try` block (for example due to a `return`, or just finishing normally),
 `close(f)` will be executed. If the `try` block exits due to an exception, the exception will
 continue propagating. A `catch` block may be combined with `try` and `finally` as well. In this
 case the `finally` block will run after `catch` has handled the error.
+-->
+```
+制御が`try`ブロックを離れる時（例えば`return`による場合、正常終了の場合など）に、`close(f)` が実行されます。
+`try`ブロックが例外によって終了する場合、例外は伝播を続けます。
+`catch`ブロックを`try`や`finally`と組み合わせても構いません。
+この場合は、`finally`ブロックは`catch`がエラー処理をしたあとに実行されます。
+
 
 `[](## [Tasks (aka Coroutines)](@id man-tasks))
 ## [タスク (別名　コルーチン)](@id man-tasks)
