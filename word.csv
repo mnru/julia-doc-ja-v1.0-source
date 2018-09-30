@@ -120,3 +120,4 @@
 ,space,(メモリ)領域
 ,passing values back and forth,値をやりとりする
 ,in conjunction with ～,～と一緒に
+変数のスコープ,conflict,競合

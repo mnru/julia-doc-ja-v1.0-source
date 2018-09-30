@@ -1,18 +1,31 @@
 `[](# [Scope of Variables](@id scope-of-variables))
 # [変数のスコープ](@id scope-of-variables)
 
+```@raw html
+<!--
 The *scope* of a variable is the region of code within which a variable is visible. Variable scoping
 helps avoid variable naming conflicts. The concept is intuitive: two functions can both have arguments
 called `x` without the two `x`'s referring to the same thing. Similarly there are many other cases
 where different blocks of code can use the same name without referring to the same thing. The
 rules for when the same variable name does or doesn't refer to the same thing are called scope
 rules; this section spells them out in detail.
+-->
+```
 
+変数の **スコープ** とは、変数から見ることのできるコードの領域のことです。
+変数のスコープを使うと変数名の競合を避けることができます。
+
+
+```@raw html
+<!--
 Certain constructs in the language introduce *scope blocks*, which are regions of code that are
 eligible to be the scope of some set of variables. The scope of a variable cannot be an arbitrary
 set of source lines; instead, it will always line up with one of these blocks. There are two
 main types of scopes in Julia, *global scope* and *local scope*, the latter can be nested. The
 constructs introducing scope blocks are:
+-->
+```
+
 
 # [](@id man-scope-table)
 
