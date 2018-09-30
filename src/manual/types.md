@@ -1,4 +1,5 @@
-# [Types](@id man-types)
+`[](# [Types](@id man-types))
+# [型](@id man-types)
 
 Type systems have traditionally fallen into two quite different camps: static type systems, where
 every program expression must have a type computable before the execution of the program, and
@@ -51,7 +52,9 @@ Julia's type system is designed to be powerful and expressive, yet clear, intuit
 Many Julia programmers may never feel the need to write code that explicitly uses types. Some
 kinds of programming, however, become clearer, simpler, faster and more robust with declared types.
 
-## Type Declarations
+`[](## Type Declarations)
+## 型宣言
+
 
 The `::` operator can be used to attach type annotations to expressions and variables in programs.
 There are two primary reasons to do this:
@@ -125,7 +128,8 @@ end
 Returning from this function behaves just like an assignment to a variable with a declared type:
 the value is always converted to `Float64`.
 
-## Abstract Types
+`[](## Abstract Types)
+## 抽象型
 
 Abstract types cannot be instantiated, and serve only as nodes in the type graph, thereby describing
 sets of related concrete types: those concrete types which are their descendants. We begin with
@@ -234,7 +238,8 @@ a function whose arguments are abstract types, because it is recompiled for each
 concrete types with which it is invoked. (There may be a performance issue, however, in the case
 of function arguments that are containers of abstract types; see [Performance Tips](@ref man-performance-tips).)
 
-## Primitive Types
+`[](## Primitive Types)
+## プリミティブ型
 
 A primitive type is a concrete type whose data consists of plain old bits. Classic examples of primitive
 types are integers and floating-point values. Unlike most languages, Julia lets you declare your
@@ -287,7 +292,8 @@ arguments. This is why a nominative type system is necessary: if structure deter
 which in turn dictates behavior, then it would be impossible to make [`Bool`](@ref) behave
 any differently than [`Int8`](@ref) or [`UInt8`](@ref).
 
-## Composite Types
+`[](## Composite Types)
+## 複合型
 
 [Composite types](https://en.wikipedia.org/wiki/Composite_data_type) are called records, structs,
 or objects in various languages. A composite type is a collection of named fields,
@@ -401,7 +407,8 @@ There is much more to say about how instances of composite types are created, bu
 depends on both [Parametric Types](@ref) and on [Methods](@ref), and is sufficiently important
 to be addressed in its own section: [Constructors](@ref man-constructors).
 
-## Mutable Composite Types
+`[](## Mutable Composite Types)
+## 可変複合型
 
 If a composite type is declared with `mutable struct` instead of `struct`, then instances of
 it can be modified:
@@ -450,7 +457,8 @@ To recap, two essential properties define immutability in Julia:
       functions as pointers to heap-allocated values except in cases where the compiler
       is sure that there's no way to tell that this is not what is happening.
 
-## Declared Types
+`[](## Declared Types)
+## 宣言型
 
 The three kinds of types (abstract, primitive, composite) discussed in the previous
 sections are actually all closely related. They share the same key properties:
@@ -477,7 +485,8 @@ no field names. A composite type is a `DataType` that has field names or is empt
 
 Every concrete value in the system is an instance of some `DataType`.
 
-## Type Unions
+`[](## Type Unions)
+## 合併型
 
 A type union is a special abstract type which includes as objects all instances of any of its
 argument types, constructed using the special [`Union`](@ref) keyword:
@@ -508,7 +517,8 @@ types in other languages. Declaring a function argument or a field as `Union{T, 
 setting it either to a value of type `T`, or to `nothing` to indicate that there is no value.
 See [this FAQ entry](@ref faq-nothing) for more information.
 
-## Parametric Types
+`[](## Parametric Types)
+## パラメトリック型
 
 An important and powerful feature of Julia's type system is that it is parametric: types can take
 parameters, so that type declarations actually introduce a whole family of new types -- one for
@@ -529,7 +539,8 @@ All declared types (the `DataType` variety) can be parameterized, with the same 
 case. We will discuss them in the following order: first, parametric composite types, then parametric
 abstract types, and finally parametric primitive types.
 
-### Parametric Composite Types
+`[](### Parametric Composite Types)
+### パラメトリック複合型
 
 Type parameters are introduced immediately after the type name, surrounded by curly braces:
 
@@ -700,7 +711,8 @@ Closest candidates are:
 Constructor methods to appropriately handle such mixed cases can be defined, but that will not
 be discussed until later on in [Constructors](@ref man-constructors).
 
-### Parametric Abstract Types
+`[](### Parametric Abstract Types)
+### パラメトリック抽象型
 
 Parametric abstract type declarations declare a collection of abstract types, in much the same
 way:
@@ -839,7 +851,8 @@ It only makes sense to take ratios of integer values, so the parameter type `T` 
 to being a subtype of [`Integer`](@ref), and a ratio of integers represents a value on the
 real number line, so any [`Rational`](@ref) is an instance of the [`Real`](@ref) abstraction.
 
-### Tuple Types
+`[](### Tuple Types)
+### タプル型
 
 Tuples are an abstraction of the arguments of a function -- without the function itself. The salient
 aspects of a function's arguments are their order and their types. Therefore a tuple type is similar
@@ -885,7 +898,8 @@ false
 Intuitively, this corresponds to the type of a function's arguments being a subtype of the function's
 signature (when the signature matches).
 
-### Vararg Tuple Types
+`[](### Vararg Tuple Types)
+### 可変引数タプル型
 
 The last parameter of a tuple type can be the special type [`Vararg`](@ref), which denotes any number
 of trailing elements:
@@ -913,7 +927,8 @@ used to represent the arguments accepted by varargs methods (see [Varargs Functi
 The type `Vararg{T,N}` corresponds to exactly `N` elements of type `T`.  `NTuple{N,T}` is a convenient
 alias for `Tuple{Vararg{T,N}}`, i.e. a tuple type containing exactly `N` elements of type `T`.
 
-### Named Tuple Types
+`[](### Named Tuple Types)
+### 名前付きタプル型
 
 Named tuples are instances of the [`NamedTuple`](@ref) type, which has two parameters: a tuple of
 symbols giving the field names, and a tuple type giving the field types.
@@ -938,7 +953,8 @@ julia> NamedTuple{(:a, :b)}((1,""))
 If field types are specified, the arguments are converted. Otherwise the types of the arguments
 are used directly.
 
-#### [Singleton Types](@id man-singleton-types)
+`[](#### [Singleton Types](@id man-singleton-types))
+#### [シングルトン型](@id man-singleton-types)
 
 There is a special kind of abstract parametric type that must be mentioned here: singleton types.
 For each type, `T`, the "singleton type" `Type{T}` is an abstract type whose only instance is
@@ -994,7 +1010,8 @@ the term "singleton type" refers to a type whose only instance is a single value
 applies to Julia's singleton types, but with that caveat that only type objects have singleton
 types.
 
-### Parametric Primitive Types
+`[](### Parametric Primitive Types)
+### パラメトリックプリミティブ型
 
 Primitive types can also be declared parametrically. For example, pointers are represented as
 primitive types which would be declared in Julia like this:
@@ -1022,7 +1039,8 @@ julia> Ptr{Int64} <: Ptr
 true
 ```
 
-## UnionAll Types
+`[](## UnionAll Types)
+## 全合併型
 
 We have said that a parametric type like `Ptr` acts as a supertype of all its instances
 (`Ptr{Int64}` etc.). How does this work? `Ptr` itself cannot be a normal data type, since without
@@ -1092,7 +1110,8 @@ must always be specified in full, this is not especially helpful, but in Julia, 
 to write just `Vector` for the abstract type including all one-dimensional dense arrays of any
 element type.
 
-## Type Aliases
+`[](## Type Aliases)
+## 型エイリアス
 
 Sometimes it is convenient to introduce a new name for an already expressible type.
 This can be done with a simple assignment statement.
@@ -1127,7 +1146,8 @@ type -- either [`Int32`](@ref) or [`Int64`](@ref).
 are specified by the IEEE-754 standard. Whereas the size of `Int` reflects the size of a
 native pointer on that machine.)
 
-## Operations on Types
+`[](## Operations on Types)
+## 型に対する演算
 
 Since types in Julia are themselves objects, ordinary functions can operate on them. Some functions
 that are particularly useful for working with or exploring types have already been introduced,
@@ -1200,7 +1220,8 @@ Closest candidates are:
   supertype(!Matched::UnionAll) at operators.jl:47
 ```
 
-## [Custom pretty-printing](@id man-custom-pretty-printing)
+`[](## [Custom pretty-printing](@id man-custom-pretty-printing))
+## [独自の整形表示](@id man-custom-pretty-printing)
 
 Often, one wants to customize how instances of a type are displayed.  This is accomplished by
 overloading the [`show`](@ref) function.  For example, suppose we define a type to represent
@@ -1365,7 +1386,8 @@ julia> [Polar(3, 4.0) Polar(4.0,5.3)]
 See the [`IOContext`](@ref) documentation for a list of common properties which can be used
 to adjust printing.
 
-## "Value types"
+`[](## "Value types")
+## "値型"
 
 In Julia, you can't dispatch on a *value* such as `true` or `false`. However, you can dispatch
 on parametric types, and Julia allows you to include "plain bits" values (Types, Symbols, Integers,
