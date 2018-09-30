@@ -1,6 +1,8 @@
 `[](# [Types](@id man-types))
 # [型](@id man-types)
 
+```@raw html
+<!--
 Type systems have traditionally fallen into two quite different camps: static type systems, where
 every program expression must have a type computable before the execution of the program, and
 dynamic type systems, where nothing is known about types until run time, when the actual values
@@ -9,20 +11,43 @@ typed languages by letting code be written without the precise types of values b
 compile time. The ability to write code that can operate on different types is called polymorphism.
 All code in classic dynamically typed languages is polymorphic: only by explicitly checking types,
 or when objects fail to support operations at run-time, are the types of any values ever restricted.
+-->
+```
+型システムは従来全く異なる２つの陣営に分類されてきました。
+静的型システムと動的型システムです。
+静的型システムでは、プログラムのすべての式は、実行前に算出可能な型でなければなりません。
+動的型システムでは、型に関する情報は、実行時、すなわち、プログラムが処理する実際の値が利用可能になる時まで
+何もわかりません。
+オブジェクト指向では、静的型言語でもある程度柔軟性があり、コンパイル時にわかる値の正確な型をコードに書かなくても構いません。
+異なる型に対して操作可能なコードを書ける能力はポリモーフィズムと呼ばれます。
+古典的な動的型システムの総てのコードはポリモーフィックです。
+わざわざ型を検査したり、実行時にオブジェクトが操作に対応できなくなったりしない限り、どんな値の型でも制限を受けません。
 
+
+
+```@raw html
+<!--
 Julia's type system is dynamic, but gains some of the advantages of static type systems by making
 it possible to indicate that certain values are of specific types. This can be of great assistance
 in generating efficient code, but even more significantly, it allows method dispatch on the types
 of function arguments to be deeply integrated with the language. Method dispatch is explored in
 detail in [Methods](@ref), but is rooted in the type system presented here.
+-->
+```
 
+```@raw html
+<!--
 The default behavior in Julia when types are omitted is to allow values to be of any type. Thus,
 one can write many useful Julia functions without ever explicitly using types. When additional
 expressiveness is needed, however, it is easy to gradually introduce explicit type annotations
 into previously "untyped" code. Adding annotations serves three primary purposes: to take advantage
 of Julia's powerful multiple-dispatch mechanism,  to improve human readability, and to catch
 programmer errors.
+-->
+```
 
+```@raw html
+<!--
 Describing Julia in the lingo of [type systems](https://en.wikipedia.org/wiki/Type_system), it
 is: dynamic, nominative and parametric. Generic types can be parameterized, and the hierarchical
 relationships between types are [explicitly declared](https://en.wikipedia.org/wiki/Nominal_type_system),
@@ -34,6 +59,25 @@ few drawbacks. It turns out that being able to inherit behavior is much more imp
 able to inherit structure, and inheriting both causes significant difficulties in traditional
 object-oriented languages. Other high-level aspects of Julia's type system that should be mentioned
 up front are:
+-->
+```
+
+```@raw html
+<!--
+  * There is no division between object and non-object values: all values in Julia are true objects
+    having a type that belongs to a single, fully connected type graph, all nodes of which are equally
+    first-class as types.
+  * There is no meaningful concept of a "compile-time type": the only type a value has is its actual
+    type when the program is running. This is called a "run-time type" in object-oriented languages
+    where the combination of static compilation with polymorphism makes this distinction significant.
+  * Only values, not variables, have types -- variables are simply names bound to values.
+  * Both abstract and concrete types can be parameterized by other types. They can also be parameterized
+    by symbols, by values of any type for which [`isbits`](@ref) returns true (essentially, things
+    like numbers and bools that are stored like C types or `struct`s with no pointers to other objects),
+    and also by tuples thereof. Type parameters may be omitted when they do not need to be referenced
+    or restricted.
+-->
+```
 
   * There is no division between object and non-object values: all values in Julia are true objects
     having a type that belongs to a single, fully connected type graph, all nodes of which are equally
@@ -48,9 +92,15 @@ up front are:
     and also by tuples thereof. Type parameters may be omitted when they do not need to be referenced
     or restricted.
 
+
+```@raw html
+<!--
 Julia's type system is designed to be powerful and expressive, yet clear, intuitive and unobtrusive.
 Many Julia programmers may never feel the need to write code that explicitly uses types. Some
 kinds of programming, however, become clearer, simpler, faster and more robust with declared types.
+-->
+```
+
 
 `[](## Type Declarations)
 ## 型宣言
