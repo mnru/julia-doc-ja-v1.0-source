@@ -107,3 +107,16 @@
 ,on demand,要求に応じて、要求があり次第
 ,clause,節
 ,clean-up work,整理作業
+,a piece of,ひとまとまりの
+,cartesian product,直積
+,symmetric coroutines,対称コルーチン
+,lightweight　threads,軽量スレッド
+,cooperative multitasking,協調的マルチタスク
+,one-shot continuations,ワンショット継続
+,unwind,巻き戻す
+,suspend,中断する
+,resume,再開する
+,pick up right where you left off,中断したところから再開する
+,space,(メモリ)領域
+,passing values back and forth,値をやりとりする
+,in conjunction with ～,～と一緒に

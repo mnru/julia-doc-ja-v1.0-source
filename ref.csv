@@ -21,4 +21,5 @@
 ,[Pre-allocating outputs],出力の事前割り当て
 制御フロー,[Exception Handling],例外処理
 ,[`Task`],タスク
-,[Mathematical Operations and Elementary Functions],
+,[Mathematical Operations and Elementary Functions],算術演算子と初等関数
+,[Parallel Computing],並列コンピューティング

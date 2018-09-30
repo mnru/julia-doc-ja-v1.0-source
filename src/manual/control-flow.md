@@ -1341,6 +1341,9 @@ manner. This feature is sometimes called by other names, such as symmetric corou
 threads, cooperative multitasking, or one-shot continuations.
 -->
 ```
+タスクは計算の中断や再開を柔軟に行うことを可能にする制御フローの機能です。
+この機能は、対称コルーチン、軽量スレッド、協調的マルチタスク、ワンショット継続などの別名でよばれることもあります。
+
 
 
 ```@raw html
@@ -1354,6 +1357,18 @@ consuming the call stack. Second, switching among tasks can occur in any order, 
 calls, where the called function must finish executing before control returns to the calling function.
 -->
 ```
+ひとまとまりの計算作業(実のところ、特定の関数の実行)を[`Task`](@ref)に指定して実行すると、
+これを中断して別の [`Task`](@ref)に切り替えることができます。
+もともとの [`Task`](@ref)は後で中断したところから再開することができます。
+一見、これは関数呼び出しと同じように見えるかもしれません。
+しかし、２つの重要な違いがあります。
+まず、タスクの切り替えにはメモリ領域を使用しません。
+このため、切り替えるタスクの数をいくら増やしても、コールスタックを消費しません。
+次に、タスクの切り替えは、どんな順番でもよく、関数呼び出しとは異なります。
+関数呼び出しの場合は、呼び出される関数は、呼び出す関数に制御が戻る前に、実行を終了する必要があります。
+
+
+
 
 ```@raw html
 <!--
@@ -1366,6 +1381,14 @@ may have more values to generate and so might not yet be ready to return. With t
 and consumer can both run as long as they need to, passing values back and forth as necessary.
 -->
 ```
+この種の制御フローのを使うと、ある種の問題は簡単に解決できます。
+ある種の問題では、関数呼び出しでは、様々な種類の作業を、自然に関連付けることができません。
+なすべき仕事の「呼び出す側」と「呼び出される側」がはっきりしないものがあります。
+例として挙げる「生産者/消費者」問題では、複雑な処理が値を生成する一方で、別の複雑な処理がそれを消費します。
+消費者は値を得るために、単に生産者関数を呼び出せばいいわけではありません。
+生産者には他にも生産すべき値があり、まだ値を返す準備ができていないかもしれないからです。
+タスクを使うと、生産者と消費者は必要に応じて値をやり取りしながら、両者とも必要なだけ作動することができます。
+
 
 ```@raw html
 <!--
@@ -1379,6 +1402,15 @@ constructor which accepts a 1-arg function as an argument can be used to run a t
 We can then [`take!`](@ref) values repeatedly from the channel object:
 -->
 ```
+Juliaにはこの問題を解決するために[`Channel`](@ref)の仕組みがあります。
+[`Channel`](@ref)は待機可能な先入先出のキューで複数のタスクを読取り・書込みが可能です。
+
+生産者タスクを定義しましょう。
+これは、[`put!`](@ref)の呼び出しによって値の生産を行います。
+値を消費するには、生産者が新しいタスクを実行するようにスケジュールする必要があります。
+１引数の関数を引数とする[`Channel`](@ref)の特殊なコンストラクタを使って、チャネルに束縛したタスクを実行することができます。
+[`take!`](@ref)を使ってチャネルオブジェクトがら繰り返し値を取得することができます。
+
 
 
 ```jldoctest producer
@@ -1421,6 +1453,12 @@ loop variable takes on all the produced values. The loop is terminated when the 
 -->
 ```
 
+「生産者」は何回も値を返すことができる、というのはこの挙動の解釈の１つです。
+[`put!`](@ref)の呼び出しの合間で、生産者の実行は中断し、制御が消費者に移ります。
+
+戻り値の[`Channel`](@ref)は`for`ループの中でイテラブルオブジェクトとして利用可能で、
+この場合、ループの変数は、生産される値すべてを取ります。
+チャネルが閉じるとループは終了します。
 
 ```jldoctest producer
 julia> for x in Channel(producer)
@@ -1449,6 +1487,20 @@ function application is needed to create a 0 or 1 argument [anonymous function](
 For [`Task`](@ref) objects this can be done either directly or by use of a convenience macro:
 -->
 ```
+生産者のチャネルを明示的に閉じる必要はないことに注意してください。
+これは、[`Channel`](@ref)が[`Task`](@ref)を束縛しているために、
+チャネルの開いている生涯期間が、束縛したタスクの生涯期間に関連付けられているからです。
+チャネルオブジェクトはタスクが終了すると自動的に閉じられます。
+タスクは複数のチャネルに束縛可能で、逆も成り立ちます。
+
+[`Task`](@ref)のコンストラクタの引数は、引数0個の関数ですが、
+[`Channel`](@ref)のメソッドは、[`Channel`](@ref)型の引数1個を持つ関数で、
+タスクを束縛したチャネルを生成します。
+生産者をパラメータ化することは、よくあるパターンですが、この場合は引数が0個または１個の[無名関数](@ref man-anonymous-functions)
+を作るために部分関数の適用が必要です。
+
+[`Task`](@ref)オブジェクトに対して、これは、直接、または便利なマクロを使って行います。
+
 
 
 ```julia
@@ -1471,6 +1523,13 @@ Note that currently Julia tasks are not scheduled to run on separate CPU cores.
 True kernel threads are discussed under the topic of [Parallel Computing](@ref).
 -->
 ```
+より高度な作業分配パターンを編成するために、[`bind`](@ref) や[`schedule`](@ref)を
+[`Task`](@ref)や[`Channel`](@ref)と一緒に使って、チャネルの集合と生産者/消費者のタスクの集合を、
+明示的に連携させることができます。
+
+現時点では、Juliaのタスクは、別々のCPUのコアにスケジュールされない点に注意してください。
+真のカーネルスレッドの関しては[並列コンピューティング](@ref)のトピックで議論します。
+
 
 
 　`[](　### Core task operations)
