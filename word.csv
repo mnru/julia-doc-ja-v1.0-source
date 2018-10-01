@@ -1,5 +1,5 @@
 ﻿章,英,日,備考
-前書き,dipatch,選択する,
+前書き,dipatch,選択する,dispatchは発送するという意味だが、methodの章を読むと選択すると訳すべきか
 ,multiple dispatch,多重ディスパッチ,
 ,Unobtrusive,控えめな、記述のすくない,
 始めよう,,,
@@ -14,7 +14,7 @@
 ,Rounding modes,丸めモード,
 ,ieee standard,ieee 規格,
 ,least significant bit,最下位ビット,
-,significand,仮数,
+,significand,仮数,1.2345*2^31で、1.2345が仮数、2が基数、31が指数
 ,exponential,巾関数,
 ,engineering notation,指数表記,
 算術演算と初等関数,Updating operator,代入演算子,
@@ -54,7 +54,7 @@
 ,dedent,インデントを取り除く,
 ,handy,便利な,
 ,match,一致する,
-,Destructuring　syntax,分割構文,
+,Destructuring　syntax,分割構文,javascriptの「分割代入」(destructuring assignmentの訳)にならった
 ,contrived,不自然な,
 ,verbatim,言葉通りに、そのまま,
 ,specification,仕様,
@@ -127,4 +127,8 @@
 ,specifically marked,わざわざ(local・global などの語句を)つける,
 ,visible,(変数を)参照できる,
 ,discourage,反対する,
-,polymorphism,ポリモーフィズム,
+型,polymorphism,多相的,関数型言語では多相性、オブジェクト指向では多態性と訳すことが多いが、多相性に統一した
+,distinctive,特有の,
+,abstract type,抽象型,
+,concrete type,具象型,具体型はHaskell界隈で、inhabited typeの訳語として使われるので避けた
+,unduly,不当に,

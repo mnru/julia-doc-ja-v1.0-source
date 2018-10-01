@@ -18,10 +18,10 @@ or when objects fail to support operations at run-time, are the types of any val
 静的型システムでは、プログラムのすべての式は、実行前に算出可能な型でなければなりません。
 動的型システムでは、型に関する情報は、実行時、すなわち、プログラムが処理する実際の値が利用可能になる時まで
 何もわかりません。
-オブジェクト指向では、静的型言語でもある程度柔軟性があり、コンパイル時にわかる値の正確な型をコードに書かなくても構いません。
+オブジェクト指向では、静的型言語でもある程度柔軟性があり、コンパイル時に判明する値の正確な型をコードに書かなくても構いません。
 異なる型に対して操作可能なコードを書ける能力は多相性と呼ばれます。
 古典的な動的型システムのすべてのコードは多相的です。
-わざわざ型を検査したり、実行時にオブジェクトが操作に対応できなくなったりしない限り、どんな値の型でも制限を受けません。
+わざわざ型を検査したり、実行時にオブジェクトが操作に対応し損なわない限り、どんな値の型でも制限を受けません。
 
 
 
@@ -73,6 +73,15 @@ up front are:
 
 Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の言葉で記述すると、
 動的で、公称的で、パラメトリックです。
+汎化型は、パラメータづけが可能で、型同士の階層的な関係は、[明示的に宣言し](https://en.wikipedia.org/wiki/Nominal_type_system)、[互換構造で暗示する](https://en.wikipedia.org/wiki/Structural_type_system)のではありません。
+特にJuliaに固有の型システムの特徴は、具象型は互いに互いのサブタイプとはならないことです。
+具象型はすべてファイナルで、そのスーパータイプとなるのは抽象型のみです。
+はじめは、この制約が不当に厳しく思えるかも知れませんが、多くの利点があり、欠点はほとんどありません。
+挙動を継承できるほうが、構造を継承できるよりも重要であり、共に継承しようとすると、
+従来のオブジェクト指向言語では、深刻な困難が生じることがわかっています。 
+他に、前もって言及すべきJuliaの型システムの高水準な特徴をあげると、
+
+
 
 
 ```@raw html
@@ -92,18 +101,16 @@ Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の
 -->
 ```
 
-  * There is no division between object and non-object values: all values in Julia are true objects
-    having a type that belongs to a single, fully connected type graph, all nodes of which are equally
-    first-class as types.
-  * There is no meaningful concept of a "compile-time type": the only type a value has is its actual
-    type when the program is running. This is called a "run-time type" in object-oriented languages
-    where the combination of static compilation with polymorphism makes this distinction significant.
-  * Only values, not variables, have types -- variables are simply names bound to values.
-  * Both abstract and concrete types can be parameterized by other types. They can also be parameterized
-    by symbols, by values of any type for which [`isbits`](@ref) returns true (essentially, things
-    like numbers and bools that are stored like C types or `struct`s with no pointers to other objects),
-    and also by tuples thereof. Type parameters may be omitted when they do not need to be referenced
-    or restricted.
+  * 値にオブジェクトと非オブジェクトの区別はありません。
+    Juliaではすべて値は真のオブジェクトであり、オブジェクトはたった一つの型に属し、型どうしはすべてグラフの中で繋がっていて、
+    どのノードも等しく型として第一級です。
+  * 「コンパイル時の型」という考え方に意味はありません。値は唯一実行時の実際の型を持つのみです。
+    これは、オブジェクト指向言語では「実行時の型」と呼ばれ、静的コンパイルで多相性を実現するためにこの型の違いは重要です。
+  * 型を持つのは変数ではなく値のみです。
+    変数は値に束縛された単なる名前です。
+  * 抽象型と具象型は共に他の型によってパラメータ化可能です。
+    また他にも、記号・[`isbits`](@ref)が真になる型(本質的に、数やブール値など他のオブジェクトへのポインタ持たないC言語の型や構造体に格納されるもの)やそれらのタプルによってもパラメータ化が可能です。
+    型のパラメータは参照や制限が必要ない時は省略可能です。
 
 
 ```@raw html
