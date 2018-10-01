@@ -19,8 +19,8 @@ or when objects fail to support operations at run-time, are the types of any val
 動的型システムでは、型に関する情報は、実行時、すなわち、プログラムが処理する実際の値が利用可能になる時まで
 何もわかりません。
 オブジェクト指向では、静的型言語でもある程度柔軟性があり、コンパイル時にわかる値の正確な型をコードに書かなくても構いません。
-異なる型に対して操作可能なコードを書ける能力はポリモーフィズムと呼ばれます。
-古典的な動的型システムの総てのコードはポリモーフィックです。
+異なる型に対して操作可能なコードを書ける能力は多相性と呼ばれます。
+古典的な動的型システムのすべてのコードは多相的です。
 わざわざ型を検査したり、実行時にオブジェクトが操作に対応できなくなったりしない限り、どんな値の型でも制限を受けません。
 
 
@@ -34,6 +34,10 @@ of function arguments to be deeply integrated with the language. Method dispatch
 detail in [Methods](@ref), but is rooted in the type system presented here.
 -->
 ```
+Juliaの型システムは動的ですが、値に対して型を指定できるようにすることで、静的型システムの利点を幾分か取り入れています。
+これは、効率的なコードを生成するための大きな手助けとなりますが。より重要なのは、関数の引数の型に対してメソッド・ディスパッチ
+が可能となり、言語に深く統合されていることです。メソッド・ディスパッチについては[メソッド](@ref)で詳細に探索していますが、
+ここに書いている型システムに根差しています。
 
 ```@raw html
 <!--
@@ -45,6 +49,11 @@ of Julia's powerful multiple-dispatch mechanism,  to improve human readability, 
 programmer errors.
 -->
 ```
+型を省略した時は、値はどんな　型でもよい、というのがJuliaのデフォルトの挙動です。
+このため、多くの役に立つ関数を、わざわざ型の指定をしなくても、Juliaでは書くことができます。
+しかし、必要に応じて、もとの"型のない"コードに徐々に明示的な型注釈をつけていくのは簡単です。
+型注釈をつけるのは３つの目的があります。
+Juliaの強力な多重ディスパッチのしくみを使うため、人間が読みやすくするため、プログラマーのエラーを捕捉するためです。
 
 ```@raw html
 <!--
@@ -61,6 +70,10 @@ object-oriented languages. Other high-level aspects of Julia's type system that 
 up front are:
 -->
 ```
+
+Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の言葉で記述すると、
+動的で、公称的で、パラメトリックです。
+
 
 ```@raw html
 <!--
