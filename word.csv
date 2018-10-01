@@ -132,3 +132,7 @@
 ,abstract type,抽象型,
 ,concrete type,具象型,具体型はHaskell界隈で、inhabited typeの訳語として使われるので避けた
 ,unduly,不当に,
+,type annotation,型注釈,
+,assertion,アサーション、表明、主張,
+,final,ファイナル、,
+,in-place,その場で,

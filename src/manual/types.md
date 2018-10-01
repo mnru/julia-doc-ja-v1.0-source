@@ -73,7 +73,7 @@ up front are:
 
 Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の言葉で記述すると、
 動的で、公称的で、パラメトリックです。
-汎化型は、パラメータづけが可能で、型同士の階層的な関係は、[明示的に宣言し](https://en.wikipedia.org/wiki/Nominal_type_system)、[互換構造で暗示する](https://en.wikipedia.org/wiki/Structural_type_system)のではありません。
+汎化型は、パラメータづけが可能で、型同士の階層的な関係は、[明示的に宣言し](https://en.wikipedia.org/wiki/Nominal_type_system)、[互換構造から推論する](https://en.wikipedia.org/wiki/Structural_type_system)のではありません。
 特にJuliaに固有の型システムの特徴は、具象型は互いに互いのサブタイプとはならないことです。
 具象型はすべてファイナルで、そのスーパータイプとなるのは抽象型のみです。
 はじめは、この制約が不当に厳しく思えるかも知れませんが、多くの利点があり、欠点はほとんどありません。
@@ -109,7 +109,7 @@ Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の
   * 型を持つのは変数ではなく値のみです。
     変数は値に束縛された単なる名前です。
   * 抽象型と具象型は共に他の型によってパラメータ化可能です。
-    また他にも、記号・[`isbits`](@ref)が真になる型(本質的に、数やブール値など他のオブジェクトへのポインタ持たないC言語の型や構造体に格納されるもの)やそれらのタプルによってもパラメータ化が可能です。
+    また他にも、記号・[`isbits`](@ref)が真になる型(本質的に、数やブール値など、他のオブジェクトへのポインタ持たないC言語の型や構造体に格納されるもの)やそれらのタプルによってもパラメータ化が可能です。
     型のパラメータは参照や制限が必要ない時は省略可能です。
 
 
@@ -121,18 +121,37 @@ kinds of programming, however, become clearer, simpler, faster and more robust w
 -->
 ```
 
+Juliaの型システムは、強力かつ表現力豊かでありながら、明快かつ直観的で目立たぬよう設計されています。
+多くのJuliaのプログラマは、わざわざ型を使ってコードを書く必要性をまったく感じないかもしれません。
+しかし、ある種のプログラムでは、型を宣言すると、より明快で、単純で、速く、堅牢になります。
+
 
 `[](## Type Declarations)
 ## 型宣言
 
 
+```@raw html
+<!--
 The `::` operator can be used to attach type annotations to expressions and variables in programs.
 There are two primary reasons to do this:
+-->
+```
+`::`演算子はプログラム中の式や変数に型注釈をつけるために使われます。
+これには、２つの理由があります。
 
+```@raw html
+<!--
 1. As an assertion to help confirm that your program works the way you expect,
 2. To provide extra type information to the compiler, which can then improve performance in some
    cases
+-->
+```
 
+1. プログラムが想定通りに動いているかを確かめる、アサーションとして役立てる
+2. コンパイラに付加的な情報を伝えて、状況によってはパフォーマンスが上がるようする
+
+```@raw html
+<!--
 When appended to an expression computing a value, the `::` operator is read as "is an instance
 of". It can be used anywhere to assert that the value of the expression on the left is an instance
 of the type on the right. When the type on the right is concrete, the value on the left must have
@@ -140,6 +159,15 @@ that type as its implementation -- recall that all concrete types are final, so 
 is a subtype of any other. When the type is abstract, it suffices for the value to be implemented
 by a concrete type that is a subtype of the abstract type. If the type assertion is not true,
 an exception is thrown, otherwise, the left-hand value is returned:
+-->
+```
+`::`演算子が値を計算する式についている場合は、"is instance of"とよみます。
+左側の式の値は右側の型のインスタンスであると主張するためにどこでも使えます。
+右側の方が具象型の場合、左側の値はその具象型となる実装でなければなりません。
+すべての具象型は、ファイナルであり、実装はの他の具象型のサブタイプとはならないことを思い出してください。
+型が抽象型の場合、実装した値の型はその抽象型のサブタイプで構いません。
+型がアサーションと異なる場合、例外が投げられ、合致する場合は左側の値を返します。
+
 
 ```jldoctest
 julia> (1+2)::AbstractFloat
@@ -149,12 +177,23 @@ julia> (1+2)::Int
 3
 ```
 
+```@raw html
+<!--
 This allows a type assertion to be attached to any expression in-place.
 
 When appended to a variable on the left-hand side of an assignment, or as part of a `local` declaration,
 the `::` operator means something a bit different: it declares the variable to always have the
 specified type, like a type declaration in a statically-typed language such as C. Every value
 assigned to the variable will be converted to the declared type using [`convert`](@ref):
+-->
+```
+このため、型アサーションを任意の式にその場でつけることができます。
+
+代入の左辺の変数に付け加える時や、`local`宣言の一部である時、`::`演算子の意味は少し違います。
+これは、変数は常に指定した型であるという宣言となり、C言語のような静的型付き言語と同様です。
+この変数に代入した値は、 [`convert`](@ref)を使って宣言した型に変換されます。
+
+
 
 ```jldoctest
 julia> function foo()
@@ -170,21 +209,36 @@ julia> typeof(ans)
 Int8
 ```
 
+```@raw html
+<!--
 This feature is useful for avoiding performance "gotchas" that could occur if one of the assignments
 to a variable changed its type unexpectedly.
 
 This "declaration" behavior only occurs in specific contexts:
+-->
+```
+
+この機能は、代入によって変数の型が図らずも変わってしまった時におこりうる、パフォーマンスの「落とし穴」を避けるために役立ちます。
+
+この「宣言」の挙動は、特定のコンテキストでのみ発生します。
+
+
+
 
 ```julia
 local x::Int8  # in a local declaration
 x::Int8 = 10   # as the left-hand side of an assignment
 ```
 
+```@raw html
+<!--
 and applies to the whole current scope, even before the declaration. Currently, type declarations
 cannot be used in global scope, e.g. in the REPL, since Julia does not yet have constant-type
 globals.
 
 Declarations can also be attached to function definitions:
+-->
+```
 
 ```julia
 function sinc(x)::Float64
@@ -195,18 +249,30 @@ function sinc(x)::Float64
 end
 ```
 
+```@raw html
+<!--
 Returning from this function behaves just like an assignment to a variable with a declared type:
 the value is always converted to `Float64`.
+-->
+```
+
 
 `[](## Abstract Types)
 ## 抽象型
 
+```@raw html
+<!--
 Abstract types cannot be instantiated, and serve only as nodes in the type graph, thereby describing
 sets of related concrete types: those concrete types which are their descendants. We begin with
 abstract types even though they have no instantiation because they are the backbone of the type
 system: they form the conceptual hierarchy which makes Julia's type system more than just a collection
 of object implementations.
+-->
+```
 
+
+```@raw html
+<!--
 Recall that in [Integers and Floating-Point Numbers](@ref), we introduced a variety of concrete
 types of numeric values: [`Int8`](@ref), [`UInt8`](@ref), [`Int16`](@ref), [`UInt16`](@ref),
 [`Int32`](@ref), [`UInt32`](@ref), [`Int64`](@ref), [`UInt64`](@ref), [`Int128`](@ref),
@@ -221,19 +287,34 @@ denominator algorithm works for all kinds of integers, but will not work for flo
 numbers. Abstract types allow the construction of a hierarchy of types, providing a context
 into which concrete types can fit. This allows you, for example, to easily program to any type
 that is an integer, without restricting an algorithm to a specific type of integer.
+-->
+```
 
+
+```@raw html
+<!--
 Abstract types are declared using the [`abstract type`](@ref) keyword. The general syntaxes for declaring an
 abstract type are:
+-->
+```
+
 
 ```
 abstract type «name» end
 abstract type «name» <: «supertype» end
 ```
 
+```@raw html
+<!--
 The `abstract type` keyword introduces a new abstract type, whose name is given by `«name»`. This
 name can be optionally followed by [`<:`](@ref) and an already-existing type, indicating that the newly
 declared abstract type is a subtype of this "parent" type.
+-->
+```
 
+
+```@raw html
+<!--
 When no supertype is given, the default supertype is `Any` -- a predefined abstract type that
 all objects are instances of and all types are subtypes of. In type theory, `Any` is commonly
 called "top" because it is at the apex of the type graph. Julia also has a predefined abstract
@@ -241,6 +322,9 @@ called "top" because it is at the apex of the type graph. Julia also has a prede
 opposite of `Any`: no object is an instance of `Union{}` and all types are supertypes of `Union{}`.
 
 Let's consider some of the abstract types that make up Julia's numerical hierarchy:
+-->
+```
+
 
 ```julia
 abstract type Number end
@@ -251,6 +335,8 @@ abstract type Signed   <: Integer end
 abstract type Unsigned <: Integer end
 ```
 
+```@raw html
+<!--
 The [`Number`](@ref) type is a direct child type of `Any`, and [`Real`](@ref) is its child.
 In turn, `Real` has two children (it has more, but only two are shown here; we'll get to
 the others later): [`Integer`](@ref) and [`AbstractFloat`](@ref), separating the world into
@@ -259,11 +345,19 @@ numbers include, of course, floating-point types, but also include other types, 
 rationals. Hence, `AbstractFloat` is a proper subtype of `Real`, including only
 floating-point representations of real numbers. Integers are further subdivided into
 [`Signed`](@ref) and [`Unsigned`](@ref) varieties.
+-->
+```
 
+
+```@raw html
+<!--
 The `<:` operator in general means "is a subtype of", and, used in declarations like this, declares
 the right-hand type to be an immediate supertype of the newly declared type. It can also be used
 in expressions as a subtype operator which returns `true` when its left operand is a subtype of
 its right operand:
+-->
+```
+
 
 ```jldoctest
 julia> Integer <: Number
@@ -273,8 +367,13 @@ julia> Integer <: AbstractFloat
 false
 ```
 
+```@raw html
+<!--
 An important use of abstract types is to provide default implementations for concrete types. To
 give a simple example, consider:
+-->
+```
+
 
 ```julia
 function myplus(x,y)
@@ -282,14 +381,24 @@ function myplus(x,y)
 end
 ```
 
+```@raw html
+<!--
 The first thing to note is that the above argument declarations are equivalent to `x::Any` and
 `y::Any`. When this function is invoked, say as `myplus(2,5)`, the dispatcher chooses the most
 specific method named `myplus` that matches the given arguments. (See [Methods](@ref) for more
 information on multiple dispatch.)
+-->
+```
 
+
+```@raw html
+<!--
 Assuming no method more specific than the above is found, Julia next internally defines and compiles
 a method called `myplus` specifically for two `Int` arguments based on the generic function given
 above, i.e., it implicitly defines and compiles:
+-->
+```
+
 
 ```julia
 function myplus(x::Int,y::Int)
@@ -297,24 +406,39 @@ function myplus(x::Int,y::Int)
 end
 ```
 
+```@raw html
+<!--
 and finally, it invokes this specific method.
 
 Thus, abstract types allow programmers to write generic functions that can later be used as the
 default method by many combinations of concrete types. Thanks to multiple dispatch, the programmer
 has full control over whether the default or more specific method is used.
+-->
+```
 
+
+```@raw html
+<!--
 An important point to note is that there is no loss in performance if the programmer relies on
 a function whose arguments are abstract types, because it is recompiled for each tuple of argument
 concrete types with which it is invoked. (There may be a performance issue, however, in the case
 of function arguments that are containers of abstract types; see [Performance Tips](@ref man-performance-tips).)
+-->
+```
+
 
 `[](## Primitive Types)
 ## プリミティブ型
 
+```@raw html
+<!--
 A primitive type is a concrete type whose data consists of plain old bits. Classic examples of primitive
 types are integers and floating-point values. Unlike most languages, Julia lets you declare your
 own primitive types, rather than providing only a fixed set of built-in ones. In fact, the standard
 primitive types are all defined in the language itself:
+-->
+```
+
 
 ```julia
 primitive type Float16 <: AbstractFloat 16 end
@@ -336,13 +460,20 @@ primitive type Int128  <: Signed   128 end
 primitive type UInt128 <: Unsigned 128 end
 ```
 
+```@raw html
+<!--
 The general syntaxes for declaring a primitive type are:
+-->
+```
+
 
 ```
 primitive type «name» «bits» end
 primitive type «name» <: «supertype» «bits» end
 ```
 
+```@raw html
+<!--
 The number of bits indicates how much storage the type requires and the name gives the new type
 a name. A primitive type can optionally be declared to be a subtype of some supertype. If a supertype
 is omitted, then the type defaults to having `Any` as its immediate supertype. The declaration
@@ -350,7 +481,12 @@ of [`Bool`](@ref) above therefore means that a boolean value takes eight bits to
 [`Integer`](@ref) as its immediate supertype. Currently, only sizes that are multiples of
 8 bits are supported. Therefore, boolean values, although they really need just a single bit,
 cannot be declared to be any smaller than eight bits.
+-->
+```
 
+
+```@raw html
+<!--
 The types [`Bool`](@ref), [`Int8`](@ref) and [`UInt8`](@ref) all have identical representations:
 they are eight-bit chunks of memory. Since Julia's type system is nominative, however, they
 are not interchangeable despite having identical structure. A fundamental difference between
@@ -361,6 +497,9 @@ behavior -- the way functions are defined to act when given objects of these typ
 arguments. This is why a nominative type system is necessary: if structure determined type,
 which in turn dictates behavior, then it would be impossible to make [`Bool`](@ref) behave
 any differently than [`Int8`](@ref) or [`UInt8`](@ref).
+-->
+```
+
 
 `[](## Composite Types)
 ## 複合型
