@@ -305,6 +305,16 @@ that is an integer, without restricting an algorithm to a specific type of integ
 -->
 ```
 
+[整数と浮動小数点数](@ref)で様々な数値の具象型を導入したのを思い出してください。
+[`Int8`](@ref), [`UInt8`](@ref), [`Int16`](@ref), [`UInt16`](@ref),
+[`Int32`](@ref), [`UInt32`](@ref), [`Int64`](@ref), [`UInt64`](@ref), [`Int128`](@ref),
+[`UInt128`](@ref), [`Float16`](@ref), [`Float32`](@ref), [`Float64`](@ref)などです。
+表現のサイズは異なりますが、`Int8`, `Int16`, `Int32`, `Int64`,`Int128`はすべて符号付き整数型で、
+`UInt8`, `UInt16`, `UInt32`,`UInt64`,`UInt128`はすべて符号なし整数型であり、
+`Float16`, `Float32`,`Float64`は整数とは別の浮動小数点数型です。
+コードは例えば、引数を整数の種類を限定して定義しますが、実はその **種類** に依存していないことがよくあります。
+
+
 
 ```@raw html
 <!--
