@@ -240,6 +240,13 @@ Declarations can also be attached to function definitions:
 -->
 ```
 
+そして、現在のスコープ全体に適用されます。宣言の前の部分にまでです。
+今のところ、型宣言は、REPLなどのグローバルスコープでは使えません。
+というのも、Juliaにはグローバルな定数型がまだないからです。
+
+この宣言は、関数の定義にもつけることができます。
+
+
 ```julia
 function sinc(x)::Float64
     if x == 0
@@ -255,6 +262,9 @@ Returning from this function behaves just like an assignment to a variable with 
 the value is always converted to `Float64`.
 -->
 ```
+この関数が終了すると、宣言した型で変数に代入するだけのようにふるまいます。
+この値は常に`Float64`に変換されます。
+
 
 
 `[](## Abstract Types)
@@ -269,6 +279,8 @@ system: they form the conceptual hierarchy which makes Julia's type system more 
 of object implementations.
 -->
 ```
+抽象型はインスタンス化できません。
+
 
 
 ```@raw html
