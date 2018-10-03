@@ -581,20 +581,31 @@ any differently than [`Int8`](@ref) or [`UInt8`](@ref).
 しかし、Juliaの型システムは公称的であるため、同一の構造であっても互換性はありません。 
 これらの基本的な違いは、スーパータイプが異なることです。
 [`Bool`](@ref)の直接のスーパータイプは [`Integer`](@ref)、[`Int8`](@ref)は[`Signed`](@ref)、Unsigned[`UInt8`](@ref)は[`Unsigned`](@ref)です。 
-その他すべての[`Bool`](@ref)、[`Int8`](@ref)、[`UInt8`](@ref)の違いは、挙動にかかわってきます。 
-つまり、それぞれの型のオブジェクトを引数にとる時に、関数の動作がどう定義されているかの違いです。 
+その他すべての[`Bool`](@ref)、[`Int8`](@ref)、[`UInt8`](@ref)の違いは、挙動に関することです。 
+挙動とは結局、引数として与えられたオブジェクトの型に対して、関数がどのように動作するように定義されているかということです。 
 これが公称的な型システムが必要な理由です。
-もしも構造によって型が決定するならば、型の構造から挙動がそのまま決まってしまうので、Bool が Int8 や UInt8 と異なる挙動をとることは不可能になるでしょう。
+もしも構造によって型が決定するならば、型の構造から挙動がそのまま決まってしまうので、[`Bool`](@ref)を[`Int8`](@ref)や[`UInt8`](@ref)と異なる挙動をとらせることは不可能になるでしょう。
 
 `[](## Composite Types)
 ## 複合型
 
+```@raw html
+<!--
 [Composite types](https://en.wikipedia.org/wiki/Composite_data_type) are called records, structs,
 or objects in various languages. A composite type is a collection of named fields,
 an instance of which can be treated as a single value. In many languages, composite types are
 the only kind of user-definable type, and they are by far the most commonly used user-defined
 type in Julia as well.
+-->
+```
 
+[複合型](https://en.wikipedia.org/wiki/Composite_data_type) は、レコード、構造体、オブジェクトなど、
+言語によって様々な呼ばれ方をします。 
+複合型は、名前付きフィールドの集合体であり、そのインスタンスは単一の値のように扱うことができます。
+ 多くの言語では、複合型はユーザーが定義できる唯一の型の種類であり、Juliaでも最も一般的に使われるユーザ定義型です。
+
+```@raw html
+<!--
 In mainstream object oriented languages, such as C++, Java, Python and Ruby, composite types also
 have named functions associated with them, and the combination is called an "object". In purer
 object-oriented languages, such as Ruby or Smalltalk, all values are objects whether they are
@@ -608,9 +619,28 @@ for more information on methods and dispatch). Thus, it would be inappropriate f
 "belong" to only their first argument. Organizing methods into function objects rather than having
 named bags of methods "inside" each object ends up being a highly beneficial aspect of the language
 design.
+-->
+```
 
+C++、Java、Python、Rubyなどの主流のオブジェクト指向言語では、複合型に名前付き関数が関連づけられて、
+その組み合わせは「オブジェクト」と呼ばれます。 
+RubyやSmalltalkのような、より純粋なオブジェクト指向言語では、すべての値は複合型であろうとなかろうとオブジェクトです。 
+少し不純なオブジェクト指向言語には、C++やJavaなどがあり、整数や浮動小数点数などの一部の値はオブジェクトではないですが、
+ユーザーの定義する複合型のインスタンスは、真のオブジェクトで、関連づけられたメソッドを持ちます。 
+Juliaでは、すべての値がオブジェクトですが、関数は操作対象のオブジェクトとは関連づけられていません。
+この仕様が必要なのは、Juliaでは、関数に対して使われるメソッドは、多重ディスパッチによって選択されるからです。 
+つまり、メソッドを選択するときには、**すべての** 関数の引数の型が考慮され、最初の引数のみではないからです（メソッドとディスパッチの詳細については、[メソッド](@ref)を参照してください）。 
+したがって、関数が最初の引数だけに「属する」のは不適切です。 
+各オブジェクトの "内側"にたくさんの名前付きのメソッドをいれるより、メソッド群を編成して関数オブジェクトにする方が、言語設計上、非常に有益です。
+
+
+```@raw html
+<!--
 Composite types are introduced with the [`struct`](@ref) keyword followed by a block of field names, optionally
 annotated with types using the `::` operator:
+-->
+```
+
 
 ```jldoctest footype
 julia> struct Foo
@@ -620,10 +650,15 @@ julia> struct Foo
        end
 ```
 
+```@raw html
+<!--
 Fields with no type annotation default to `Any`, and can accordingly hold any type of value.
 
 New objects of type `Foo` are created by applying the `Foo` type object like a function
 to values for its fields:
+-->
+```
+
 
 ```jldoctest footype
 julia> foo = Foo("Hello, world.", 23, 1.5)
@@ -633,6 +668,8 @@ julia> typeof(foo)
 Foo
 ```
 
+```@raw html
+<!--
 When a type is applied like a function it is called a *constructor*. Two constructors are generated
 automatically (these are called *default constructors*). One accepts any arguments and calls
 [`convert`](@ref) to convert them to the types of the fields, and the other accepts arguments
@@ -641,6 +678,9 @@ it easier to add new definitions without inadvertently replacing a default const
 
 Since the `bar` field is unconstrained in type, any value will do. However, the value for `baz`
 must be convertible to `Int`:
+-->
+```
+
 
 ```jldoctest footype
 julia> Foo((), 23.5, 1)
@@ -649,14 +689,23 @@ Stacktrace:
 [...]
 ```
 
+```@raw html
+<!--
 You may find a list of field names using the [`fieldnames`](@ref) function.
+-->
+```
 
 ```jldoctest footype
 julia> fieldnames(Foo)
 (:bar, :baz, :qux)
 ```
 
+```@raw html
+<!--
 You can access the field values of a composite object using the traditional `foo.bar` notation:
+-->
+```
+
 
 ```jldoctest footype
 julia> foo.bar
@@ -669,6 +718,8 @@ julia> foo.qux
 1.5
 ```
 
+```@raw html
+<!--
 Composite objects declared with `struct` are *immutable*; they cannot be modified
 after construction. This may seem odd at first, but it has several advantages:
 
@@ -676,7 +727,11 @@ after construction. This may seem odd at first, but it has several advantages:
     in some cases the compiler is able to avoid allocating immutable objects entirely.
   * It is not possible to violate the invariants provided by the type's constructors.
   * Code using immutable objects can be easier to reason about.
+-->
+```
 
+```@raw html
+<!--
 An immutable object might contain mutable objects, such as arrays, as fields. Those contained
 objects will remain mutable; only the fields of the immutable object itself cannot be changed
 to point to different objects.
@@ -685,6 +740,8 @@ Where required, mutable composite objects can be declared with the keyword [`mut
 discussed in the next section.
 
 Immutable composite types with no fields are singletons; there can be only one instance of such types:
+-->
+```
 
 ```jldoctest
 julia> struct NoFields
@@ -694,12 +751,17 @@ julia> NoFields() === NoFields()
 true
 ```
 
+```@raw html
+<!--
 The [`===`](@ref) function confirms that the "two" constructed instances of `NoFields` are actually one
 and the same. Singleton types are described in further detail [below](@ref man-singleton-types).
 
 There is much more to say about how instances of composite types are created, but that discussion
 depends on both [Parametric Types](@ref) and on [Methods](@ref), and is sufficiently important
 to be addressed in its own section: [Constructors](@ref man-constructors).
+-->
+```
+
 
 `[](## Mutable Composite Types)
 ## 可変複合型
