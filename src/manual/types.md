@@ -486,6 +486,10 @@ concrete types with which it is invoked. (There may be a performance issue, howe
 of function arguments that are containers of abstract types; see [Performance Tips](@ref man-performance-tips).)
 -->
 ```
+特記すべき重要な点は、引数が抽象型の関数を使っても、パフォーマンスの劣ることは全くない点です。
+これは、関数が呼び出される毎に、具象型の引数のタプルそれぞれに対してリコンパイルを行うからです。
+（しかし関数の引数が抽象型のコンテナの場合は、パフォーマンス上の問題が起こるかもしれません。
+[パフォーマンス・ティップス](@ref man-performance-tips)を参照のこと。）
 
 
 `[](## Primitive Types)
