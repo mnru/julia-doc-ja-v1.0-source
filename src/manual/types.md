@@ -49,7 +49,7 @@ of Julia's powerful multiple-dispatch mechanism,  to improve human readability, 
 programmer errors.
 -->
 ```
-型を省略した時は、値はどんな　型でもよい、というのがJuliaのデフォルトの挙動です。
+Juliaのデフォルトの挙動では、型を省略した場合は、値に対して任意の型が許容されます。
 このため、多くの役に立つ関数を、わざわざ型の指定をしなくても、Juliaでは書くことができます。
 しかし、必要に応じて、もとの"型のない"コードに徐々に明示的な型注釈をつけていくのは簡単です。
 型注釈をつけるのは３つの目的があります。
@@ -191,7 +191,7 @@ assigned to the variable will be converted to the declared type using [`convert`
 
 代入の左辺の変数に付け加える時や、`local`宣言の一部である時、`::`演算子の意味は少し違います。
 これは、変数は常に指定した型であるという宣言となり、C言語のような静的型付き言語と同様です。
-この変数に代入した値は、 [`convert`](@ref)を使って宣言した型に変換されます。
+この変数に代入した値は,宣言した型に [`convert`](@ref)を利用して変換されます。
 
 
 
@@ -242,7 +242,7 @@ Declarations can also be attached to function definitions:
 
 そして、現在のスコープ全体に適用されます。宣言の前の部分にまでです。
 今のところ、型宣言は、REPLなどのグローバルスコープでは使えません。
-というのも、Juliaにはグローバルな定数型がまだないからです。
+というのも、Juliaにはグローバルな定数型がまだ存在しないからです。
 
 この宣言は、関数の定義にもつけることができます。
 
@@ -312,8 +312,10 @@ that is an integer, without restricting an algorithm to a specific type of integ
 表現のサイズは異なりますが、`Int8`, `Int16`, `Int32`, `Int64`,`Int128`はすべて符号付き整数型で、
 `UInt8`, `UInt16`, `UInt32`,`UInt64`,`UInt128`はすべて符号なし整数型であり、
 `Float16`, `Float32`,`Float64`は整数とは別の浮動小数点数型です。
-コードは例えば、引数を整数の種類を限定して定義しても、実はその **種類** に依存していないことがよくあります。
-
+コードは例えば、引数を整数の種類を限定して定義した場合、実はその **種類** にかかわらず動作することがよくあります。
+最大公約数を求めるアルゴリズムは、すべての整数に対して動作しますが、浮動小数点数では、動作しません。
+抽象型を使うと、型の階層を形成して、具象型の適合する文脈を作ることができます。
+これによって、例えば、任意の整数型でに対するプログラムを簡単に、アルゴリズムを特定の整数型に制限することなく、作成することができます。
 
 
 ```@raw html
@@ -322,7 +324,8 @@ Abstract types are declared using the [`abstract type`](@ref) keyword. The gener
 abstract type are:
 -->
 ```
-
+抽象型は [`abstract type`](@ref)キーワードを使って宣言することができます。
+抽象型を宣言する一般的な構文は、
 
 ```
 abstract type «name» end
@@ -336,6 +339,8 @@ name can be optionally followed by [`<:`](@ref) and an already-existing type, in
 declared abstract type is a subtype of this "parent" type.
 -->
 ```
+`abstract type`キーワードによって、新しい抽象型が`«name»`という名前で導入されます。
+必要に応じて、この名前と[`<:`](@ref)と既存の型を続けると、新しく宣言した型はその型を"親"とするサブタイプであることを指定できます。
 
 
 ```@raw html
@@ -350,6 +355,13 @@ Let's consider some of the abstract types that make up Julia's numerical hierarc
 -->
 ```
 
+スーパータイプを書かない場合、デフォルトのスーパータイプは`Any`になります。
+`Any`は事前に定義された型で、すべてのオブジェクトは`Any`のインスタンスであり、すべての型は`Any`のサブタイプとなります。
+ `Any`は、型理論では、型のグラフの頂点にあるため、通常「トップ」と呼ばれます。 
+ またJuliaには、`Union{}`と書かれる、事前に定義された「ボトム」の抽象型があり、型のグラフの最下位となります。 
+ これは'Any'のちょうど逆で、`Union{}`のインスタンスとなるオブジェクトは存在せず、すべての型が`Union{}`のスーパータイプです。
+
+Juliaにおいて数の階層を形成する抽象型をいくつか考察しましょう。
 
 ```julia
 abstract type Number end
@@ -372,6 +384,12 @@ floating-point representations of real numbers. Integers are further subdivided 
 [`Signed`](@ref) and [`Unsigned`](@ref) varieties.
 -->
 ```
+[`Number`](@ref)は`Any`の直下の子の型です。[`Real`](@ref)はその子です。
+次に`Real`には２つの子があります(もっとあありますがここでは２つのみを示します、他のものは後述します)。
+[`Integer`](@ref)と[`AbstractFloat`](@ref)は、数の世界を整数の表現と実数の表現に分離します。 
+実数の表現には、浮動小数点型が当然ありますが、有理数などの他の型もあります。 
+したがって、`AbstractFloat`は`Real`の真のサブタイプで、実数の中の浮動小数点数の表現しかありません。 
+整数はさらに[`Signed`](@ref)と[`Unsigned`](@ref)に細分されます。
 
 
 ```@raw html
@@ -383,6 +401,9 @@ its right operand:
 -->
 ```
 
+`<:`演算子は通常「のサブタイプである」という意味の言葉で、このように宣言で利用します。
+右側の型が新しく宣言した型の直接のスーパータイプであるという宣言になります。
+また、式の中でサブタイプ演算子としても利用可能で、左の被演算子が右の被演算子のサブタイプの時に`true`を返します。
 
 ```jldoctest
 julia> Integer <: Number
@@ -398,7 +419,8 @@ An important use of abstract types is to provide default implementations for con
 give a simple example, consider:
 -->
 ```
-
+抽象型の重要な用途に、具象型のデフォルトの実装を与えることがあります。
+簡単な例を考えてみると、
 
 ```julia
 function myplus(x,y)
@@ -415,6 +437,10 @@ information on multiple dispatch.)
 -->
 ```
 
+まず注意したい点は、上記の引数の宣言は`x::Any`や`y::Any`と同等である点です。
+この関数が`myplus(2,5)`のように呼び出されると、`myplus`という名前で引数の合うメソッドから最も特化したメソッドが選択されます。
+(多重ディスパッチに関するさらなる情報は[メソッド](@ref)を参照のこと)。
+
 
 ```@raw html
 <!--
@@ -423,6 +449,10 @@ a method called `myplus` specifically for two `Int` arguments based on the gener
 above, i.e., it implicitly defines and compiles:
 -->
 ```
+上記のメソッドより特化したメソッドが見当たらない場合、次にJuliaは内部で`myplus`という名前のメソッドを定義しコンパイルします。
+このメソッドは汎化関数に対して、引数2個が`Int`型のメソッドに特化したものです。
+つまり、暗黙裡に定義とコンパイルが行われます。
+
 
 
 ```julia
@@ -440,6 +470,12 @@ default method by many combinations of concrete types. Thanks to multiple dispat
 has full control over whether the default or more specific method is used.
 -->
 ```
+そして、最終的にこの特化したメソッドが呼び出されます。
+
+このように、抽象型を使うと、あとで多くの具象型と組み合わせた時にデフォルトのメソッドとなる汎化関数を書くことができます。
+多重ディスパッチのおかげで、プログラマーはメソッドをデフォルトと特化したものとどちらを使うかを、完全に制御することができます。
+
+
 
 
 ```@raw html
@@ -450,6 +486,10 @@ concrete types with which it is invoked. (There may be a performance issue, howe
 of function arguments that are containers of abstract types; see [Performance Tips](@ref man-performance-tips).)
 -->
 ```
+特記すべき重要な点は、引数が抽象型の関数を使っても、パフォーマンスの劣ることは全くない点です。
+これは、関数が呼び出される毎に、具象型の引数のタプルそれぞれに対してリコンパイルを行うからです。
+（しかし関数の引数が抽象型のコンテナの場合は、パフォーマンス上の問題が起こるかもしれません。
+[パフォーマンス・ティップス](@ref man-performance-tips)を参照のこと。）
 
 
 `[](## Primitive Types)
@@ -463,7 +503,11 @@ own primitive types, rather than providing only a fixed set of built-in ones. In
 primitive types are all defined in the language itself:
 -->
 ```
-
+プリミティブ型は、データが普通のビットで構成される具象型です。
+プリミティブ型の定番の例は、整数と浮動小数点数です。
+ほとんどの言語とは異なり、Juliaでは組込みの決まったプリミティブ型が利用可能なだけではなく、
+独自のプリミティブ型を宣言することができます。
+実際、組込みのプリミティブ型はすべてJulia自体で定義されています。
 
 ```julia
 primitive type Float16 <: AbstractFloat 16 end
@@ -490,7 +534,7 @@ primitive type UInt128 <: Unsigned 128 end
 The general syntaxes for declaring a primitive type are:
 -->
 ```
-
+プリミティブ型を宣言する一般的な構文は、
 
 ```
 primitive type «name» «bits» end
@@ -509,6 +553,13 @@ cannot be declared to be any smaller than eight bits.
 -->
 ```
 
+ビット数は、その型が格納に何ビット必要とするかを示し、新しい型の名前に使われます。 
+プリミティブ型は、必要に応じてどのスーパータイプのサブタイプなのかを宣言することができます。
+スーパータイプを省略すると、デフォルトでは、Anyがその型の直接のスーパータイプになります。
+したがって、上記のBool 宣言は、ブール値の格納に8ビットを要し、Integer が直接のスーパータイプであることを意味しています 。
+現在は、8ビットの倍数であるサイズのみが利用可能です。 
+したがって、ブール値に本当に必要なのは1ビットだけですが、8ビットより小さい宣言にはできません。
+
 
 ```@raw html
 <!--
@@ -525,6 +576,15 @@ any differently than [`Int8`](@ref) or [`UInt8`](@ref).
 -->
 ```
 
+[`Bool`](@ref)、[`Int8`](@ref)、[`UInt8`](@ref)の型はすべて同一の表現です。
+これらは8ビットのメモリの塊です。 
+しかし、Juliaの型システムは公称的であるため、同一の構造であっても互換性はありません。 
+これらの基本的な違いは、スーパータイプが異なることです。
+[`Bool`](@ref)の直接のスーパータイプは [`Integer`](@ref)、[`Int8`](@ref)は[`Signed`](@ref)、Unsigned[`UInt8`](@ref)は[`Unsigned`](@ref)です。 
+その他すべての[`Bool`](@ref)、[`Int8`](@ref)、[`UInt8`](@ref)の違いは、挙動にかかわってきます。 
+つまり、それぞれの型のオブジェクトを引数にとる時に、関数の動作がどう定義されているかの違いです。 
+これが公称的な型システムが必要な理由です。
+もしも構造によって型が決定するならば、型の構造から挙動がそのまま決まってしまうので、Bool が Int8 や UInt8 と異なる挙動をとることは不可能になるでしょう。
 
 `[](## Composite Types)
 ## 複合型
