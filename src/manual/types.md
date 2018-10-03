@@ -312,7 +312,7 @@ that is an integer, without restricting an algorithm to a specific type of integ
 表現のサイズは異なりますが、`Int8`, `Int16`, `Int32`, `Int64`,`Int128`はすべて符号付き整数型で、
 `UInt8`, `UInt16`, `UInt32`,`UInt64`,`UInt128`はすべて符号なし整数型であり、
 `Float16`, `Float32`,`Float64`は整数とは別の浮動小数点数型です。
-コードは例えば、引数を整数の種類を限定して定義しますが、実はその **種類** に依存していないことがよくあります。
+コードは例えば、引数を整数の種類を限定して定義しても、実はその **種類** に依存していないことがよくあります。
 
 
 
