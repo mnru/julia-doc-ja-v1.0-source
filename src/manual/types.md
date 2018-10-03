@@ -312,8 +312,10 @@ that is an integer, without restricting an algorithm to a specific type of integ
 表現のサイズは異なりますが、`Int8`, `Int16`, `Int32`, `Int64`,`Int128`はすべて符号付き整数型で、
 `UInt8`, `UInt16`, `UInt32`,`UInt64`,`UInt128`はすべて符号なし整数型であり、
 `Float16`, `Float32`,`Float64`は整数とは別の浮動小数点数型です。
-コードは例えば、引数を整数の種類を限定して定義しますが、実はその **種類** に依存していないことがよくあります。
-
+コードは例えば、引数を整数の種類を限定して定義した場合、実はその **種類** にかかわらず動作することがよくあります。
+最大公約数を求めるアルゴリズムは、すべての整数に対して動作しますが、浮動小数点数では、動作しません。
+抽象型を使うと、型の階層を形成して、具象型の適合する文脈を作ることができます。
+これによって、例えば、任意の整数型でに対するプログラムを簡単に、アルゴリズムを特定の整数型に制限することなく、作成することができます。
 
 
 ```@raw html
@@ -322,7 +324,8 @@ Abstract types are declared using the [`abstract type`](@ref) keyword. The gener
 abstract type are:
 -->
 ```
-
+抽象型は [`abstract type`](@ref)キーワードを使って宣言することができます。
+抽象型を宣言する一般的な構文は、
 
 ```
 abstract type «name» end
@@ -336,6 +339,8 @@ name can be optionally followed by [`<:`](@ref) and an already-existing type, in
 declared abstract type is a subtype of this "parent" type.
 -->
 ```
+`abstract type`キーワードによって、新しい抽象型が`«name»`という名前で導入されます。
+必要に応じて、この名前に
 
 
 ```@raw html
