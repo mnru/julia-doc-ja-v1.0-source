@@ -242,7 +242,7 @@ Declarations can also be attached to function definitions:
 
 そして、現在のスコープ全体に適用されます。宣言の前の部分にまでです。
 今のところ、型宣言は、REPLなどのグローバルスコープでは使えません。
-というのも、Juliaにはグローバルな定数型がまだないからです。
+というのも、Juliaにはグローバルな定数型がまだ存在しないからです。
 
 この宣言は、関数の定義にもつけることができます。
 
@@ -449,6 +449,10 @@ a method called `myplus` specifically for two `Int` arguments based on the gener
 above, i.e., it implicitly defines and compiles:
 -->
 ```
+上記のメソッドより特化したメソッドが見当たらない場合、次にJuliaは内部で`myplus`という名前のメソッドを定義しコンパイルします。
+このメソッドは汎化関数に対して、引数2個が`Int`型のメソッドに特化したものです。
+つまり、暗黙裡に定義とコンパイルが行われます。
+
 
 
 ```julia
@@ -466,6 +470,12 @@ default method by many combinations of concrete types. Thanks to multiple dispat
 has full control over whether the default or more specific method is used.
 -->
 ```
+そして、最終的にこの特化したメソッドが呼び出されます。
+
+このように、抽象型を使うと、あとで多くの具象型と組み合わせた時のデフォルトのメソッドとなる汎化関数を書くことができます。
+多重ディスパッチのおかげで、プログラマーはデフォルトのメソッドとより特化したメソッドのどちらを使うかを完全に制御することができます。
+
+
 
 
 ```@raw html
