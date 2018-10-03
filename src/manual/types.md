@@ -340,7 +340,7 @@ declared abstract type is a subtype of this "parent" type.
 -->
 ```
 `abstract type`キーワードによって、新しい抽象型が`«name»`という名前で導入されます。
-必要に応じて、この名前に
+必要に応じて、この名前と[`<:`](@ref)と既存の型を続けると、新しく宣言した型はその型を"親"とするサブタイプであることを指定できます。
 
 
 ```@raw html
@@ -355,6 +355,13 @@ Let's consider some of the abstract types that make up Julia's numerical hierarc
 -->
 ```
 
+スーパータイプを書かない場合、デフォルトのスーパータイプは`Any`になります。
+`Any`は事前に定義された型で、すべてのオブジェクトは`Any`のインスタンスであり、すべての型は`Any`のサブタイプとなります。
+ `Any`は、型理論では、型のグラフの頂点にあるため、通常「トップ」と呼ばれます。 
+ またJuliaには、`Union{}`と書かれる、事前に定義された「ボトム」の抽象型があり、型のグラフの最下位となります。 
+ これは'Any'のちょうど逆で、`Union{}`のインスタンスとなるオブジェクトは存在せず、すべての型が`Union{}`のスーパータイプです。
+
+Juliaにおいて数の階層を形成する抽象型をいくつか考察しましょう。
 
 ```julia
 abstract type Number end
@@ -377,6 +384,7 @@ floating-point representations of real numbers. Integers are further subdivided 
 [`Signed`](@ref) and [`Unsigned`](@ref) varieties.
 -->
 ```
+
 
 
 ```@raw html
