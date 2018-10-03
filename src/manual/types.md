@@ -72,7 +72,7 @@ up front are:
 ```
 
 Juliaのことを[型システム](https://en.wikipedia.org/wiki/Type_system)の言葉で記述すると、
-動的で、公称的で、パラメトリックです。
+動的で、公称的で、パラメータ化可能です。
 汎化型は、パラメータづけが可能で、型同士の階層的な関係は、[明示的に宣言し](https://en.wikipedia.org/wiki/Nominal_type_system)、[互換構造から推論する](https://en.wikipedia.org/wiki/Structural_type_system)のではありません。
 特にJuliaに固有の型システムの特徴は、具象型は互いに互いのサブタイプとはならないことです。
 具象型はすべてファイナルで、そのスーパータイプとなるのは抽象型のみです。
@@ -641,6 +641,7 @@ annotated with types using the `::` operator:
 -->
 ```
 
+複合型は[`struct`](@ref)キーワードに続けて、フィールド名のブロックをおき、必要に応じて`::`を使って型注釈をつけて導入します。
 
 ```jldoctest footype
 julia> struct Foo
@@ -658,7 +659,9 @@ New objects of type `Foo` are created by applying the `Foo` type object like a f
 to values for its fields:
 -->
 ```
+型注釈のないフィールドは、デフォルトの`Any`型となり、従ってどんな型の値でも保持することができます。
 
+型が`Foo`の新しいオブジェクトは、型オブジェクト`Foo`を、そのフィールド値に対して、関数を適用するようにして作成します。
 
 ```jldoctest footype
 julia> foo = Foo("Hello, world.", 23, 1.5)
@@ -681,6 +684,16 @@ must be convertible to `Int`:
 -->
 ```
 
+型は関数のように適用する時には、 **コンストラクタ** と呼ばれます。
+2つのコンストラクタが自動的に生成されます（これらは **デフォルトコンストラクタ** と呼ばれます）。
+1つはどんな引数でも許容し、[`convert`](@ref) を呼び出してフィールドの型に変換します。
+もう1つはフィールドの型と完全に一致する引数だけを許容します。
+2つのコンストラクタが生成されるのは、新しい定義を追加を簡単に、不注意でデフォルトのコンストラクタを置き換えることなく、
+できるようにするためです。
+
+`bar`フィールドには型の制約はないので、値は何でも構いません。ただし、`baz`の値は`Int`に変換できる必要があります。
+
+
 
 ```jldoctest footype
 julia> Foo((), 23.5, 1)
@@ -695,6 +708,8 @@ You may find a list of field names using the [`fieldnames`](@ref) function.
 -->
 ```
 
+[`fieldnames`](@ref)関数を使うと、フィールド名のリストが表示されます。
+
 ```jldoctest footype
 julia> fieldnames(Foo)
 (:bar, :baz, :qux)
@@ -705,7 +720,7 @@ julia> fieldnames(Foo)
 You can access the field values of a composite object using the traditional `foo.bar` notation:
 -->
 ```
-
+従来のfoo.bar表記法を使用して、複合型のオブジェクトのフィールド値にアクセスできます。
 
 ```jldoctest footype
 julia> foo.bar
@@ -730,6 +745,19 @@ after construction. This may seem odd at first, but it has several advantages:
 -->
 ```
 
+`struct`で宣言された複合型オブジェクトは **不変** です。
+生成後に変更することはできません。
+これは最初は奇妙に思えるかもしれませんが、いくつかの利点があります：
+
+  * より効率的になる場合があります。
+    構造体の中には効率的に配列にパックできるものもあり、
+    場合によっては、コンパイラが、不変オブジェクト全体を別のメモリに割り当てることを避けることができます。
+
+  * 型コンストラクタで規定される不変性を破ることはできません。
+
+  * 不変オブジェクトを使ったコードは、理解しやすくなる場合があります。
+
+
 ```@raw html
 <!--
 An immutable object might contain mutable objects, such as arrays, as fields. Those contained
@@ -742,6 +770,17 @@ discussed in the next section.
 Immutable composite types with no fields are singletons; there can be only one instance of such types:
 -->
 ```
+
+不変オブジェクトは、配列などの可変なオブジェクトをフィールドとして含んでも構いません。 
+含まれているオブジェクトは可変のままです。 
+不変オブジェクトのフィールド自体が、別のオブジェクトを参照するように変更できなくなるだけです。
+
+必要に応じて、可変な複合オブジェクトをキーワード[`mutable struct`](@ref)で宣言することができます
+（次のセクションで検討します）。
+
+フィールドのない複合型はシングルトンです。そのような型のインスタンスは1つしか作れません。
+
+
 
 ```jldoctest
 julia> struct NoFields
@@ -762,12 +801,24 @@ to be addressed in its own section: [Constructors](@ref man-constructors).
 -->
 ```
 
+[`===`](@ref)によって、NoFieldsの「2つの」生成されたインスタンスが、実際には同一であることを確認できます。
+ シングルトン型については、[あとで](@ref man-singleton-types) で詳しく説明します。
+
+複合型のインスタンスがどのように作成されるかについては、もっと多くの言うべきことがありますが、その議論は[パラメータ型](@ref)と[メソッド](@ref)の両方もかかわり、十分重要なので、独自の章[コンストラクタ](@ref man-constructors)で解説します。
+
+
 
 `[](## Mutable Composite Types)
 ## 可変複合型
 
+```@raw html
+<!--
 If a composite type is declared with `mutable struct` instead of `struct`, then instances of
 it can be modified:
+-->
+```
+`struct`の代わりに`mutable struct`で複合型を宣言すると、インスタンスは変更可能になります。
+
 
 ```jldoctest bartype
 julia> mutable struct Bar
@@ -784,6 +835,8 @@ julia> bar.baz = 1//2
 1//2
 ```
 
+```@raw html
+<!--
 In order to support mutation, such objects are generally allocated on the heap, and have
 stable memory addresses.
 A mutable object is like a little container that might hold different values over time,
@@ -793,7 +846,19 @@ the field values alone tell you everything about the object.
 In deciding whether to make a type mutable, ask whether two instances
 with the same field values would be considered identical, or if they might need to change independently
 over time. If they would be considered identical, the type should probably be immutable.
+-->
+```
 
+変更に対応できるように、このようなオブジェクトは、通常、ヒープ上に配置し、メモリアドレスが固定されています。 
+可変オブジェクトは、時間とともに値の変わりうる小さなコンテナと似ていて、アドレスだけで確実に識別できます。 
+対照的に、不変型のインスタンスは、特定のフィールド値に関連づけられています。
+フィールド値だけで、オブジェクトに関するすべてがわかります。 
+型を可変にするかどうかを決めるには、同じフィールド値を持つ2つのインスタンスは同一だとみなせるか、あるいは時間とともに別々に変更する必要があるかを考えます。 
+同一であるとみなせるならば、おそらくその型は不変にすべきでしょう。
+
+
+```@raw html
+<!--
 To recap, two essential properties define immutability in Julia:
 
   * It is not permitted to modify the value of an immutable type.
@@ -812,10 +877,15 @@ To recap, two essential properties define immutability in Julia:
     * Mutable values, on the other hand are heap-allocated and passed to
       functions as pointers to heap-allocated values except in cases where the compiler
       is sure that there's no way to tell that this is not what is happening.
+-->
+```
+
 
 `[](## Declared Types)
 ## 宣言型
 
+```@raw html
+<!--
 The three kinds of types (abstract, primitive, composite) discussed in the previous
 sections are actually all closely related. They share the same key properties:
 
@@ -823,9 +893,17 @@ sections are actually all closely related. They share the same key properties:
   * They have names.
   * They have explicitly declared supertypes.
   * They may have parameters.
+-->
+```
 
+
+```@raw html
+<!--
 Because of these shared properties, these types are internally represented as instances of the
 same concept, `DataType`, which is the type of any of these types:
+-->
+```
+
 
 ```jldoctest
 julia> typeof(Real)
@@ -835,17 +913,27 @@ julia> typeof(Int)
 DataType
 ```
 
+```@raw html
+<!--
 A `DataType` may be abstract or concrete. If it is concrete, it has a specified size, storage
 layout, and (optionally) field names. Thus a primitive type is a `DataType` with nonzero size, but
 no field names. A composite type is a `DataType` that has field names or is empty (zero size).
 
 Every concrete value in the system is an instance of some `DataType`.
+-->
+```
+
 
 `[](## Type Unions)
 ## 合併型
 
+```@raw html
+<!--
 A type union is a special abstract type which includes as objects all instances of any of its
 argument types, constructed using the special [`Union`](@ref) keyword:
+-->
+```
+
 
 ```jldoctest
 julia> IntOrString = Union{Int,AbstractString}
@@ -861,20 +949,30 @@ julia> 1.0 :: IntOrString
 ERROR: TypeError: in typeassert, expected Union{Int64, AbstractString}, got Float64
 ```
 
+```@raw html
+<!--
 The compilers for many languages have an internal union construct for reasoning about types; Julia
 simply exposes it to the programmer. The Julia compiler is able to generate efficient code in the
 presence of `Union` types with a small number of types [^1], by generating specialized code
 in separate branches for each possible type.
+-->
+```
 
+
+```@raw html
+<!--
 A particularly useful case of a `Union` type is `Union{T, Nothing}`, where `T` can be any type and
 [`Nothing`](@ref) is the singleton type whose only instance is the object [`nothing`](@ref). This pattern
 is the Julia equivalent of [`Nullable`, `Option` or `Maybe`](https://en.wikipedia.org/wiki/Nullable_type)
 types in other languages. Declaring a function argument or a field as `Union{T, Nothing}` allows
 setting it either to a value of type `T`, or to `nothing` to indicate that there is no value.
 See [this FAQ entry](@ref faq-nothing) for more information.
+-->
+```
+
 
 `[](## Parametric Types)
-## パラメトリック型
+## パラメータ型
 
 An important and powerful feature of Julia's type system is that it is parametric: types can take
 parameters, so that type declarations actually introduce a whole family of new types -- one for
@@ -896,7 +994,7 @@ case. We will discuss them in the following order: first, parametric composite t
 abstract types, and finally parametric primitive types.
 
 `[](### Parametric Composite Types)
-### パラメトリック複合型
+### パラメータ複合型
 
 Type parameters are introduced immediately after the type name, surrounded by curly braces:
 
@@ -1068,7 +1166,7 @@ Constructor methods to appropriately handle such mixed cases can be defined, but
 be discussed until later on in [Constructors](@ref man-constructors).
 
 `[](### Parametric Abstract Types)
-### パラメトリック抽象型
+### パラメータ抽象型
 
 Parametric abstract type declarations declare a collection of abstract types, in much the same
 way:
@@ -1367,7 +1465,7 @@ applies to Julia's singleton types, but with that caveat that only type objects 
 types.
 
 `[](### Parametric Primitive Types)
-### パラメトリックプリミティブ型
+### パラメータプリミティブ型
 
 Primitive types can also be declared parametrically. For example, pointers are represented as
 primitive types which would be declared in Julia like this:
