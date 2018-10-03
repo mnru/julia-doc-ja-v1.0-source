@@ -401,6 +401,9 @@ its right operand:
 -->
 ```
 
+`<:`演算子は通常「のサブタイプである」という意味の言葉で、このように宣言で利用します。
+右側の型が新しく宣言した型の直接のスーパータイプであるという宣言になります。
+また、式の中でサブタイプ演算子としても利用可能で、左の被演算子が右の被演算子のサブタイプの時に`true`を返します。
 
 ```jldoctest
 julia> Integer <: Number
@@ -416,7 +419,8 @@ An important use of abstract types is to provide default implementations for con
 give a simple example, consider:
 -->
 ```
-
+抽象型の重要な用途に、具象型のデフォルトの実装を与えることがあります。
+簡単な例を考えてみると、
 
 ```julia
 function myplus(x,y)
@@ -432,6 +436,10 @@ specific method named `myplus` that matches the given arguments. (See [Methods](
 information on multiple dispatch.)
 -->
 ```
+
+まず注意したい点は、上記の引数の宣言は`x::Any`や`y::Any`と同等である点です。
+この関数が`myplus(2,5)`のように呼び出されると、`myplus`という名前で引数の合うメソッドから最も特化したメソッドが選択されます。
+(多重ディスパッチに関するさらなる情報は[メソッド](@ref)を参照のこと)。
 
 
 ```@raw html
