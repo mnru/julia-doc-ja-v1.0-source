@@ -191,7 +191,7 @@ assigned to the variable will be converted to the declared type using [`convert`
 
 代入の左辺の変数に付け加える時や、`local`宣言の一部である時、`::`演算子の意味は少し違います。
 これは、変数は常に指定した型であるという宣言となり、C言語のような静的型付き言語と同様です。
-この変数に代入した値は、 [`convert`](@ref)を使って宣言した型に変換されます。
+この変数に代入した値は,宣言した型に [`convert`](@ref)を利用して変換されます。
 
 
 
@@ -384,7 +384,12 @@ floating-point representations of real numbers. Integers are further subdivided 
 [`Signed`](@ref) and [`Unsigned`](@ref) varieties.
 -->
 ```
-
+[`Number`](@ref)は`Any`の直下の子の型です。[`Real`](@ref)はその子です。
+次に`Real`には２つの子があります(もっとあありますがここでは２つのみを示します、他のものは後述します)。
+[`Integer`](@ref)と[`AbstractFloat`](@ref)は、数の世界を整数の表現と実数の表現に分離します。 
+実数の表現には、浮動小数点型が当然ありますが、有理数などの他の型もあります。 
+したがって、`AbstractFloat`は`Real`の真のサブタイプで、実数の中の浮動小数点数の表現しかありません。 
+整数はさらに[`Signed`](@ref)と[`Unsigned`](@ref)に細分されます。
 
 
 ```@raw html
