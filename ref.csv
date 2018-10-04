@@ -26,3 +26,4 @@
 ,[Comprehensions],内包表記
 型,[Methods],メソッド
 ,[Parametric Types],パラメータ型
+,[`Vararg`],可変引数

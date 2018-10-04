@@ -1018,6 +1018,8 @@ Juliaのこのパターンは、他の言語の[`Nullable`,`Option`,`Maybe`](htt
 `[](## Parametric Types)
 ## パラメータ型
 
+```@raw html
+<!--
 An important and powerful feature of Julia's type system is that it is parametric: types can take
 parameters, so that type declarations actually introduce a whole family of new types -- one for
 each possible combination of parameter values. There are many languages that support some version
@@ -1032,15 +1034,44 @@ but will instead focus on explaining Julia's system in its own right. We will no
 because Julia is a dynamically typed language and doesn't need to make all type decisions at compile
 time, many traditional difficulties encountered in static parametric type systems can be relatively
 easily handled.
+-->
+```
 
+Juliaの型システムには、パラメータ化可能という重要かつ強力な特徴があります。 
+型にパラメータをつけると、型宣言は実質的に、とりうるパラメータ組み合わせに対応する、新しい型の種族全体を導入することになります。 
+多くの言語が[汎化プログラミング](https://en.wikipedia.org/wiki/Generic_programming)に何らかの形で対応しています。
+これは、必要な型を正確に指定しなくても、処理すべきデータ構造やアルゴリズムを特定することができます。 
+たとえば少し挙げるだけでも、ML、Haskell、Ada、Eiffel、C++、Java、C＃、F＃、およびScalaなどが、何らかの形で汎化プログラミングを取り入れています。 
+これらの言語の中には真のパラメータ多相（ML、Haskell、Scalaなど）に対応するものもあれば、テンプレートベースの汎化プログラミング（C ++、Javaなど）の形で対応するものもあります。
+ 言語によって汎化プログラミングやパラメータ型は多種多様であるため、Juliaのパラメータ型を他の言語と比較することはせず、Julia自体のシステムについて説明することに専念します。 
+ しかし、Juliaは動的型付け言語で、コンパイル時にすべての型を決定する必要はないため、静的パラメータ型付け言語の多くで生じる従来の困難が、比較的簡単に扱えることを注記しておきます。
+
+
+
+
+
+```@raw html
+<!--
 All declared types (the `DataType` variety) can be parameterized, with the same syntax in each
 case. We will discuss them in the following order: first, parametric composite types, then parametric
 abstract types, and finally parametric primitive types.
+-->
+```
+
+すべての宣言型（`DataType`の仲間）は、それぞれ同じ構文でパラメータ化できます。 
+まず、パラメータ複合型、次にパラメータ抽象型、最後にパラメータプリミティブ型という順番で説明します。
+
 
 `[](### Parametric Composite Types)
 ### パラメータ複合型
 
+```@raw html
+<!--
 Type parameters are introduced immediately after the type name, surrounded by curly braces:
+-->
+```
+型パラメータを導入するには、型名の直後に、中括弧で囲んで挿入します。
+
 
 ```jldoctest pointtype
 julia> struct Point{T}
@@ -1049,6 +1080,8 @@ julia> struct Point{T}
        end
 ```
 
+```@raw html
+<!--
 This declaration defines a new parametric type, `Point{T}`, holding two "coordinates" of type
 `T`. What, one may ask, is `T`? Well, that's precisely the point of parametric types: it can be
 any type at all (or a value of any bits type, actually, although here it's clearly used as a type).
@@ -1056,6 +1089,17 @@ any type at all (or a value of any bits type, actually, although here it's clear
 of `Point` with [`Float64`](@ref). Thus, this single declaration actually declares an unlimited
 number of types: `Point{Float64}`, `Point{AbstractString}`, `Point{Int64}`, etc. Each of these
 is now a usable concrete type:
+-->
+```
+
+この宣言では、型が`T`の２つの「座標」を保持している新しいパラメータ型`Point{T}`を定義しています。 
+`T`とはなんだ、と誰かが尋ねるかもしれません。これがまさしくパラメータ型のポイントです。 
+どんな型（実際にはプリミティブ型の値でも構いませんが、ここでは明らかに型が使われています）でもかまいません。 
+`Point{Float64}`は、`Point` の定義で`T`を `Float64`と置き換えたものと同等な具象型です。 
+よって、一つの宣言が実質的には、`Point{Float64}`、`Point{AbstractString}`、`Point{Int64}`などの無限の宣言に相当します。 
+そして、それぞれが、具象型として利用可能です。
+
+
 
 ```jldoctest pointtype
 julia> Point{Float64}
@@ -1065,11 +1109,21 @@ julia> Point{AbstractString}
 Point{AbstractString}
 ```
 
+```@raw html
+<!--
 The type `Point{Float64}` is a point whose coordinates are 64-bit floating-point values, while
 the type `Point{AbstractString}` is a "point" whose "coordinates" are string objects (see [Strings](@ref)).
 
 `Point` itself is also a valid type object, containing all instances `Point{Float64}`, `Point{AbstractString}`,
 etc. as subtypes:
+-->
+```
+
+`Point{Float64}`という型は、座標が64ビット浮動小数点数の点であり、`Point{AbstractString}`は、その「座標」が文字列オブジェクトの「点」です（[文字列](@ref)を参照）。
+
+Pointは自身が有効な型オブジェクトで、`Point{Float64}`、`Point{AbstractString}`などすべてのインスタンスをサブタイプとして含んでいます。
+
+
 
 ```jldoctest pointtype
 julia> Point{Float64} <: Point
@@ -1079,7 +1133,13 @@ julia> Point{AbstractString} <: Point
 true
 ```
 
+```@raw html
+<!--
 Other types, of course, are not subtypes of it:
+-->
+```
+
+他の型は当然このサブタイプではありません。
 
 ```jldoctest pointtype
 julia> Float64 <: Point
@@ -1089,7 +1149,12 @@ julia> AbstractString <: Point
 false
 ```
 
+```@raw html
+<!--
 Concrete `Point` types with different values of `T` are never subtypes of each other:
+-->
+```
+異なる`T`の値がついた具象型`Point`は決して互いにサブタイプとなることはありません。
 
 ```jldoctest pointtype
 julia> Point{Float64} <: Point{Int64}
@@ -1099,21 +1164,52 @@ julia> Point{Float64} <: Point{Real}
 false
 ```
 
+```@raw html
+<!--
 !!! warning
     This last point is *very* important: even though `Float64 <: Real` we **DO NOT** have `Point{Float64} <: Point{Real}`.
+-->
+```
+!!! 警告
 
+   この最後の点は **非常に** 重要です。`Float64 <: Real`は成り立つにもかかわらず、
+   `Point{Float64} <: Point{Real}`は　**成り立ちません**。
+
+```@raw html
+<!--
 In other words, in the parlance of type theory, Julia's type parameters are *invariant*, rather
 than being [covariant (or even contravariant)](https://en.wikipedia.org/wiki/Covariance_and_contravariance_%28computer_science%29). This is for practical reasons: while any instance
 of `Point{Float64}` may conceptually be like an instance of `Point{Real}` as well, the two types
 have different representations in memory:
+-->
+```
 
+型理論の術語で言い換えると、Juliaの型パラメータは [covariant (or even contravariant)](https://en.wikipedia.org/wiki/Covariance_and_contravariance_%28computer_science%29)ではなく、**不変** です。
+これは現実的の理由によります。
+`{Float64}`のインスタンスは`Point{Real}` のインスタンスと概念的には似ているかもしれませんが、２つ型のメモリ内の表現は異なります。
+
+
+
+```@raw html
+<!--
   * An instance of `Point{Float64}` can be represented compactly and efficiently as an immediate pair
     of 64-bit values;
   * An instance of `Point{Real}` must be able to hold any pair of instances of [`Real`](@ref).
     Since objects that are instances of `Real` can be of arbitrary size and structure, in
     practice an instance of `Point{Real}` must be represented as a pair of pointers to
     individually allocated `Real` objects.
+-->
+```
 
+   * `Point{Float64}`のインスタンスは、64ビット値の隣接する組としてコンパクトで効率的に表現できます。
+
+   * `Point{Real}` のインスタンスは、どんな[`Real`](@ref)の組でも保持できる必要があります。
+   `Real`のインスタンスとなるオブジェクトは任意のサイズや構造になりうるので、現実的には、`Point{Real}`のインスタンスは、個別に配置された`Real`オブジェクトへのポインタの組として表現する必要があります。
+
+
+
+```@raw html
+<!--
 The efficiency gained by being able to store `Point{Float64}` objects with immediate values is
 magnified enormously in the case of arrays: an `Array{Float64}` can be stored as a contiguous
 memory block of 64-bit floating-point values, whereas an `Array{Real}` must be an array of pointers
@@ -1121,9 +1217,26 @@ to individually allocated [`Real`](@ref) objects -- which may well be
 [boxed](https://en.wikipedia.org/wiki/Object_type_%28object-oriented_programming%29#Boxing)
 64-bit floating-point values, but also might be arbitrarily large, complex objects, which are
 declared to be implementations of the `Real` abstract type.
+-->
+```
 
+`Point{Float64}`オブジェクトに、値を直接を格納できると、得られる効率は、配列の場合、非常に大きくなります。 
+`Array{Float64}`は、64ビットの浮動小数点数の連続したメモリブロックとして格納されますが、`Array{Real}`はそれぞれ別々に配置された`Real`オブジェクトへのポインタの配列でなければなりません。 
+抽象型`Real`に宣言されたオブジェクトの実装は、64ビットの浮動小数点数が[ボックス化](https://en.wikipedia.org/wiki/Object_type_%28object-oriented_programming%29#Boxing)されていても構わないし、任意の大きさの複雑なオブジェクトでもかまいません。
+
+
+
+
+```@raw html
+<!--
 Since `Point{Float64}` is not a subtype of `Point{Real}`, the following method can't be applied
 to arguments of type `Point{Float64}`:
+-->
+```
+
+`Point{Float64}`は、`Point{Real}`のサブタイプではないので、
+以下のメソッドを型`Point{Float64}`の引数に適用することはできません。
+
 
 ```julia
 function norm(p::Point{Real})
@@ -1131,8 +1244,16 @@ function norm(p::Point{Real})
 end
 ```
 
+```@raw html
+<!--
 A correct way to define a method that accepts all arguments of type `Point{T}` where `T` is
 a subtype of [`Real`](@ref) is:
+-->
+```
+`T`が[`Real`](@ref)のサブタイプとなる`Point{T}`の型すべてを、
+引数として許容するメソッドを正しく定義する方法は次のとおりです。
+
+
 
 ```julia
 function norm(p::Point{<:Real})
@@ -1140,6 +1261,8 @@ function norm(p::Point{<:Real})
 end
 ```
 
+```@raw html
+<!--
 (Equivalently, one could define `function norm(p::Point{T} where T<:Real)` or
 `function norm(p::Point{T}) where T<:Real`; see [UnionAll Types](@ref).)
 
@@ -1153,6 +1276,18 @@ arguments to the object constructor.
 
 Since the type `Point{Float64}` is a concrete type equivalent to `Point` declared with [`Float64`](@ref)
 in place of `T`, it can be applied as a constructor accordingly:
+-->
+```
+
+（同等の定義として、`function norm{T<:Real}(p::Point{T})`や、`function norm(p::Point{T} where T<:Real)`があります。（[全合併型](@ref) を参照。）
+
+より多くの例については、後の [メソッド](@ref) で説明します。
+
+`Point`オブジェクトはどのように構成するのでしょうか。 [コンストラクタ]（@ ref man-constructor）で詳しく説明しますが、複合型にに対して独自のコンストラクタを定義することは可能ですが、特別にコンストラクタの宣言をしなくても、デフォルトで新しい複合型オブジェクトを作成する方法が2通りあります。1つは型パラメータを明示的に与えるもの、もう1つはオブジェクトコンストラクタへの引数から暗黙裡に推定されるものです。
+
+型`Point{Float64}`は、`T`の代わりに[`Float64`](@ref) を使って宣言した`Point`と同等の具象型なので、`Point`と同じようなコンストラクタとしてそのまま適用できます。
+
+
 
 ```jldoctest pointtype
 julia> Point{Float64}(1.0, 2.0)
@@ -1162,7 +1297,13 @@ julia> typeof(ans)
 Point{Float64}
 ```
 
+```@raw html
+<!--
 For the default constructor, exactly one argument must be supplied for each field:
+-->
+```
+
+デフォルトのコンストラクタには、各フィールドに対してちょうど1つ引数を指定する必要があります。
 
 ```jldoctest pointtype
 julia> Point{Float64}(1.0)
@@ -1174,6 +1315,8 @@ ERROR: MethodError: no method matching Point{Float64}(::Float64, ::Float64, ::Fl
 [...]
 ```
 
+```@raw html
+<!--
 Only one default constructor is generated for parametric types, since overriding it is not possible.
 This constructor accepts any arguments and converts them to the field types.
 
@@ -1181,6 +1324,18 @@ In many cases, it is redundant to provide the type of `Point` object one wants t
 the types of arguments to the constructor call already implicitly provide type information. For
 that reason, you can also apply `Point` itself as a constructor, provided that the implied value
 of the parameter type `T` is unambiguous:
+-->
+```
+
+
+パラメータ型に対しては、デフォルトのコンストラクタは1つしか生成されません。
+オーバーライドできないためです。
+このコンストラクタは任意の引数を受け取って、フィールドの型に変換します。
+
+多くの場合、生成したい`Point`オブジェクトの型を指定するのは冗長です。 
+`Point`コンストラクタを呼び出す際の引数に、すでに型情報が隠れているからです。 
+そのため、`Point`のパラメータの型`T`が推定可能で曖昧さがない場合は、`Point`自体をコンストラクタとして適用することも可能です。
+
 
 ```jldoctest pointtype
 julia> Point(1.0,2.0)
@@ -1196,8 +1351,14 @@ julia> typeof(ans)
 Point{Int64}
 ```
 
+```@raw html
+<!--
 In the case of `Point`, the type of `T` is unambiguously implied if and only if the two arguments
 to `Point` have the same type. When this isn't the case, the constructor will fail with a [`MethodError`](@ref):
+-->
+```
+`Point`の場合、2つの引数が同じ型を持つ場合にのみ、型`T`は明確に推定されます。
+これ以外の場合、コンストラクタは失敗して、 [`MethodError`](@ref) が発生します。
 
 ```jldoctest pointtype
 julia> Point(1,2.5)
@@ -1206,21 +1367,40 @@ Closest candidates are:
   Point(::T, !Matched::T) where T at none:2
 ```
 
+```@raw html
+<!--
 Constructor methods to appropriately handle such mixed cases can be defined, but that will not
 be discussed until later on in [Constructors](@ref man-constructors).
+-->
+```
+このような型の混ざった場合でも適切に処理するコンストラクタメソッドは定義可能ですが、後述の[コンストラクタ]（@ ref man-constructors）まで議論を保留します。
 
 `[](### Parametric Abstract Types)
 ### パラメータ抽象型
 
+```@raw html
+<!--
 Parametric abstract type declarations declare a collection of abstract types, in much the same
 way:
+-->
+```
+
+パラメトリック抽象型に対しても、ほぼ同じ方法で、抽象型の一群に対して型宣言を行います。
+
 
 ```jldoctest pointytype
 julia> abstract type Pointy{T} end
 ```
 
+```@raw html
+<!--
 With this declaration, `Pointy{T}` is a distinct abstract type for each type or integer value
 of `T`. As with parametric composite types, each such instance is a subtype of `Pointy`:
+-->
+```
+この宣言ではPointy{T}は、型や整数値を表すTそれぞれに対して別々の抽象型になります。 パラメトリック複合型と同様に、各インスタンスはPointyのサブタイプです。
+
+
 
 ```jldoctest pointytype
 julia> Pointy{Int64} <: Pointy
@@ -1230,7 +1410,15 @@ julia> Pointy{1} <: Pointy
 true
 ```
 
+```@raw html
+<!--
 Parametric abstract types are invariant, much as parametric composite types are:
+-->
+```
+
+パラメトリックな抽象型は、パラメトリックな複合型と同じように不変です。
+
+
 
 ```jldoctest pointytype
 julia> Pointy{Float64} <: Pointy{Real}
@@ -1240,9 +1428,18 @@ julia> Pointy{Real} <: Pointy{Float64}
 false
 ```
 
+```@raw html
+<!--
 The notation `Pointy{<:Real}` can be used to express the Julia analogue of a
 *covariant* type, while `Pointy{>:Int}` the analogue of a *contravariant* type,
 but technically these represent *sets* of types (see [UnionAll Types](@ref)).
+-->
+```
+
+Juliaでは、Pointy{<:Real}という表記で共変型のようなもの、Pointy{>:Int}で反変型のようなものを表現できます。 しかし、専門的には、これらは型の集合を表しています。(全合併型 参照)
+
+
+
 ```jldoctest pointytype
 julia> Pointy{Float64} <: Pointy{<:Real}
 true
@@ -1251,9 +1448,17 @@ julia> Pointy{Real} <: Pointy{>:Int}
 true
 ```
 
+```@raw html
+<!--
 Much as plain old abstract types serve to create a useful hierarchy of types over concrete types,
 parametric abstract types serve the same purpose with respect to parametric composite types. We
 could, for example, have declared `Point{T}` to be a subtype of `Pointy{T}` as follows:
+-->
+```
+
+普通の抽象型は、具象型に対して役に立つ型の階層を作成するのに役立ちますが、パラメトリックな抽象型はパラメトリックな複合型と同じような目的で使います。 たとえば、次のようにPoint{T}をPointy{T}のサブタイプとして宣言することができます。
+
+
 
 ```jldoctest pointytype
 julia> struct Point{T} <: Pointy{T}
@@ -1262,7 +1467,15 @@ julia> struct Point{T} <: Pointy{T}
        end
 ```
 
+```@raw html
+<!--
 Given such a declaration, for each choice of `T`, we have `Point{T}` as a subtype of `Pointy{T}`:
+-->
+```
+この宣言で、それぞれ選んたTに対して、Point{T}はPointy{T}のサブタイプとなります。
+
+
+
 
 ```jldoctest pointytype
 julia> Point{Float64} <: Pointy{Float64}
@@ -1275,7 +1488,13 @@ julia> Point{AbstractString} <: Pointy{AbstractString}
 true
 ```
 
+```@raw html
+<!--
 This relationship is also invariant:
+-->
+```
+この関係も不変です。
+
 
 ```jldoctest pointytype
 julia> Point{Float64} <: Pointy{Real}
@@ -1285,9 +1504,18 @@ julia> Point{Float64} <: Pointy{<:Real}
 true
 ```
 
+```@raw html
+<!--
 What purpose do parametric abstract types like `Pointy` serve? Consider if we create a point-like
 implementation that only requires a single coordinate because the point is on the diagonal line
 *x = y*:
+-->
+```
+
+`Pointy`のようなパラメトリック抽象型はなんの役に立つのでしょうか？
+対角線　**x = y**　上にあるため、座標が1つ分かればすむ点のようなものを実装する場合を考えましょう。
+
+
 
 ```jldoctest pointytype
 julia> struct DiagPoint{T} <: Pointy{T}
@@ -1295,6 +1523,8 @@ julia> struct DiagPoint{T} <: Pointy{T}
        end
 ```
 
+```@raw html
+<!--
 Now both `Point{Float64}` and `DiagPoint{Float64}` are implementations of the `Pointy{Float64}`
 abstraction, and similarly for every other possible choice of type `T`. This allows programming
 to a common interface shared by all `Pointy` objects, implemented for both `Point` and `DiagPoint`.
@@ -1303,13 +1533,30 @@ next section, [Methods](@ref).
 
 There are situations where it may not make sense for type parameters to range freely over all
 possible types. In such situations, one can constrain the range of `T` like so:
+-->
+```
+
+ここで`Point{Float64}`と`DiagPoint{Float64}`は共に、抽象型`Pointy{Float64}`の実装で、これは`T`に他の可能な型を代入しても同様です。
+これにより`Point`と`DiagPoint`のどちらを実装するにも、`Pointy`オブジェクトを共通のインタフェースにするようなプログラミングが可能になります。
+しかし、完全な解説は、メソッドとディスパッチを導入する次の章[メソッド](@ref) に持ち越します。
+
+
+型のパラメータがとりうる型を自由にしてしまうと、意味を成さない場合があります。
+そのような状況では、次のように、`T`の範囲を制限することができます。
+
 
 ```jldoctest realpointytype
 julia> abstract type Pointy{T<:Real} end
 ```
 
+```@raw html
+<!--
 With such a declaration, it is acceptable to use any type that is a subtype of
 [`Real`](@ref) in place of `T`, but not types that are not subtypes of `Real`:
+-->
+```
+この宣言では、`T`は任意の[`Real`](@ref)のサブタイプが受け入れますが、 `Real`のサブタイプでなければ受け入れません。
+
 
 ```jldoctest realpointytype
 julia> Pointy{Float64}
@@ -1325,7 +1572,13 @@ julia> Pointy{1}
 ERROR: TypeError: in Pointy, in T, expected T<:Real, got Int64
 ```
 
+```@raw html
+<!--
 Type parameters for parametric composite types can be restricted in the same manner:
+-->
+```
+パラメトリック複合型の型パラメータも、同じ方法で制限できます。
+
 
 ```julia
 struct Point{T<:Real} <: Pointy{T}
@@ -1334,9 +1587,17 @@ struct Point{T<:Real} <: Pointy{T}
 end
 ```
 
+```@raw html
+<!--
 To give a real-world example of how all this parametric type machinery can be useful, here is
 the actual definition of Julia's [`Rational`](@ref) immutable type (except that we omit the
 constructor here for simplicity), representing an exact ratio of integers:
+-->
+```
+現実の世界でパラメトリック型という仕組みがどれほど役立つかという例として、
+ここでは整数の比を表す[`Rational`](@ref) という不変型の、Juliaでの実際の定義を示します。
+（単純化のため、ここではコンストラクタを省略します）
+
 
 ```julia
 struct Rational{T<:Integer} <: Real
@@ -1345,17 +1606,33 @@ struct Rational{T<:Integer} <: Real
 end
 ```
 
+```@raw html
+<!--
 It only makes sense to take ratios of integer values, so the parameter type `T` is restricted
 to being a subtype of [`Integer`](@ref), and a ratio of integers represents a value on the
 real number line, so any [`Rational`](@ref) is an instance of the [`Real`](@ref) abstraction.
+-->
+```
+整数値の比率になる時だけ、意味をなすので、パラメータの型`T`は、[`Integer`](@ref)のサブタイプに限定されています。
+整数の比は数直線上の値を表現するので、任意の[`Rational`](@ref) は、抽象型 [`Real`](@ref) のインスタンスです。
+
 
 `[](### Tuple Types)
 ### タプル型
 
+```@raw html
+<!--
 Tuples are an abstraction of the arguments of a function -- without the function itself. The salient
 aspects of a function's arguments are their order and their types. Therefore a tuple type is similar
 to a parameterized immutable type where each parameter is the type of one field. For example,
 a 2-element tuple type resembles the following immutable type:
+-->
+```
+タプルとは関数本体からその引数だけを抜き出したものです。
+関数の引数の目立った特徴は、順序と型です。
+そのため、タプル型は、不変なパラメトリック複合型で各パラメータがフィールドの型に対応しているものと似ています。
+たとえば、2要素タプル型は、次の複合型に似ています。
+
 
 ```julia
 struct Tuple2{A,B}
@@ -1364,6 +1641,8 @@ struct Tuple2{A,B}
 end
 ```
 
+```@raw html
+<!--
 However, there are three key differences:
 
   * Tuple types may have any number of parameters.
@@ -1371,16 +1650,36 @@ However, there are three key differences:
     `Tuple{Any}` is considered an abstract type, and tuple types are only concrete if their parameters
     are.
   * Tuples do not have field names; fields are only accessed by index.
+-->
+```
+ただし、3つの重要な違いがあります。 
 
+  * タプル型は、任意の数のパラメータを持つことができます。
+  * タプル型は、そのパラメータと**共変**です。`Tuple{Int}`は`Tuple{Any}`のサブタイプです。したがって `Tuple{Any}`は、抽象型と見なされます。タプル型は、そのパラメータが具象型の場合にのみ具象型です。
+  * タプルにはフィールド名はありません。フィールドにはインデックスによってのみアクセスできます。
+
+
+```@raw html
+<!--
 Tuple values are written with parentheses and commas. When a tuple is constructed, an appropriate
 tuple type is generated on demand:
+-->
+```
+タプルの値は、括弧とカンマをつかって書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
+
 
 ```jldoctest
 julia> typeof((1,"foo",2.5))
 Tuple{Int64,String,Float64}
 ```
 
+```@raw html
+<!--
 Note the implications of covariance:
+-->
+```
+暗黙的に共変となる点に注目してください。
+
 
 ```jldoctest
 julia> Tuple{Int,AbstractString} <: Tuple{Real,Any}
@@ -1393,14 +1692,26 @@ julia> Tuple{Int,AbstractString} <: Tuple{Real,}
 false
 ```
 
+```@raw html
+<!--
 Intuitively, this corresponds to the type of a function's arguments being a subtype of the function's
 signature (when the signature matches).
+-->
+```
+
+直観的には、これは、関数の引数の型が関数のシグネチャのサブタイプであることに相当します（シグネチャが適合する場合）。
+
 
 `[](### Vararg Tuple Types)
 ### 可変引数タプル型
 
+```@raw html
+<!--
 The last parameter of a tuple type can be the special type [`Vararg`](@ref), which denotes any number
 of trailing elements:
+-->
+```
+タプル型の最後のパラメータは、特殊な型である[`可変引数`](@ref)として、任意の数の後続の要素を示す型とすることができます。
 
 ```jldoctest
 julia> mytupletype = Tuple{AbstractString,Vararg{Int}}
@@ -1419,26 +1730,47 @@ julia> isa(("1",1,2,3.0), mytupletype)
 false
 ```
 
+```@raw html
+<!--
 Notice that `Vararg{T}` corresponds to zero or more elements of type `T`. Vararg tuple types are
 used to represent the arguments accepted by varargs methods (see [Varargs Functions](@ref)).
 
 The type `Vararg{T,N}` corresponds to exactly `N` elements of type `T`.  `NTuple{N,T}` is a convenient
 alias for `Tuple{Vararg{T,N}}`, i.e. a tuple type containing exactly `N` elements of type `T`.
+-->
+```
+`Vararg{T}`は、0個以上の型`T`に対応することに注意してください。
+可変引数タプル型は、varargsメソッドによって受け入れられる引数を表すために使用されます（[可変引数関数](@ref)を参照）。
+
+型`Vararg{T,N}`は、ちょうど`N`個の型`T`に対応します。
+`NTuple{N,T}`は`Tuple{Vararg{T,N}}`の便利なエイリアスです。
+つまり、型`T`の要素をちょうど`N`個含むタプル型です。
+
 
 `[](### Named Tuple Types)
 ### 名前付きタプル型
 
+```@raw html
+<!--
 Named tuples are instances of the [`NamedTuple`](@ref) type, which has two parameters: a tuple of
 symbols giving the field names, and a tuple type giving the field types.
+-->
+```
+
 
 ```jldoctest
 julia> typeof((a=1,b="hello"))
 NamedTuple{(:a, :b),Tuple{Int64,String}}
 ```
 
+```@raw html
+<!--
 A `NamedTuple` type can be used as a constructor, accepting a single tuple argument.
 The constructed `NamedTuple` type can be either a concrete type, with both parameters specified,
 or a type that specifies only field names:
+-->
+```
+
 
 ```jldoctest
 julia> NamedTuple{(:a, :b),Tuple{Float32, String}}((1,""))
@@ -1448,15 +1780,28 @@ julia> NamedTuple{(:a, :b)}((1,""))
 (a = 1, b = "")
 ```
 
+```@raw html
+<!--
 If field types are specified, the arguments are converted. Otherwise the types of the arguments
 are used directly.
+-->
+```
+
 
 `[](#### [Singleton Types](@id man-singleton-types))
 #### [シングルトン型](@id man-singleton-types)
 
+```@raw html
+<!--
 There is a special kind of abstract parametric type that must be mentioned here: singleton types.
 For each type, `T`, the "singleton type" `Type{T}` is an abstract type whose only instance is
 the object `T`. Since the definition is a little difficult to parse, let's look at some examples:
+-->
+```
+ここで、特殊なパラメトリック抽象型であるシングルトン型について触れておくべきでしょう。
+型`T`それぞれに対して、 「シングルトン型」 `Type{T}`は、インスタンスが`T`唯一つだけの抽象型です。
+定義を構文的に説明するのは少し難しいので、例をいくつか見てみましょう。
+
 
 ```jldoctest
 julia> isa(Float64, Type{Float64})
@@ -1472,9 +1817,16 @@ julia> isa(Float64, Type{Real})
 false
 ```
 
+```@raw html
+<!--
 In other words, [`isa(A,Type{B})`](@ref) is true if and only if `A` and `B` are the same object
 and that object is a type. Without the parameter, `Type` is simply an abstract type which has
 all type objects as its instances, including, of course, singleton types:
+-->
+```
+換言すると、[`isa(A,Type{B})`](@ref) は、`A`と`B`が同じオブジェクトであり、そのオブジェクトとは型であるのみ真になります。
+パラメータをつけない`Type`は、単なる抽象型であり、すべての型オブジェクトは`Type`のインスタンスです（もちろん、シングルトン型も含みます）。
+
 
 ```jldoctest
 julia> isa(Type{Float64}, Type)
@@ -1487,7 +1839,12 @@ julia> isa(Real, Type)
 true
 ```
 
+```@raw html
+<!--
 Any object that is not a type is not an instance of `Type`:
+-->
+```
+型ではないオブジェクトは、`Type`のインスタンスではありません。
 
 ```jldoctest
 julia> isa(1, Type)
@@ -1497,6 +1854,8 @@ julia> isa("foo", Type)
 false
 ```
 
+```@raw html
+<!--
 Until we discuss [Parametric Methods](@ref) and [conversions](@ref conversion-and-promotion), it is difficult to explain
 the utility of the singleton type construct, but in short, it allows one to specialize function
 behavior on specific type *values*. This is useful for writing methods (especially parametric
@@ -1507,12 +1866,33 @@ A few popular languages have singleton types, including Haskell, Scala and Ruby.
 the term "singleton type" refers to a type whose only instance is a single value. This meaning
 applies to Julia's singleton types, but with that caveat that only type objects have singleton
 types.
+-->
+```
+[パラメトリックメソッド](@ref)と[変換](@ref conversion-and-promotion)の議論がすむまで、
+シングルトン型がどう役に立つのかを説明するのは難しいですが、手短にいうと、関数の挙動を特定の型の**値**だけに特化することができるのです。
+これが役に立つのは、挙動が型に依存する（特にパラメトリックな）メソッドを書く時で、
+しかもその型が勝手に推測されるのではなく、わざわざ引数として与える場合です。
+
+
+Haskell、Scala、Rubyなどの人気のある言語には、シングルトン型が備わっています。
+通常の用法では、「シングルトン型」という術語は、唯一のインスタンスがで単一の値である型を指します。
+この意味はJuliaのシングルトン型にも当てはまりますが、型オブジェクトだけがシングルトン型になるという点に注意してください。
+
+
 
 `[](### Parametric Primitive Types)
 ### パラメータプリミティブ型
 
+```@raw html
+<!--
 Primitive types can also be declared parametrically. For example, pointers are represented as
 primitive types which would be declared in Julia like this:
+-->
+```
+
+原始型にもパラメータをつけて宣言することができます。
+たとえば、ポインタは原始型として表現できて、Juliaでは以下のように宣言します。
+
 
 ```julia
 # 32-bit system:
@@ -1522,12 +1902,22 @@ primitive type Ptr{T} 32 end
 primitive type Ptr{T} 64 end
 ```
 
+```@raw html
+<!--
 The slightly odd feature of these declarations as compared to typical parametric composite types,
 is that the type parameter `T` is not used in the definition of the type itself -- it is just
 an abstract tag, essentially defining an entire family of types with identical structure, differentiated
 only by their type parameter. Thus, `Ptr{Float64}` and `Ptr{Int64}` are distinct types, even though
 they have identical representations. And of course, all specific pointer types are subtypes of
 the umbrella [`Ptr`](@ref) type:
+-->
+```
+
+一般的なパラメトリック複合型と比べて、この宣言のちょっと変な特徴は、型パラメータ`T`が型自体の定義に使われていないことです。
+つまり、型パラメータは抽象的なタグであり、本質的に同一の構造である型の族全体をに定義し、型パラメータだけで差別化されています。
+そのため、`Ptr{Float64}`と`Ptr{Int64}`は、表現は同一であっても、型としては異なります。
+もちろん、個別のポインタ型はすべて、包括型`Ptr`のサブタイプです。
+
 
 ```jldoctest
 julia> Ptr{Float64} <: Ptr
@@ -1540,6 +1930,8 @@ true
 `[](## UnionAll Types)
 ## 全合併型
 
+```@raw html
+<!--
 We have said that a parametric type like `Ptr` acts as a supertype of all its instances
 (`Ptr{Int64}` etc.). How does this work? `Ptr` itself cannot be a normal data type, since without
 knowing the type of the referenced data the type clearly cannot be used for memory operations.
@@ -1552,7 +1944,25 @@ of `T`. In this context, the parameter `T` is also often called a "type variable
 like a variable that ranges over types.
 Each `where` introduces a single type variable, so these expressions are nested for types with
 multiple parameters, for example `Array{T,N} where N where T`.
+-->
+```
+`Ptr`のようなパラメトリック型はすべてのインスタンス（`Ptr{Int64}`など）のスーパータイプのように振る舞うと前に述べましました。
+これはどのようにして実現しているのでしょうか？
+`Ptr`自体は通常のデータ型ではありえません。というのも、参照するデータの型が分からなければ、
+明らかに、その型を記憶操作に使用できないからです。
+答えは、`Ptr`の型（また他の`Array`のようなパラメトリック型）は、`全合併型`と呼ばれる種類の異なる型です 。
+この型は、あるパラメータをすべての値に対して **繰り返し合併した** 型を表現します。
 
+
+全合併型は、通常、キーワード`where`を使って記述されます。
+例えば、`Ptr`は、より正確には`Ptr{T} where T`と書くことができて、ある`T`という値によって`Ptr{T}`と書ける型をもつ値すべてを意味します。
+この文脈では、パラメータ`T`は型をまたぐ変数のようなものであるため、よく「型変数」と呼ばれます。
+それぞれの`where`は型変数を一つ導入するため、こういった式は複数のパラメータを持つ場合、
+例えば`Array{T,N} where N where T`のように、型に対してネストします。
+
+
+```@raw html
+<!--
 The type application syntax `A{B,C}` requires `A` to be a `UnionAll` type, and first substitutes `B`
 for the outermost type variable in `A`.
 The result is expected to be another `UnionAll` type, into which `C` is then substituted.
@@ -1571,7 +1981,29 @@ Type variables can have both lower and upper bounds.
 contain `Int`s (since `T` must be at least as big as `Int`).
 The syntax `where T>:Int` also works to specify only the lower bound of a type variable,
 and `Array{>:Int}` is equivalent to `Array{T} where T>:Int`.
+-->
+```
 
+型の適用構文`A{B,C}`には、`A`が全合併型であることが必要です。
+まず`A`の一番外側の型変数を`B`で置換します。
+その結果は別の`全合併`型になることと想定されているので、`C`で置換します。
+よって`A{B,C}`と`A{B}{C}`は同等です。
+これは`Array{Float64}`のように、型を部分的にインスタンス化することができる理由の説明となっています。
+最初のパラメータの値は固定されていますが、2番目の値はすべてのとりうる値にまたがっているからです。
+明示的に`where`構文を使用すると、どんなパラメータの部分集合にでも固定できます。
+例えば、すべての1次元配列の型は、`Array{T,1} where T`と書くことができます。
+
+
+型変数は、サブタイプの関係をつかって制限することができます。
+`Array{T} where T<:Integer`は、配列で要素の型が[`Integer`](@ref)のいずれかになるものすべてを指しています。
+構文`Array{<:Integer}`は`Array{T} where T<:Integer`の便利な簡略表記です。
+型変数は、下限と上限の両方を指定することができます。
+`Array{T} where Int<:T<:Number`は [`Number`](@ref)の配列で`Int`を含みうるものすべてを指します（少なくとも、`T` は`Int`以上の大きさでなければなりません）。
+構文`where T>:Int`はまた、型変数の下限のみを指定していて、
+`Array{>:Int}`は、`Array{T} where T>:Int`同等です。
+
+```@raw html
+<!--
 Since `where` expressions nest, type variable bounds can refer to outer type variables.
 For example `Tuple{T,Array{S}} where S<:AbstractArray{T} where T<:Real` refers to 2-tuples
 whose first element is some [`Real`](@ref), and whose second element is an `Array` of any
@@ -1579,6 +2011,16 @@ kind of array whose element type contains the type of the first tuple element.
 
 The `where` keyword itself can be nested inside a more complex declaration. For example,
 consider the two types created by the following declarations:
+-->
+```
+
+`where`式はネストするので、型変数を限定する式は外側の型変数を参照することができます。
+例えば、`Tuple{T,Array{S}} where S<:AbstractArray{T} where T<:Real`は、第1要素は[`Real`](@ref)のいずれかで、
+第2要素は、各要素が第1要素の型を含む型の配列である**配列**の、2要素-タプルを参照します。
+
+`where`キーワード自体は、より複雑な宣言の中でネストすることができます。
+たとえば、次の宣言で作成される2つの型を考えてみましょう。
+
 
 ```jldoctest
 julia> const T1 = Array{Array{T,1} where T, 1}
@@ -1588,6 +2030,8 @@ julia> const T2 = Array{Array{T,1}, 1} where T
 Array{Array{T,1},1} where T
 ```
 
+```@raw html
+<!--
 Type `T1` defines a 1-dimensional array of 1-dimensional arrays; each
 of the inner arrays consists of objects of the same type, but this type may vary from one inner array to the next.
 On the other hand, type `T2` defines a 1-dimensional array of 1-dimensional arrays all of whose inner arrays must have the
@@ -1595,11 +2039,24 @@ same type.  Note that `T2` is an abstract type, e.g., `Array{Array{Int,1},1} <: 
 
 There is a convenient syntax for naming such types, similar to the short form of function
 definition syntax:
+-->
+```
+
+型`T1`は、1次元配列を要素とする、1次元配列を定義します。
+内側の配列は同じ型のオブジェクトで構成されますが、この型は内側の配列ごとに異なる場合があります。
+一方、型`T2`は、すべての内側の配列の型が等しい1次元配列の1次元配列を定義します。
+`T2`は抽象型であり、`Array{Array{Int,1},1} <: T2`であるのに対して、`T1`は具象型である点に注意してください。
+したがって、`T1`は引数のないコンストラクタで`a=T1()`のように構築することはできますが、`T2`ではできません。
+
+このような型を命名する便利な構文があり、それは関数定義の短い形の構文と似ています：
+
 
 ```julia
 Vector{T} = Array{T,1}
 ```
 
+```@raw html
+<!--
 This is equivalent to `const Vector = Array{T,1} where T`.
 Writing `Vector{Float64}` is equivalent to writing `Array{Float64,1}`, and the umbrella type
 `Vector` has as instances all `Array` objects where the second parameter -- the number of array
@@ -1607,14 +2064,31 @@ dimensions -- is 1, regardless of what the element type is. In languages where p
 must always be specified in full, this is not especially helpful, but in Julia, this allows one
 to write just `Vector` for the abstract type including all one-dimensional dense arrays of any
 element type.
+-->
+```
+これは`const Vector = Array{T,1} where T`と同等です。
+`Vector{Float64}`と書くのは、`Array{Float64,1}`と書くのと同等です。
+包括型の `Vector`は、2番目のパラメータ（配列の次元数）が1である、すべての`Array`オブジェクトを、要素の種類に関係なく、インスタンスとして持ちます。
+パラメトリック型を常に完全に指定しなければならない言語では、こういう構文はそんなに有用ではないかもしれません。
+しかしJuliaでは、`Vector`と書くだけで、任意の要素型のすべての1次元の密な配列を含む抽象型を表すことができます。
+
+
 
 `[](## Type Aliases)
 ## 型エイリアス
 
+```@raw html
+<!--
 Sometimes it is convenient to introduce a new name for an already expressible type.
 This can be done with a simple assignment statement.
 For example, `UInt` is aliased to either [`UInt32`](@ref) or [`UInt64`](@ref) as is
 appropriate for the size of pointers on the system:
+-->
+```
+すでに表現可能な型に新しい名前をつけると便利な場合が時々あります。
+これは簡単な代入文で行うことができます。
+たとえば、`UInt`は、システム上のポインタのサイズに応じて、[`UInt32`](@ref) か [`UInt64`](@ref)　の別名となります。
+
 
 ```julia-repl
 # 32-bit system:
@@ -1626,7 +2100,13 @@ julia> UInt
 UInt64
 ```
 
+```@raw html
+<!--
 This is accomplished via the following code in `base/boot.jl`:
+-->
+```
+これは`base/boot.jl`の中にある以下のコードで実現できます。
+
 
 ```julia
 if Int === Int64
@@ -1636,6 +2116,8 @@ else
 end
 ```
 
+```@raw html
+<!--
 Of course, this depends on what `Int` is aliased to -- but that is predefined to be the correct
 type -- either [`Int32`](@ref) or [`Int64`](@ref).
 
@@ -1643,6 +2125,15 @@ type -- either [`Int32`](@ref) or [`Int64`](@ref).
 [`AbstractFloat`](@ref). Unlike with integer registers, the floating point register sizes
 are specified by the IEEE-754 standard. Whereas the size of `Int` reflects the size of a
 native pointer on that machine.)
+-->
+```
+もちろん、これは `Int` が[`Int32`](@ref)と [`Int64`](@ref)のどちらの別名なのかでかわります。
+この別名は正しい型になるように事前に定義されています。
+
+（`Int`と違って、`Float`という、[`AbstractFloat`](@ref)の特定のサイズの型の別名は存在しない点に注意してください。
+整数レジスタとは異なり、浮動小数点レジスタのサイズは、IEEE-754規格で規定されています。
+一方`Int`のサイズは、そのマシン上のネイティブポインタのサイズを反映しています。）
+
 
 `[](## Operations on Types)
 ## 型に対する演算
