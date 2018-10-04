@@ -849,12 +849,13 @@ over time. If they would be considered identical, the type should probably be im
 -->
 ```
 
-変更に対応できるように、このようなオブジェクトは、通常、ヒープ上に配置し、メモリアドレスが固定されています。 
+変更に対応できるように、このようなオブジェクトは、通常、ヒープ上に配置し、メモリアドレスは固定しています。 
 可変オブジェクトは、時間とともに値の変わりうる小さなコンテナと似ていて、アドレスだけで確実に識別できます。 
 対照的に、不変型のインスタンスは、特定のフィールド値に関連づけられています。
 フィールド値だけで、オブジェクトに関するすべてがわかります。 
-型を可変にするかどうかを決めるには、同じフィールド値を持つ2つのインスタンスは同一だとみなせるか、あるいは時間とともに別々に変更する必要があるかを考えます。 
-同一であるとみなせるならば、おそらくその型は不変にすべきでしょう。
+型を可変にするかどうかを決めるには以下の問いを考えればいいでしょう。
+同じフィールド値を持つ2つのインスタンスは同一だとみなせるか、あるいは時間とともに別々に変更する必要があるかと。 
+同一であると考えてもよいなら、おそらくその型は不変にすべきでしょう。
 
 
 ```@raw html
@@ -879,6 +880,21 @@ To recap, two essential properties define immutability in Julia:
       is sure that there's no way to tell that this is not what is happening.
 -->
 ```
+要約すると、2つの重要な特性がJuliaにおける普遍性を決定づけています。
+
+  * 不変型の値を変更することは、許可されていません。
+    * プリミティブ型では、一度設定された値のビットパターンは決して変わらず、その値はそのプリミティブ型で恒等的であることを意味します。
+    * 複合型では、そのフィールドの値の恒等性は決して変わらないことを意味します。
+      フィールドが、プリミティブ型の場合は、そのビットは決して変わらず、配列のような可変型の場合は、常に同じ可変の値を参照することを意味します。
+      可変な値の中身自体が変わった場合であってもです。
+  * 不変型のオブジェクトはコンパイラが自由にコピーすることができます。
+    というのも、不変性によって、元のオブジェクトとコピーしたものを見分けることができないからです。
+    * In particular, this means that small enough immutable values like integers and floats
+      are typically passed to functions in registers (or stack allocated).
+    * Mutable values, on the other hand are heap-allocated and passed to
+      functions as pointers to heap-allocated values except in cases where the compiler
+      is sure that there's no way to tell that this is not what is happening.
+
 
 
 `[](## Declared Types)
