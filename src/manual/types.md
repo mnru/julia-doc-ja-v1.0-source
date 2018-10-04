@@ -1170,7 +1170,7 @@ false
     This last point is *very* important: even though `Float64 <: Real` we **DO NOT** have `Point{Float64} <: Point{Real}`.
 -->
 ```
-!!! 警告
+!!! warning
 
    この最後の点は **非常に** 重要です。`Float64 <: Real`は成り立つにもかかわらず、
    `Point{Float64} <: Point{Real}`は　**成り立ちません**。
@@ -1385,7 +1385,7 @@ way:
 -->
 ```
 
-パラメトリック抽象型に対しても、ほぼ同じ方法で、抽象型の一群に対して型宣言を行います。
+パラメータ抽象型に対しても、ほぼ同じ方法で、抽象型の一群に対して型宣言を行います。
 
 
 ```jldoctest pointytype
@@ -1398,7 +1398,7 @@ With this declaration, `Pointy{T}` is a distinct abstract type for each type or 
 of `T`. As with parametric composite types, each such instance is a subtype of `Pointy`:
 -->
 ```
-この宣言ではPointy{T}は、型や整数値を表すTそれぞれに対して別々の抽象型になります。 パラメトリック複合型と同様に、各インスタンスはPointyのサブタイプです。
+この宣言ではPointy{T}は、型や整数値を表すTそれぞれに対して別々の抽象型になります。 パラメータ複合型と同様に、各インスタンスはPointyのサブタイプです。
 
 
 
@@ -1416,7 +1416,7 @@ Parametric abstract types are invariant, much as parametric composite types are:
 -->
 ```
 
-パラメトリックな抽象型は、パラメトリックな複合型と同じように不変です。
+パラメータ抽象型は、パラメータ複合型と同じように不変です。
 
 
 
@@ -1456,7 +1456,7 @@ could, for example, have declared `Point{T}` to be a subtype of `Pointy{T}` as f
 -->
 ```
 
-普通の抽象型は、具象型に対して役に立つ型の階層を作成するのに役立ちますが、パラメトリックな抽象型はパラメトリックな複合型と同じような目的で使います。 たとえば、次のようにPoint{T}をPointy{T}のサブタイプとして宣言することができます。
+普通の抽象型は、具象型に対して役に立つ型の階層を作成するのに役立ちますが、パラメータ抽象型はパラメータ複合型と同じような目的で使います。 たとえば、次のようにPoint{T}をPointy{T}のサブタイプとして宣言することができます。
 
 
 
@@ -1512,7 +1512,7 @@ implementation that only requires a single coordinate because the point is on th
 -->
 ```
 
-`Pointy`のようなパラメトリック抽象型はなんの役に立つのでしょうか？
+`Pointy`のようなパラメータ抽象型はなんの役に立つのでしょうか？
 対角線　**x = y**　上にあるため、座標が1つ分かればすむ点のようなものを実装する場合を考えましょう。
 
 
@@ -1577,7 +1577,7 @@ ERROR: TypeError: in Pointy, in T, expected T<:Real, got Int64
 Type parameters for parametric composite types can be restricted in the same manner:
 -->
 ```
-パラメトリック複合型の型パラメータも、同じ方法で制限できます。
+パラメータ複合型の型パラメータも、同じ方法で制限できます。
 
 
 ```julia
@@ -1594,7 +1594,7 @@ the actual definition of Julia's [`Rational`](@ref) immutable type (except that 
 constructor here for simplicity), representing an exact ratio of integers:
 -->
 ```
-現実の世界でパラメトリック型という仕組みがどれほど役立つかという例として、
+現実の世界でパラメータ型という仕組みがどれほど役立つかという例として、
 ここでは整数の比を表す[`Rational`](@ref) という不変型の、Juliaでの実際の定義を示します。
 （単純化のため、ここではコンストラクタを省略します）
 
@@ -1630,7 +1630,7 @@ a 2-element tuple type resembles the following immutable type:
 ```
 タプルとは関数本体からその引数だけを抜き出したものです。
 関数の引数の目立った特徴は、順序と型です。
-そのため、タプル型は、不変なパラメトリック複合型で各パラメータがフィールドの型に対応しているものと似ています。
+そのため、タプル型は、不変なパラメータ複合型で各パラメータがフィールドの型に対応しているものと似ています。
 たとえば、2要素タプル型は、次の複合型に似ています。
 
 
@@ -1798,7 +1798,7 @@ For each type, `T`, the "singleton type" `Type{T}` is an abstract type whose onl
 the object `T`. Since the definition is a little difficult to parse, let's look at some examples:
 -->
 ```
-ここで、特殊なパラメトリック抽象型であるシングルトン型について触れておくべきでしょう。
+ここで、特殊なパラメータ抽象型であるシングルトン型について触れておくべきでしょう。
 型`T`それぞれに対して、 「シングルトン型」 `Type{T}`は、インスタンスが`T`唯一つだけの抽象型です。
 定義を構文的に説明するのは少し難しいので、例をいくつか見てみましょう。
 
@@ -1890,8 +1890,8 @@ primitive types which would be declared in Julia like this:
 -->
 ```
 
-原始型にもパラメータをつけて宣言することができます。
-たとえば、ポインタは原始型として表現できて、Juliaでは以下のように宣言します。
+プリミティブ型にもパラメータをつけて宣言することができます。
+たとえば、ポインタはプリミティブ型として表現できて、Juliaでは以下のように宣言します。
 
 
 ```julia
@@ -1913,7 +1913,7 @@ the umbrella [`Ptr`](@ref) type:
 -->
 ```
 
-一般的なパラメトリック複合型と比べて、この宣言のちょっと変な特徴は、型パラメータ`T`が型自体の定義に使われていないことです。
+一般的なパラメータ複合型と比べて、この宣言のちょっと変な特徴は、型パラメータ`T`が型自体の定義に使われていないことです。
 つまり、型パラメータは抽象的なタグであり、本質的に同一の構造である型の族全体をに定義し、型パラメータだけで差別化されています。
 そのため、`Ptr{Float64}`と`Ptr{Int64}`は、表現は同一であっても、型としては異なります。
 もちろん、個別のポインタ型はすべて、包括型`Ptr`のサブタイプです。
@@ -1946,11 +1946,11 @@ Each `where` introduces a single type variable, so these expressions are nested 
 multiple parameters, for example `Array{T,N} where N where T`.
 -->
 ```
-`Ptr`のようなパラメトリック型はすべてのインスタンス（`Ptr{Int64}`など）のスーパータイプのように振る舞うと前に述べましました。
+`Ptr`のようなパラメータ型はすべてのインスタンス（`Ptr{Int64}`など）のスーパータイプのように振る舞うと前に述べましました。
 これはどのようにして実現しているのでしょうか？
 `Ptr`自体は通常のデータ型ではありえません。というのも、参照するデータの型が分からなければ、
 明らかに、その型を記憶操作に使用できないからです。
-答えは、`Ptr`の型（また他の`Array`のようなパラメトリック型）は、`全合併型`と呼ばれる種類の異なる型です 。
+答えは、`Ptr`の型（また他の`Array`のようなパラメータ型）は、`全合併型`と呼ばれる種類の異なる型です 。
 この型は、あるパラメータをすべての値に対して **繰り返し合併した** 型を表現します。
 
 
@@ -2069,7 +2069,7 @@ element type.
 これは`const Vector = Array{T,1} where T`と同等です。
 `Vector{Float64}`と書くのは、`Array{Float64,1}`と書くのと同等です。
 包括型の `Vector`は、2番目のパラメータ（配列の次元数）が1である、すべての`Array`オブジェクトを、要素の種類に関係なく、インスタンスとして持ちます。
-パラメトリック型を常に完全に指定しなければならない言語では、こういう構文はそんなに有用ではないかもしれません。
+パラメータ型を常に完全に指定しなければならない言語では、こういう構文はそんなに有用ではないかもしれません。
 しかしJuliaでは、`Vector`と書くだけで、任意の要素型のすべての1次元の密な配列を含む抽象型を表すことができます。
 
 
