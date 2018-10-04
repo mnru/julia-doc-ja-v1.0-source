@@ -1398,7 +1398,8 @@ With this declaration, `Pointy{T}` is a distinct abstract type for each type or 
 of `T`. As with parametric composite types, each such instance is a subtype of `Pointy`:
 -->
 ```
-この宣言では、`T`は型や整数値を表し、`Pointy{T}`は、それぞれに対して別々の抽象型になります。 パラメータ複合型と同様に、各インスタンスは`Pointy`のサブタイプです。
+
+この宣言では、`T`は型や整数値を表し、`Pointy{T}`は、それぞれの`T`に対して別の抽象型になります。 パラメータ複合型と同様に、各インスタンスは`Pointy`のサブタイプです。
 
 
 
@@ -1436,7 +1437,7 @@ but technically these represent *sets* of types (see [UnionAll Types](@ref)).
 -->
 ```
 
-Juliaでは、Pointy{<:Real}という表記で共変型のようなもの、Pointy{>:Int}で反変型のようなものを表現できます。 しかし、専門的には、これらは型の集合を表しています。(全合併型 参照)
+Juliaでは、`Pointy{<:Real}`という表記で **共変型*** のようなもの、`Pointy{>:Int}`で **反変型** のようなものを表現できます。 しかし、技術的には、これらは型の集合を表しています。([全合併型](@ref) 参照)
 
 
 
@@ -1456,8 +1457,7 @@ could, for example, have declared `Point{T}` to be a subtype of `Pointy{T}` as f
 -->
 ```
 
-普通の抽象型は、具象型に対して役に立つ型の階層を作成するのに役立ちますが、パラメータ抽象型はパラメータ複合型と同じような目的で使います。 たとえば、次のようにPoint{T}をPointy{T}のサブタイプとして宣言することができます。
-
+通常の抽象型は、具象型に対する有益な型の階層の作成に使いますが、パラメータ抽象型はパラメータ複合型と同じような目的で使います。 たとえば、`Point{T}`を`Pointy{T}`のサブタイプとする宣言は次のようにできます。
 
 
 ```jldoctest pointytype
@@ -1472,7 +1472,7 @@ julia> struct Point{T} <: Pointy{T}
 Given such a declaration, for each choice of `T`, we have `Point{T}` as a subtype of `Pointy{T}`:
 -->
 ```
-この宣言で、それぞれ選んたTに対して、Point{T}はPointy{T}のサブタイプとなります。
+この宣言で、それぞれの選んた`T`に対して、`Point{T}`は`Pointy{T}`のサブタイプとなります。
 
 
 
@@ -1512,8 +1512,8 @@ implementation that only requires a single coordinate because the point is on th
 -->
 ```
 
-`Pointy`のようなパラメータ抽象型はなんの役に立つのでしょうか？
-対角線　**x = y**　上にあるため、座標が1つ分かればすむ点のようなものを実装する場合を考えましょう。
+`Pointy`のようなパラメータ抽象型はなんの役に立つのでしょうか。
+対角線　**x = y**　上にあるため、座標1つのみを必要とする点状のものを実装する場合を考えましょう。
 
 
 
@@ -1536,12 +1536,12 @@ possible types. In such situations, one can constrain the range of `T` like so:
 -->
 ```
 
-ここで`Point{Float64}`と`DiagPoint{Float64}`は共に、抽象型`Pointy{Float64}`の実装で、これは`T`に他の可能な型を代入しても同様です。
+ここで`Point{Float64}`と`DiagPoint{Float64}`は共に、抽象型`Pointy{Float64}`の実装で、これは`T`に他のとりうる型を選んでも同じです。
 これにより`Point`と`DiagPoint`のどちらを実装するにも、`Pointy`オブジェクトを共通のインタフェースにするようなプログラミングが可能になります。
 しかし、完全な解説は、メソッドとディスパッチを導入する次の章[メソッド](@ref) に持ち越します。
 
 
-型のパラメータがとりうる型を自由にしてしまうと、意味を成さない場合があります。
+型のパラメータのとりうる型を自由にしてしまうと、意味を成さない場合があります。
 そのような状況では、次のように、`T`の範囲を制限することができます。
 
 
@@ -1555,7 +1555,7 @@ With such a declaration, it is acceptable to use any type that is a subtype of
 [`Real`](@ref) in place of `T`, but not types that are not subtypes of `Real`:
 -->
 ```
-この宣言では、`T`は任意の[`Real`](@ref)のサブタイプが受け入れますが、 `Real`のサブタイプでなければ受け入れません。
+この宣言では、`T`が任意の[`Real`](@ref)のサブタイプの場合で許容されますが、 `Real`のサブタイプでなければ許容されません。
 
 
 ```jldoctest realpointytype
@@ -1594,8 +1594,9 @@ the actual definition of Julia's [`Rational`](@ref) immutable type (except that 
 constructor here for simplicity), representing an exact ratio of integers:
 -->
 ```
-現実の世界でパラメータ型という仕組みがどれほど役立つかという例として、
-ここでは整数の比を表す[`Rational`](@ref) という不変型の、Juliaでの実際の定義を示します。
+
+実世界でパラメータ型という仕組みがどれほど役立つかという例として、
+ここでは整数の比を表す[`Rational`](@ref) という不変型を、Juliaで実際にどう定義するかを示します。
 （単純化のため、ここではコンストラクタを省略します）
 
 
@@ -1868,14 +1869,14 @@ applies to Julia's singleton types, but with that caveat that only type objects 
 types.
 -->
 ```
-[パラメトリックメソッド](@ref)と[変換](@ref conversion-and-promotion)の議論がすむまで、
+[パラメータメソッド](@ref)と[変換](@ref conversion-and-promotion)の議論がすむまで、
 シングルトン型がどう役に立つのかを説明するのは難しいですが、手短にいうと、関数の挙動を特定の型の**値**だけに特化することができるのです。
 これが役に立つのは、挙動が型に依存する（特にパラメトリックな）メソッドを書く時で、
 しかもその型が勝手に推測されるのではなく、わざわざ引数として与える場合です。
 
 
 Haskell、Scala、Rubyなどの人気のある言語には、シングルトン型が備わっています。
-通常の用法では、「シングルトン型」という術語は、唯一のインスタンスがで単一の値である型を指します。
+一般的な用法では、「シングルトン型」という術語は、唯一のインスタンスがで単一の値である型を指します。
 この意味はJuliaのシングルトン型にも当てはまりますが、型オブジェクトだけがシングルトン型になるという点に注意してください。
 
 
@@ -2519,11 +2520,11 @@ for cases where you don't need a more elaborate hierarchy.
 ```
 
 Juliaでは、`true` や `false`のような**値**によって、ディスパッチすることができません。
-しかし、パラメトリック型に対してはディスパッチができて、その型パラメータとして「プレーンビット」値（型、シンボル、整数、浮動小数点数、タプルなど）を使うことができます。
+しかし、パラメータ型に対してはディスパッチができて、その型パラメータとして「プレーンビット」値（型、シンボル、整数、浮動小数点数、タプルなど）を使うことができます。
 よくある例として、`Array{T,N}`で使われる次元のパラメータがあり、この場合`T`は型（ [`Float64`](@ref)など）ですが、`N`はただの`Int`型です。
 
 値をパラメータとする独自の型を作成して、その型によってディスパッチを制御することができます。
-この考え方を説明するために、パラメトリック型の`Val{T}`を導入しましょう。
+この考え方を説明するために、パラメータ型の`Val{T}`を導入しましょう。
 手の込んだ階層の必要ない時は、こうした手法にはこの型を慣用的に使います。
 
 `Val{T}`は次のように定義します。

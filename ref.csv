@@ -27,3 +27,6 @@
 型,[Methods],メソッド
 ,[Parametric Types],パラメータ型
 ,[`Vararg`],可変引数
+,[UnionAll Types],全合併型
+,[Parametric Methods],パラメータメソッド
+,[conversion],変換
