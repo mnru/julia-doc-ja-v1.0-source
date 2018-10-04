@@ -889,11 +889,10 @@ To recap, two essential properties define immutability in Julia:
       可変な値の中身自体が変わった場合であってもです。
   * 不変型のオブジェクトはコンパイラが自由にコピーすることができます。
     というのも、不変性によって、元のオブジェクトとコピーしたものを見分けることができないからです。
-    * In particular, this means that small enough immutable values like integers and floats
-      are typically passed to functions in registers (or stack allocated).
-    * Mutable values, on the other hand are heap-allocated and passed to
-      functions as pointers to heap-allocated values except in cases where the compiler
-      is sure that there's no way to tell that this is not what is happening.
+    * このため、特に十分小さな整数や浮動小数点数などの不変型は、通常レジスタ（やスタック）にある関数には
+      そのまま渡されます。
+    * 一方、可変な値は、ヒープに配置され、その配置された値へのポインタとして関数に渡されます。 
+      except in cases where the compiler is sure that there's no way to tell that this is not what is happening.
 
 
 
@@ -911,6 +910,13 @@ sections are actually all closely related. They share the same key properties:
   * They may have parameters.
 -->
 ```
+上記のセクションで説明した3種の型（抽象型、プリミティブ型、複合型）は、実のところ、すべて密接に関連しています。 
+これらは重要な特徴が共通しています。
+
+  * 明示的に宣言している。
+  * 名前がある。
+  * スーパータイプを明示的に宣言している。
+  * パラメータをつけてもよい。
 
 
 ```@raw html
@@ -919,6 +925,10 @@ Because of these shared properties, these types are internally represented as in
 same concept, `DataType`, which is the type of any of these types:
 -->
 ```
+
+特徴が共通しているため、これらの型は内部的に同じ概念の`DataType`のインスタンスとして表現されます。
+`DataType`はこれらの型のいずれかのことです。
+
 
 
 ```jldoctest
@@ -940,6 +950,14 @@ Every concrete value in the system is an instance of some `DataType`.
 ```
 
 
+`DataType`は抽象型でも具象型でもかまいません。
+具象型であれば、特定のサイズ、 格納領域の配置 があり、（場合によっては）フィールド名もあります。 
+そして、プリミティブ型は、サイズが0ではない`DataType`で、フィールド名を持ちません。 
+複合型は、フィールド名があるか、空（サイズ0）の`DataType`です。
+
+システムのすべての具体的な値は、なんらかの`DataType`のインスタンスです。
+
+
 `[](## Type Unions)
 ## 合併型
 
@@ -949,7 +967,8 @@ A type union is a special abstract type which includes as objects all instances 
 argument types, constructed using the special [`Union`](@ref) keyword:
 -->
 ```
-
+合併型は特殊な抽象型で、この型にオブジェクトとして含まれるのは、引数のいずれかの型のインスタンスすべてであり、
+特殊なキーワード[`Union`](@ref)を使って構築します。
 
 ```jldoctest
 julia> IntOrString = Union{Int,AbstractString}
@@ -974,6 +993,10 @@ in separate branches for each possible type.
 -->
 ```
 
+多くの言語のコンパイラには、型推論のための内部でつかう合併構文があります。
+Juliaは単にそれをプログラマにも公開しています。
+型の数が少ない場合に `合併型` を使うと、Juliaのコンパイラは効率的なコードを生成します[^1]。
+なりうる型すべてに個別に特化したコードを生成します。
 
 ```@raw html
 <!--
@@ -985,6 +1008,11 @@ setting it either to a value of type `T`, or to `nothing` to indicate that there
 See [this FAQ entry](@ref faq-nothing) for more information.
 -->
 ```
+特に有益な`合併型`は`Union{T, Nothing}`です。
+ここで`T`は任意の型、[`Nothing`](@ref)は唯一のインスタンスがオブジェクト[`nothing`](@ref)だけのシングルトン型です。
+Juliaのこのパターンは、他の言語の[`Nullable`,`Option`,`Maybe`](https://en.wikipedia.org/wiki/Nullable_type)型と同等です。
+関数の引数やフィールドを`Union{T, Nothing}`として宣言すると、型`T`の値か、値がないことを示す`nothing`のどちらかに設定することができます。
+詳細な情報は[FAQのこの項目](@ref faq-nothing)を参照してください。
 
 
 `[](## Parametric Types)

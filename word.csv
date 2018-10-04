@@ -1,5 +1,5 @@
 ﻿章,英,日,備考
-前書き,dipatch,選択する,dispatchは発送するという意味だが、methodの章の説明では選択すると訳すべきか
+前書き,dipatch,選択する,dispatchは発送するという意味だが、methodの章を読むと選択すると訳すべきか
 ,multiple dispatch,多重ディスパッチ,
 ,Unobtrusive,控えめな、記述のすくない,
 始めよう,,,
@@ -136,8 +136,4 @@
 ,assertion,アサーション、表明、主張,
 ,final,ファイナル、,
 ,in-place,その場で,
-,apex,頂点,
-,nadir,どん底,
-,variety,種類,
-,plain old,普通の,
-,identity,恒等性,
+,bit type,プリミティブ型,bit typeはver0.6以降primitive typeに改名したため
