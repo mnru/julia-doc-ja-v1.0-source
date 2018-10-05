@@ -137,3 +137,4 @@
 ,final,ファイナル、,
 ,in-place,その場で,
 ,bit type,プリミティブ型,bit typeはver0.6以降primitive typeに改名したため
+,umbrella type,包括型,
