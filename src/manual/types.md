@@ -1666,6 +1666,7 @@ Tuple values are written with parentheses and commas. When a tuple is constructe
 tuple type is generated on demand:
 -->
 ```
+
 タプルの値は、括弧とカンマをつかって書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
 
 
@@ -1679,6 +1680,7 @@ Tuple{Int64,String,Float64}
 Note the implications of covariance:
 -->
 ```
+
 暗黙的に共変となる点に注目してください。
 
 
@@ -1712,7 +1714,8 @@ The last parameter of a tuple type can be the special type [`Vararg`](@ref), whi
 of trailing elements:
 -->
 ```
-タプル型の最後のパラメータは、特殊な型である[`可変引数`](@ref)として、任意の数の後続の要素を示す型とすることができます。
+
+タプル型の最後のパラメータは、特殊な型である[`可変引数`](@ref)にすることが可能で、任意個数の後続の要素を表します。
 
 ```jldoctest
 julia> mytupletype = Tuple{AbstractString,Vararg{Int}}
@@ -1741,7 +1744,7 @@ alias for `Tuple{Vararg{T,N}}`, i.e. a tuple type containing exactly `N` element
 -->
 ```
 `Vararg{T}`は、0個以上の型`T`に対応することに注意してください。
-可変引数タプル型は、varargsメソッドによって受け入れられる引数を表すために使用されます（[可変引数関数](@ref)を参照）。
+可変引数タプル型は、可変引数メソッドによって受け入れられる引数を表すために使用されます（[可変引数関数](@ref)を参照）。
 
 型`Vararg{T,N}`は、ちょうど`N`個の型`T`に対応します。
 `NTuple{N,T}`は`Tuple{Vararg{T,N}}`の便利なエイリアスです。
@@ -1757,6 +1760,8 @@ Named tuples are instances of the [`NamedTuple`](@ref) type, which has two param
 symbols giving the field names, and a tuple type giving the field types.
 -->
 ```
+名前付きタプル型は、 [`NamedTuple`](@ref) 型のインスタンスで、2つのパラメータを取ります。
+シンボルのタプルはフィールド名を与え、型のタプルはフィールドの型を与えます。
 
 
 ```jldoctest
@@ -1771,7 +1776,8 @@ The constructed `NamedTuple` type can be either a concrete type, with both param
 or a type that specifies only field names:
 -->
 ```
-
+`NamedTuple`型はコンストラクタとしても利用可能で、１個のタプルを引数としてとります。
+生成された`NamedTuple`の型は、両方のパラメータの指定された具象型か、フィールド名だけがしていされた型になります。
 
 ```jldoctest
 julia> NamedTuple{(:a, :b),Tuple{Float32, String}}((1,""))
@@ -1787,6 +1793,8 @@ If field types are specified, the arguments are converted. Otherwise the types o
 are used directly.
 -->
 ```
+フィールドの型を指定した時は、引数は変換されます。
+そうでない場合は、引数の型がそのまま使われます。
 
 
 `[](#### [Singleton Types](@id man-singleton-types))
