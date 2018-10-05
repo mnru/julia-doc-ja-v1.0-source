@@ -1667,7 +1667,8 @@ Tuple values are written with parentheses and commas. When a tuple is constructe
 tuple type is generated on demand:
 -->
 ```
-タプルの値は、括弧とカンマを使って書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
+
+タプルの値は、括弧とカンマをつかって書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
 
 
 ```jldoctest
@@ -1680,6 +1681,7 @@ Tuple{Int64,String,Float64}
 Note the implications of covariance:
 -->
 ```
+
 暗黙的に共変となる点に注目してください。
 
 
@@ -1713,7 +1715,8 @@ The last parameter of a tuple type can be the special type [`Vararg`](@ref), whi
 of trailing elements:
 -->
 ```
-タプル型の最後のパラメータは、特殊な型である[`可変引数`](@ref)として、任意の数の後続の要素を示す型とすることができます。
+
+タプル型の最後のパラメータは、特殊な型である[`可変引数`](@ref)にすることが可能で、任意個数の後続の要素を表します。
 
 ```jldoctest
 julia> mytupletype = Tuple{AbstractString,Vararg{Int}}
@@ -1742,7 +1745,7 @@ alias for `Tuple{Vararg{T,N}}`, i.e. a tuple type containing exactly `N` element
 -->
 ```
 `Vararg{T}`は、0個以上の型`T`に対応することに注意してください。
-可変引数タプル型は、varargsメソッドによって受け入れられる引数を表すために使用されます（[可変引数関数](@ref)を参照）。
+可変引数タプル型は、可変引数メソッドによって受け入れられる引数を表すために使用されます（[可変引数関数](@ref)を参照）。
 
 型`Vararg{T,N}`は、ちょうど`N`個の型`T`に対応します。
 `NTuple{N,T}`は`Tuple{Vararg{T,N}}`の便利なエイリアスです。
@@ -1758,6 +1761,8 @@ Named tuples are instances of the [`NamedTuple`](@ref) type, which has two param
 symbols giving the field names, and a tuple type giving the field types.
 -->
 ```
+名前付きタプル型は、 [`NamedTuple`](@ref) 型のインスタンスで、2つのパラメータを取ります。
+シンボルのタプルはフィールド名を与え、型のタプルはフィールドの型を与えます。
 
 
 ```jldoctest
@@ -1772,7 +1777,8 @@ The constructed `NamedTuple` type can be either a concrete type, with both param
 or a type that specifies only field names:
 -->
 ```
-
+`NamedTuple`型はコンストラクタとしても利用可能で、１個のタプルを引数としてとります。
+生成された`NamedTuple`の型は、両方のパラメータの指定された具象型か、フィールド名だけがしていされた型になります。
 
 ```jldoctest
 julia> NamedTuple{(:a, :b),Tuple{Float32, String}}((1,""))
@@ -1788,6 +1794,8 @@ If field types are specified, the arguments are converted. Otherwise the types o
 are used directly.
 -->
 ```
+フィールドの型を指定した時は、引数は変換されます。
+そうでない場合は、引数の型がそのまま使われます。
 
 
 `[](#### [Singleton Types](@id man-singleton-types))
@@ -2000,7 +2008,7 @@ and `Array{>:Int}` is equivalent to `Array{T} where T>:Int`.
 `Array{T} where T<:Integer`は、配列で要素の型が[`Integer`](@ref)のいずれかになるものすべてを指しています。
 構文`Array{<:Integer}`は`Array{T} where T<:Integer`の便利な簡略表記です。
 型変数は、下限と上限の両方を指定することができます。
-`Array{T} where Int<:T<:Number`は [`Number`](@ref)の配列で`Int`を含みうるものすべてを指します（少なくとも、`T` は`Int`以上の大きさでなければなりません）。
+`Array{T} where Int<:T<:Number`は [`Number`](@ref)の配列で`Int`を含みうるものすべてを指します（少なくとも、`T` は`Int`以上大きくなければなりません）。
 構文`where T>:Int`はまた、型変数の下限のみを指定していて、
 `Array{>:Int}`は、`Array{T} where T>:Int`同等です。
 
@@ -2016,11 +2024,11 @@ consider the two types created by the following declarations:
 -->
 ```
 
-`where`式はネストするので、型変数を限定する式は外側の型変数を参照することができます。
+`where`式はネストする場合、型変数を限定する式は外側の型変数を参照することができます。
 例えば、`Tuple{T,Array{S}} where S<:AbstractArray{T} where T<:Real`は、第1要素は[`Real`](@ref)のいずれかで、
 第2要素は、各要素が第1要素の型を含む型の配列である**配列**の、2要素-タプルを参照します。
 
-`where`キーワード自体は、より複雑な宣言の中でネストすることができます。
+`where`キーワード自体は、より複雑な宣言の内側でネストすることができます。
 たとえば、次の宣言で作成される2つの型を考えてみましょう。
 
 
@@ -2050,7 +2058,7 @@ definition syntax:
 `T2`は抽象型であり、`Array{Array{Int,1},1} <: T2`であるのに対して、`T1`は具象型である点に注意してください。
 したがって、`T1`は引数のないコンストラクタで`a=T1()`のように構築することはできますが、`T2`ではできません。
 
-このような型を命名する便利な構文があり、それは関数定義の短い形の構文と似ています：
+このような型を命名する便利な構文で、関数定義の短い形の構文と似ているものがあります：
 
 
 ```julia
@@ -2070,7 +2078,7 @@ element type.
 ```
 これは`const Vector = Array{T,1} where T`と同等です。
 `Vector{Float64}`と書くのは、`Array{Float64,1}`と書くのと同等です。
-包括型の `Vector`は、2番目のパラメータ（配列の次元数）が1である、すべての`Array`オブジェクトを、要素の種類に関係なく、インスタンスとして持ちます。
+包括型の `Vector`がインスタンスとして持つのは、2番目のパラメータ（配列の次元数）が1である、要素の種類に関係ないすべての`Array`オブジェクトです。
 パラメータ型を常に完全に指定しなければならない言語では、こういう構文はそんなに有用ではないかもしれません。
 しかしJuliaでは、`Vector`と書くだけで、任意の要素型のすべての1次元の密な配列を含む抽象型を表すことができます。
 
@@ -2089,7 +2097,7 @@ appropriate for the size of pointers on the system:
 ```
 すでに表現可能な型に新しい名前をつけると便利な場合が時々あります。
 これは簡単な代入文で行うことができます。
-たとえば、`UInt`は、システム上のポインタのサイズに応じて、[`UInt32`](@ref) か [`UInt64`](@ref)　の別名となります。
+たとえば、`UInt`は、システム上のポインタのサイズによって、[`UInt32`](@ref) か [`UInt64`](@ref)　のどちらかの別名となります。
 
 
 ```julia-repl
@@ -2129,7 +2137,7 @@ are specified by the IEEE-754 standard. Whereas the size of `Int` reflects the s
 native pointer on that machine.)
 -->
 ```
-もちろん、これは `Int` が[`Int32`](@ref)と [`Int64`](@ref)のどちらの別名なのかでかわります。
+もちろん、これは `Int` が[`Int32`](@ref)と [`Int64`](@ref)のどちらの別名なのかで変わりますが、
 この別名は正しい型になるように事前に定義されています。
 
 （`Int`と違って、`Float`という、[`AbstractFloat`](@ref)の特定のサイズの型の別名は存在しない点に注意してください。
@@ -2152,8 +2160,8 @@ The [`isa`](@ref) function tests if an object is of a given type and returns tru
 ```
 
 Juliaの型はそれ自体がオブジェクトなので、通常の関数を作用させることができます。
-特に型の操作や探索に役立つ関数がいくつか既に導入されていて、
-`<:`などは、演算子の左側が右側のサブタイプであるかどうかを示す演算子です。
+特に型の操作や探索に役立つ関数がいくつか既に導入されています。
+`<:`などは、左側の被演算子が右側の被演算子のサブタイプであるかどうかを示す演算子です。
 
 [`isa`](@ref) 関数は、オブジェクトが指定された型であるかどうかを検査し、真か偽を返します。
 
@@ -2174,7 +2182,7 @@ what their types are:
 -->
 ```
 [`typeof()`](@ref) 関数は、既にこのマニュアルを通して例として使っていますが、引数の型を返します。
-上記のように、型はオブジェクトであり、それ自体の型もあるので、型に対してその型が何であるかを尋ねることができます。
+上述のように、型はオブジェクトであり、それ自体の型もあるので、型に対してその型が何であるかを尋ねることができます。
 
 
 ```jldoctest
@@ -2196,7 +2204,7 @@ all composite values and thus all have a type of `DataType`:
 ```
 
 この操作を繰り返すとどうなるでしょうか？型の型の型は何でしょうか？
-既にみたように、型はすべて複合値なので、すべて`DataType`型になります。
+既にみたように、型はすべて複合型の値なので、すべて`DataType`型になります。
 
 ```jldoctest
 julia> typeof(DataType)
@@ -2216,7 +2224,7 @@ supertype. Only declared types (`DataType`) have unambiguous supertypes:
 ```
 `DataType`は自身の型でもあります。
 
-別の一部の型に対する演算としては、[`supertype()`](@ref)は型のスーパータイプを示します。
+別のある種の型に対する演算としては、[`supertype()`](@ref)があり、型のスーパータイプを示します。
 宣言型（`DataType`）のみが明確なスーパータイプを持っています：
 
 
@@ -2261,7 +2269,7 @@ overloading the [`show`](@ref) function.  For example, suppose we define a type 
 complex numbers in polar form:
 -->
 ```
-型のインスタンスがどのように表示されるかをカスタマイズしたい場合がよくおこります。
+型のインスタンスがどのように表示されるかを独自に指定したい場合がよくおこります。
 これは、[`show()`](@ref) 関数のオーバーロードによって実現されます。
 たとえば、極座標形式で複素数を表す型を定義するとします。
 
