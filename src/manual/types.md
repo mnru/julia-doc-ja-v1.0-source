@@ -1629,10 +1629,11 @@ to a parameterized immutable type where each parameter is the type of one field.
 a 2-element tuple type resembles the following immutable type:
 -->
 ```
+
 タプルとは関数本体からその引数だけを抜き出したものです。
 関数の引数の目立った特徴は、順序と型です。
 そのため、タプル型は、不変なパラメータ複合型で各パラメータがフィールドの型に対応しているものと似ています。
-たとえば、2要素タプル型は、次の複合型に似ています。
+たとえば、2要素のタプル型は、次の複合型に似ています。
 
 
 ```julia
@@ -1656,7 +1657,7 @@ However, there are three key differences:
 ただし、3つの重要な違いがあります。 
 
   * タプル型は、任意の数のパラメータを持つことができます。
-  * タプル型は、そのパラメータと**共変**です。`Tuple{Int}`は`Tuple{Any}`のサブタイプです。したがって `Tuple{Any}`は、抽象型と見なされます。タプル型は、そのパラメータが具象型の場合にのみ具象型です。
+  * タプル型は、そのパラメータと **共変** です。`Tuple{Int}`は`Tuple{Any}`のサブタイプです。したがって `Tuple{Any}`は、抽象型と見なされます。タプル型は、そのパラメータが具象型の場合にのみ具象型です。
   * タプルにはフィールド名はありません。フィールドにはインデックスによってのみアクセスできます。
 
 
@@ -1666,7 +1667,7 @@ Tuple values are written with parentheses and commas. When a tuple is constructe
 tuple type is generated on demand:
 -->
 ```
-タプルの値は、括弧とカンマをつかって書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
+タプルの値は、括弧とカンマを使って書きます。タプルが生成されると、必要に応じて適切なタプル型が生成されます。
 
 
 ```jldoctest
