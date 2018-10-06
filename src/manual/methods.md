@@ -651,7 +651,7 @@ nested `where`, e.g. `where S<:Real where T`.
 
 パラメータメソッドでは、型の生成に使われる`where`式と同じ構文を使って型を書くことが可能です（[全合併型](@ref)を参照）。
 パラメータが1つしかない場合は、中括弧（`where {T}`）を省略することができますが、わかりやくするために、好んでよく使われます。
-複数のパラメータの記述には、カンマで区切ったり(例`where {T, S<:Real}`)、`where`をネストして使ったり（例`where S<:Real where T`）します。
+複数のパラメータは、カンマで区切ったり(例`where {T, S<:Real}`)、`where`をネストしたり（例`where S<:Real where T`）して記述します。
 
 
 ```@raw html
@@ -676,9 +676,9 @@ including Tasks and Threads (and any previously defined `@generated` functions).
 Let's start with an example to see what this means:
 -->
 ```
-メソッドの再定義や、新しいメソッドの追加は、その変更が即座に反映されない、という認識は重要です。
-これは、Juliaが静的にコードを推論しコンパイルする際に、通常のJITトリックやオーバーヘッドがなくてすむ鍵となります。
-実際、新しいメソッド定義は、タスクおよびスレッド（およびそれ以前に定義された@generated関数）を含め、現在の実行時環境ではまったく見えません。
+メソッドを再定義したり、新しく追加したりする時は、変更がすぐには反映されない、ということを理解しておくことが重要です。
+これは、静的にコードを推論・コンパイルし、よくあるJITトリックやオーバーヘッドなしで実行速度が速い、というJuliaの能力の鍵となります。
+実際、新しいメソッド定義は、実行時環境からは、タスクおよびスレッド（そして以前に定義された`@generated`関数）を含め、まったく見えません。
 これが何を意味するかを例をあげて見てみましょう。
 
 
@@ -712,11 +712,12 @@ can call this new method definition!
 -->
 ```
 
+この例では、`newfun`の新しい定義は作成されましたが、すぐには呼び出せないことに注意してください。
+この新しいグローバルな関数はすぐに`tryeval`関数からは見えるので、`return newfun`と(括弧を付けずに）書くことができます。
+しかし、あなたも、呼ぶ関数からも、呼ばれる関数からも、この新しいメソッド定義を呼び出すことはできません！
 
-メソッドの再定義や、新しいメソッドの追加は、その変更が即座に反映されない、という認識は重要です。
-これは、Juliaが静的にコードを推論しコンパイルする際に、通常のJITトリックやオーバーヘッドがなくてすむ鍵となります。
-実際、新しいメソッド定義は、タスクおよびスレッド（およびそれ以前に定義された@generated関数）を含め、現在の実行時環境ではまったく見えません。
-これが何を意味するかを例をあげて見てみましょう。
+
+
 
 ```@raw html
 <!--
@@ -729,11 +730,11 @@ However, future calls to `tryeval` will continue to see the definition of `newfu
 You may want to try this for yourself to see how it works.
 -->
 ```
-しかし、例外はあります。`newfun`への **REPLからの**今後の呼び出しは、期待通りに動作し、`newfun`の新しい定義を参照して呼び出すことができます。
+しかし、例外はあります。**REPLからの** `newfun`への今後行うの呼び出しは、期待通りに動作し、`newfun`の新しい定義を参照して呼び出すことができます。
 
-しかし、`tryeval`への今後の呼び出しが、参照し続ける`newfun`の定義は、次回`tryeval`を呼び出すまでは**REPLで前回行った**ものです。前回の`tryeval`の呼び出しも同様だったのです。
+しかし、`tryeval`への今後行う呼び出しは、**REPLで前回行った** `newfun`の定義を参照し続けます。これは前回の`tryeval`の呼び出しも同じです。
 
-これがどのように動作するかを見るために自身で試してみたいと思うかもしれません。
+これを自分で試して、どのように動作するかを見てみたいと思うかもしれません。
 
 
 ```@raw html
@@ -751,10 +752,10 @@ Fortunately, there is an easy solution: call the function using [`Base.invokelat
 -->
 ```
 
-この行動の実装は「世界の世代のカウンター」です。
+この挙動の実装は「世界の年齢のカウンター」です。
 この単調に増加する値は、各メソッド定義の操作を追跡します。
-これにより、「実行時環境から見えるメソッド定義の集合」を、単一の数値「世界世代」として記述することができます。
-また、世代を比較するだけで、2つの世界で利用できるメソッドを比較することもできます。
+これにより、「実行時環境から見えるメソッド定義の集合」を、単一の数値「世界の年齢」として記述することができます。
+また、年齢を比較するだけで、2つの世界で利用できるメソッドを比較することもできます。
 上記の例では、メソッド`newfun()`が存在する「現在の世界」が、`tryeval`開始時に設定されたタスクローカルの「実行時の世界」よりも１つ大きいことがわかります。
 
 場合によってはこれを回避する必要があります（たとえば、上記のREPLを実装している場合など）。
@@ -849,6 +850,9 @@ sometimes it can be the best way to express some algorithm.
 Here are a few common design patterns that come up sometimes when using dispatch in this way.
 -->
 ```
+複雑なディスパッチの論理は、パフォーマンスや利便性のためには、必要ありませんが、
+ある種のアルゴリズムを表現するための最善の方法となることがあります。
+そのような用途によく使われるデザインパターンを挙げていきます。
 
 
 `[](### Extracting the type parameter from a super-type)
@@ -861,6 +865,7 @@ Here is the correct code template for returning the element-type `T`
 of any arbitrary subtype of `AbstractArray`:
 -->
 ```
+ここに挙げるのは、`AbstractArray`の任意のサブタイプの要素の型`T`を返す正しいコードのテンプレートです。
 
 
 ```julia
@@ -878,6 +883,11 @@ Another way, which used to be the only correct way before the advent of
 triangular dispatch in Julia v0.6, is:
 -->
 ```
+いわゆる三角ディスパッチを使います。
+`T`が例えば`eltype(Array{T} where T <: Integer)`のような`全合併型`のときには、
+`Any`が返される点に注意してください。（`Base`の中の`eltype`の変形版のような働きをします）
+
+別の方法で、Julia v0.6で三角ディスパッチが使えるようになる以前の唯一正しい方法は、
 
 
 ```julia
@@ -895,10 +905,9 @@ to cases where the parameter `T` would need to be matched more
 narrowly:
 -->
 ```
+下記のような方法も可能で、パラメータ`T`の一致する範囲をもっと狭める必要がある時に
+役立ちます。
 
-Another possibility is the following, which could useful to adapt
-to cases where the parameter `T` would need to be matched more
-narrowly:
 ```julia
 eltype(::Type{AbstractArray{T, N} where {T<:S, N<:M}}) where {M, S} = Any
 eltype(::Type{AbstractArray{T, N} where {T<:S}}) where {N, S} = Any
@@ -913,6 +922,8 @@ eltype(::Type{A}) where {A <: AbstractArray} = eltype(supertype(A))
 One common mistake is to try and get the element-type by using introspection:
 -->
 ```
+よくある間違いとして、イントロスペクション（実行時にオブジェクトの情報を参照・変更すること）を使って要素の型を
+得ることです。
 
 
 ```julia
@@ -924,6 +935,7 @@ eltype_wrong(::Type{A}) where {A<:AbstractArray} = A.parameters[1]
 However, it is not hard to construct cases where this will fail:
 -->
 ```
+しかし、これが失敗する場合を実現するのは難しくありません。
 
 
 ```julia
@@ -937,6 +949,8 @@ but where the element-type is still fully specified, with `T` equal to `Bool`!
 -->
 ```
 
+ここでは、パラメータを持たない`BitVector`を生成しましたが、
+`T`を`Bool`と同等にすると、要素の型を完全に指定することができます。
 
 
 `[](### Building a similar type with a different type parameter)
@@ -954,6 +968,12 @@ There is no general transform of one subtype into another subtype with a differe
 (Quick review: do you see why this is?)
 -->
 ```
+汎化的なコードを作る際に、型の構成を少し変えたオブジェクトを構成する必要が生じて、
+型パラメータも変更する必要が出てくる、といったことがよく起こります。
+例えば、要素の型が任意のある種の抽象型の配列を作り、これを使って特定の要素の型に対する計算を書きたいとします。
+この時実装すべき`AbstractArray{T}`のサブタイプに対するメソッドには、型の変換をどのように計算するか記述しなければなりません。
+パラメータの違うサブタイプどうしに対する一般的な変換はありません。
+(おさらい：どうしてだかわかりますか)
 
 
 ```@raw html
@@ -967,6 +987,12 @@ Here is a basic example usage of them, guaranteeing that `input` and
 `output` are of the same type:
 -->
 ```
+
+これを達成するには、通常`AbstractArray`のサブタイプに２つのメソッドを実装します。
+入力の配列を特定の抽象型`AbstractArray{T, N}` のサブタイプに変換するメソッドと、
+特定の要素型の初期化されていない配列を作るメソッドです。
+例となる実装が、JuliaのBaseライブラリにあります。
+これを使った、`input`と`output`が同じ型になることを保証する基本的な例を挙げます。
 
 
 ```julia
@@ -983,6 +1009,11 @@ Combining [`similar`](@ref) (to make the output array) and [`copyto!`](@ref) (to
 is a generic way to express the requirement for a mutable copy of the input argument:
 -->
 ```
+この拡張に、入力の配列のコピーが必要なアルゴリズムを使う場合、
+もとの入力のエイリアスを戻り値として使うには、[`convert`](@ref)だけでは不十分です。
+ [`similar`](@ref) (出力用の配列を生成する)と[`copyto!`](@ref)（それを入力データで埋める）を組み合わせるのが、
+ 入力の引数の可変なコピーを必要がとする場合の汎化的な表現法です。
+
 
 
 ```julia
@@ -1006,6 +1037,14 @@ while in other cases, this rigor must be resolved manually.
 This dispatching branching can be observed, for example, in the logic to sum two matrices:
 -->
 ```
+様々なレベルのパラメータ引数のリストをディスパッチするには、
+それぞれのディスパッチのレベルを別の関数に分離するのが最善策で有ることがよくあります。
+これは、単一のディスパッチ方式と似ているように聞こえるかもしれませんが、以下に示すように、より柔軟です。
+
+例えば、配列の要素の型によるディスパッチを行なおうとすると、曖昧な状態に陥ることがよくあります。
+この代わりに、まずコンテナの型によるディスパッチを行い、次に再帰的に要素型に対してメソッドを特化させます。
+大抵の場合、アルゴリズムはこの階層的な方式を便利に利用するでしょうが、手動で厳密に解決しなければならないこともあるでしょう。
+こうしたディスパッチの分岐は、２つの行列の和をおこなう場合などで見られます。
 
 
 ```julia
@@ -1036,6 +1075,14 @@ often referred to as a
 ["Holy-trait"](https://github.com/JuliaLang/julia/issues/2345#issuecomment-54537633).
 -->
 ```
+上記の反復するディスパッチの自然な拡張として、型の階層が定義された集合とは無関係に型の集合に対するディスパッチを行う層を追加することがあります。
+そのような集合を構築するには、問題としている型に対する`合併型`を書けばいいですが、
+`合併型`は生成後に変更できないので、この集合は拡張できません。
+しかし、拡張可能な集合は、["Holy-trait"](https://github.com/JuliaLang/julia/issues/2345#issuecomment-54537633)とよくよばれるデザインパターンを使ってプログラム可能です。
+
+
+
+
 
 
 ```@raw html
@@ -1057,6 +1104,20 @@ since the generic definitions + trait classes will enable the system to select t
 Here a toy implementation of `map` illustrating the trait-based dispatch:
 -->
 ```
+このパターンでは、汎化関数の定義を実装します。
+この汎化関数は、各引数が所属可能なトレイトの集合ごとに異なるシングルトンの値(または型)を算出するものです。
+この関数が純粋である場合、通常のディスパッチと比較してパフォーマンス上全く影響はありません。
+
+前のセクションでは、実装の詳細をごまかしていた[`map`](@ref)や[`promote`](@ref)は、共にこのトレイトを使って動作しています。
+
+`map`の実装などで、行列に対して反復を行う場合に、重要な問題は、データに対してどういう順序を使って渡り歩くかということです。
+`AbstractArray`のサブタイプを[`Base.IndexStyle`](@ref)トレイトを使って実装する時、
+他の`map`などの関数は、この情報に基づいて最善のアルゴリズムを選ぶようにディスパッチを行うことができます。
+（[抽象配列インターフェイス](@ref man-interface-array)参照）
+これは、サブタイプそれぞれが独自の`map`の変種の実装を行う必要はないことを意味します。
+というのも、汎化的な定義の`+`トレイトのクラスによって、システムが最速のバージョンを選択できるからです。
+トレイトに基づくディスパッチの解説用に`map`の実装のおもちゃ版を示します。
+
 
 
 ```julia
@@ -1079,6 +1140,11 @@ plus a table of preferred pair-wise promotion rules.
 -->
 ```
 
+このトレイトに基づく方式は、スカラーの`+`に対する[`promote`](@ref)のしくみにも採用されています。
+これに使われる[`promote_type`](@ref)は、２種類の被演算子最適な共通の型を、の与えられた演算から算出して返します。
+これによって、すべての関数に対して、引数の取りうる型の組み合わせすべてに対する実装を行うという問題を、
+それぞれの型から共通の型への変換を実装し、組み合わせごとの望ましい昇格規則の表を作るという、より小さな問題に縮小できます。
+
 
 
 `[](### Output-type computation)
@@ -1099,6 +1165,17 @@ This is often performed by the following steps:
 -->
 ```
 
+トレイトに基づく昇格の議論から次のデザインパターンに移行します。
+行列演算に対する出力要素の型の算出です。
+
+足し算のような原始的な演算に対しては、[`promote_type`](@ref)関数を使って望まれる出力の型を算出します。
+（以前に、`+`を呼び出した時に起こる`promote`の呼び出しでこの動作を見ました）
+
+もっと行列に対する関数が複雑な場合は、期待する型の戻り値を算出するために、もっと複雑ない一連の操作が必要かもしれません。
+これは次のような段階を経てよく実行されます。
+
+
+
 
 ```@raw html
 <!--
@@ -1108,6 +1185,10 @@ This is often performed by the following steps:
 3. Build the output matrix as `similar(R, dims)`, where `dims` are the desired dimensions of the output array.
 -->
 ```
+1.アルゴリズムの中核で行われる操作の集合を表す小さな関数`op`を書く。
+2.計算結果の行列の要素の型`R`を、`promote_op(op, argument_types...)`を使って計算する。
+ここで`argument_types`は`eltype`を入力行列それぞれに適用して算出する。
+3.`similar(R, dims)`によって出力行列を構成する。`dims`は出力行列に望まれる次元とする。
 
 
 ```@raw html
@@ -1115,6 +1196,7 @@ This is often performed by the following steps:
 For a more specific example, a generic square-matrix multiply pseudo-code might look like:
 -->
 ```
+更に具体的な例として、以下のような汎化的な正方行列の掛け算の擬似コードは、以下のようになります。
 
 
 ```julia
@@ -1174,7 +1256,11 @@ This is a common pattern seen when converting from a larger class of types
 to the one specific argument type that is actually supported by the algorithm:
 -->
 ```
+コンパイル時間と検査の複雑さを大幅に減少させる方法に、希望する型への変換と計算を分離することがあります。
+これにより、変換をインラインで最適化し、のこりの大きな核の本体と独立します。
 
+
+型の大きなクラスから実際にアルゴリズムが対応している特定の引数の型に変換する際によく見られるパターンです。
 
 ```julia
 complexfunction(arg::Int) = ...

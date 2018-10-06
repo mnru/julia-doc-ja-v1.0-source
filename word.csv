@@ -144,3 +144,7 @@
 メソッド,facilitate,容易にする、促進する,
 ,specific,特化した、一致する,
 ,catch-all method,全捕捉するメソッド,
+,introspection,イントロスペクション,実行時にオブジェクトの情報を参照して、その情報にさらに変更を加える方法
+,impact,影響,
+,gloss over,ごまかす,
+,traverse,横断する、渡り歩く,
