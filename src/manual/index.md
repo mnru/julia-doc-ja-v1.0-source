@@ -11,7 +11,7 @@
   * [制御フロー](@ref)
   * [変数のスコープ](@ref scope-of-variables)
   * [型](@ref man-types)
-  * [Methods](@ref)
+  * [メソッド](@ref)
   * [Constructors](@ref man-constructors)
   * [Conversion and Promotion](@ref conversion-and-promotion)
   * [Interfaces](@ref)

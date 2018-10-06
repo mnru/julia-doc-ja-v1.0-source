@@ -1,4 +1,5 @@
-# Methods
+`[](# Methods)
+# メソッド
 
 Recall from [Functions](@ref man-functions) that a function is an object that maps a tuple of arguments to a
 return value, or throws an exception if no appropriate value can be returned. It is common for
@@ -41,7 +42,8 @@ for structuring and organizing programs.
     it can be omitted altogether, writing just `meth(arg1,arg2)`, with `this` implied as the receiving
     object.
 
-## Defining Methods
+`[](## Defining Methods)
+## メソッドの定義
 
 Until now, we have, in our examples, defined only functions with a single method having unconstrained
 argument types. Such functions behave just like they would in traditional dynamically typed languages.
@@ -223,7 +225,8 @@ Multiple dispatch together with the flexible parametric type system give Julia i
 abstractly express high-level algorithms decoupled from implementation details, yet generate efficient,
 specialized code to handle each case at run time.
 
-## [Method Ambiguities](@id man-ambiguities)
+`[](## [Method Ambiguities](@id man-ambiguities))
+## [メソッドの曖昧さ](@id man-ambiguities)
 
 It is possible to define a set of function methods such that there is no unique most specific
 method applicable to some combinations of arguments:
@@ -274,7 +277,9 @@ exists, if transiently, until the more specific method is defined.
 In more complex cases, resolving method ambiguities involves a certain
 element of design; this topic is explored further [below](@ref man-method-design-ambiguities).
 
-## Parametric Methods
+`[](## Parametric Methods)
+## パラメータメソッド
+
 
 Method definitions can optionally have type parameters qualifying the signature:
 
@@ -518,14 +523,16 @@ julia> fetch(schedule(t, 1))
 "definition for Int"
 ```
 
-## Design Patterns with Parametric Methods
+`[](## Design Patterns with Parametric Methods)
+## パラメータメソッドのデザインパターン
 
 
 While complex dispatch logic is not required for performance or usability,
 sometimes it can be the best way to express some algorithm.
 Here are a few common design patterns that come up sometimes when using dispatch in this way.
 
-### Extracting the type parameter from a super-type
+`[](### Extracting the type parameter from a super-type)
+### スーパータイプからの型パラメータの抽出
 
 
 Here is the correct code template for returning the element-type `T`
@@ -578,7 +585,8 @@ Here we have created a type `BitVector` which has no parameters,
 but where the element-type is still fully specified, with `T` equal to `Bool`!
 
 
-### Building a similar type with a different type parameter
+`[](### Building a similar type with a different type parameter)
+### 別の型パラメータに似た型の構成
 
 When building generic code, there is often a need for constructing a similar
 object with some change made to the layout of the type, also
@@ -612,7 +620,8 @@ is a generic way to express the requirement for a mutable copy of the input argu
 copy_with_eltype(input, Eltype) = copyto!(similar(input, Eltype), input)
 ```
 
-### Iterated dispatch
+`[](### Iterated dispatch)
+### ディスパッチの反復
 
 In order to dispatch a multi-level parametric argument list,
 often it is best to separate each level of dispatch into distinct functions.
@@ -636,7 +645,9 @@ This dispatching branching can be observed, for example, in the logic to sum two
 +(a::Float64, b::Float64) = Core.add(a, b)
 ```
 
-### Trait-based dispatch
+`[](### Trait-based dispatch)
+### トレイトをもとにしたディスパッチ
+
 
 A natural extension to the iterated dispatch above is to add a layer to
 method selection that allows to dispatch on sets of types which are
@@ -681,7 +692,8 @@ to the much smaller problem of implementing a conversion operation from each typ
 plus a table of preferred pair-wise promotion rules.
 
 
-### Output-type computation
+`[](### Output-type computation)
+### 出力型の算出
 
 The discussion of trait-based promotion provides a transition into our next design pattern:
 computing the output element type for a matrix operation.
@@ -744,7 +756,8 @@ function matmul(a::AbstractMatrix, b::AbstractMatrix)
 end
 ```
 
-### Separate convert and kernel logic
+`[](### Separate convert and kernel logic)
+### 変換とカーネルロジックの分離
 
 One way to significantly cut down on compile-times and testing complexity is to isolate
 the logic for converting to the desired type and the computation.
@@ -762,7 +775,8 @@ matmul(a::T, b::T) = ...
 matmul(a, b) = matmul(promote(a, b)...)
 ```
 
-## Parametrically-constrained Varargs methods
+`[](## Parametrically-constrained Varargs methods)
+## パラメータ制限つきの可変引数メソッド
 
 Function parameters can also be used to constrain the number of arguments that may be supplied
 to a "varargs" function ([Varargs Functions](@ref)).  The notation `Vararg{T,N}` is used to indicate
@@ -797,7 +811,8 @@ would be called only when the number of `indices` matches the dimensionality of 
 When only the type of supplied arguments needs to be constrained `Vararg{T}` can be equivalently
 written as `T...`. For instance `f(x::Int...) = x` is a shorthand for `f(x::Vararg{Int}) = x`.
 
-## Note on Optional and keyword Arguments
+`[](## Note on Optional and keyword Arguments)
+## オプション引数・キーワード引数に関する注記
 
 As mentioned briefly in [Functions](@ref man-functions), optional arguments are implemented as syntax for multiple
 method definitions. For example, this definition:
@@ -831,7 +846,8 @@ Keyword arguments behave quite differently from ordinary positional arguments. I
 they do not participate in method dispatch. Methods are dispatched based only on positional arguments,
 with keyword arguments processed after the matching method is identified.
 
-## Function-like objects
+`[](## Function-like objects)
+## 関数的なオブジェクト
 
 Methods are associated with types, so it is possible to make any arbitrary Julia object "callable"
 by adding methods to its type. (Such "callable" objects are sometimes called "functors.")
@@ -873,7 +889,9 @@ julia> p()
 This mechanism is also the key to how type constructors and closures (inner functions that refer
 to their surrounding environment) work in Julia.
 
-## Empty generic functions
+`[](## Empty generic functions)
+## 空の汎化関数
+
 
 Occasionally it is useful to introduce a generic function without yet adding methods. This can
 be used to separate interface definitions from implementations. It might also be done for the
@@ -885,7 +903,8 @@ function emptyfunc
 end
 ```
 
-## [Method design and the avoidance of ambiguities](@id man-method-design-ambiguities)
+`[](## [Method design and the avoidance of ambiguities](@id man-method-design-ambiguities))
+## [メソッドの設計と曖昧さの回避](@id man-method-design-ambiguities)
 
 Julia's method polymorphism is one of its most powerful features, yet
 exploiting this power can pose design challenges.  In particular, in
@@ -914,7 +933,8 @@ while to think carefully about alternative strategies.
 
 Below we discuss particular challenges and some alternative ways to resolve such issues.
 
-### Tuple and NTuple arguments
+`[](### Tuple and NTuple arguments)
+### タプル・Nタプル引数
 
 `Tuple` (and `NTuple`) arguments present special challenges. For example,
 
@@ -940,7 +960,8 @@ f(x::NTuple{N,Int}) where {N} = 1           # this is the fallback
 f(x::Tuple{Float64, Vararg{Float64}}) = 2   # this requires at least one Float64
 ```
 
-### [Orthogonalize your design](@id man-methods-orthogonalize)
+`[](### [Orthogonalize your design](@id man-methods-orthogonalize))
+### [設計の直交化](@id man-methods-orthogonalize)
 
 When you might be tempted to dispatch on two or more arguments,
 consider whether a "wrapper" function might make for a simpler
@@ -985,7 +1006,8 @@ overflow. The non-exported function `Base.promote_noncircular` can be
 used as an alternative; when promotion fails it will still throw an
 error, but one that fails faster with a more specific error message.
 
-### Dispatch on one argument at a time
+`[](### Dispatch on one argument at a time)
+### 一度に１引数のディスパッチ
 
 If you need to dispatch on multiple arguments, and there are many
 fallbacks with too many combinations to make it practical to define
@@ -1008,7 +1030,8 @@ function `f`. Instead, they have to define specializations for your
 internal methods `_fA` and `_fB`, and this blurs the lines between
 exported and internal methods.
 
-### Abstract containers and element types
+`[](### Abstract containers and element types)
+### 抽象コンテナと要素の型
 
 Where possible, try to avoid defining methods that dispatch on
 specific element types of abstract containers. For example,
@@ -1042,7 +1065,9 @@ define the "band-aid" method
 
 that resolves the ambiguity by brute force.
 
-### Complex method "cascades" with default arguments
+`[](### Complex method "cascades" with default arguments)
+### デフォルトの引数を持った複雑なメソッドの「カスケード」
+
 
 If you are defining a method "cascade" that supplies defaults, be
 careful about dropping any arguments that correspond to potential
