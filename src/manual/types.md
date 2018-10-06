@@ -2181,7 +2181,7 @@ of its argument. Since, as noted above, types are objects, they also have types,
 what their types are:
 -->
 ```
-[`typeof()`](@ref) 関数は、既にこのマニュアルを通して例として使っていますが、引数の型を返します。
+[`typeof()`](@ref) 関数は、既にこのマニュアルを通して例の中で使っていますが、引数の型を返します。
 上述のように、型はオブジェクトであり、それ自体の型もあるので、型に対してその型が何であるかを尋ねることができます。
 
 
@@ -2224,7 +2224,7 @@ supertype. Only declared types (`DataType`) have unambiguous supertypes:
 ```
 `DataType`は自身の型でもあります。
 
-別のある種の型に対する演算としては、[`supertype()`](@ref)があり、型のスーパータイプを示します。
+ある種の型に対する別の演算には、[`supertype()`](@ref)があり、型のスーパータイプを示します。
 宣言型（`DataType`）のみが明確なスーパータイプを持っています：
 
 
@@ -2248,7 +2248,7 @@ If you apply [`supertype`](@ref) to other type objects (or non-type objects), a 
 is raised:
 -->
 ```
-[`supertype()`](@ref) を他の型のオブジェクト（又は型ではないオブジェクト）に適用した場合は、[`MethodError`](@ref) が発生します。
+[`supertype()`](@ref) を他の型のオブジェクト（または、型ではないオブジェクト）に適用した場合は、[`MethodError`](@ref) が発生します。
 
 
 ```jldoctest; filter = r"Closest candidates.*"s
@@ -2269,8 +2269,8 @@ overloading the [`show`](@ref) function.  For example, suppose we define a type 
 complex numbers in polar form:
 -->
 ```
-型のインスタンスがどのように表示されるかを独自に指定したい場合がよくおこります。
-これは、[`show()`](@ref) 関数のオーバーロードによって実現されます。
+型のインスタンスがどのように表示されるかを独自に指定したい場合がよくあります。
+これは、[`show()`](@ref) 関数のオーバーロードによって可能です。
 たとえば、極座標形式で複素数を表す型を定義するとします。
 
 
@@ -2300,12 +2300,13 @@ print the object to a given output object `io` (representing a file, terminal, b
 see [Networking and Streams](@ref)):
 -->
 ```
-この例では、[`Real`](@ref)型の異なる引数をとると、それらを共通の型に昇格することができるような、独自のコンストラクタ関数を追加しました （ [コンストラクタ](@ref man-constructors)と[変換と昇格](@ref conversion-and-promotion)を参照)。
+この例では独自のコンストラクタ関数を追加して、異なる[`Real`](@ref)型の引数をとると、それらを共通の型に昇格できるようにしました
+ （ [コンストラクタ](@ref man-constructors)と[変換と昇格](@ref conversion-and-promotion)を参照)。
 （もちろん、[`Number`](@ref)型と同じように動作させるためには、他にも多くのメソッドを定義する必要があるでしょう
 （例えば、`+`、 `*`、 `one`、 `zero`、昇格のルールなど）。
-デフォルトでは、この型のインスタンスの表示はかなり単純で、型名とフィールド値を知らせるだけの、`Polar{Float64}(3.0,4.0)`のようになります。
+デフォルトでは、この型のインスタンスの表示はかなり単純で、型名とフィールド値を知らせるだけなので、`Polar{Float64}(3.0,4.0)`のようになります。
 
-代わりに`3.0 * exp(4.0im)`のように表示したい場合は、オブジェクトを出力オブジェクト`io`（ファイル、端末、バッファなどを表します。[Networking and Streams](@ref) 参照）に出力する次のメソッドを定義します。
+これに代えて`3.0 * exp(4.0im)`のように表示したい場合は、オブジェクトを出力オブジェクト`io`（ファイル、端末、バッファなどを表します。[ネットワークとストリーム](@ref) 参照）に出力する次のメソッドを定義します。
 
 
 ```jldoctest polartype
@@ -2324,9 +2325,10 @@ format for displaying an object by overloading a three-argument form of `show` t
 -->
 ```
 
-`Polar`オブジェクトの表示をより細かく制御することが可能です。
-特に、冗長な複数行印刷形式は、REPLなどの対話環境で単一のオブジェクトを表示する時に、簡単な単一行形式は、オブジェクトを別の（配列などの）オブジェクトの一部として表示する時にと 、両方を行いたい場合があります。
-デフォルトでは、`show(io, z)`関数が両方の場合に呼び出されますが、ユーザーが定義した**別の**複数行の形式を表示することもできます。そのためには、3引数の`show`関数で、2番目の引数に、`text/plain`MIMEタイプ（[Multimedia I/O](@ref)参照）をとるものをオーバーロードします。例えば、
+`Polar`オブジェクトの表示をさらに細かく制御することが可能です。
+特に、冗長な複数行印刷形式は、REPLなどの対話環境で単一のオブジェクトを表示する場合に、簡単な単一行形式は、オブジェクトを別の（配列などの）オブジェクトの一部として表示する場合にと、両方を行いたい場合があります。
+デフォルトでは、`show(io, z)`関数がどちらの場合にも呼び出されますが、ユーザーが定義した **別の** 複数行の形式を表示することもできます。
+そのためには、３引数の`show`関数で、２番目の引数に、`text/plain`MIMEタイプ（[Multimedia I/O](@ref)参照）をとるものをオーバーロードします。例えば、
 
 
 ```jldoctest polartype
@@ -2339,7 +2341,7 @@ julia> Base.show(io::IO, ::MIME"text/plain", z::Polar{T}) where{T} =
 (Note that `print(..., z)` here will call the 2-argument `show(io, z)` method.) This results in:
 -->
 ```
-（ここでは、`print(..., z)`は、2引数の`show(io, z)`メソッドを呼び出すことに注意してください）。この結果こうなります。
+（ここでは、`print(..., z)`は、２引数の`show(io, z)`メソッドを呼び出すことに注意してください）。この結果は以下のようになります。
 
 
 ```jldoctest polartype
@@ -2369,11 +2371,11 @@ we can define formatted HTML display of `Polar` objects, with superscripts and i
 単一行の`show(io, z)`形式は、依然として、`Polar`の値の配列に使用されています。
 技術的には、REPLが、`display(z)`を呼び出して、実行結果の一行を表示します。
 冗長な複数行印刷形式は、`show(STDOUT, MIME("text/plain"), z)`が 、簡単な単一行形式は、`show(STDOUT, z)`がそれぞれデフォルトです。
-しかし、新しいマルチメディアディスプレイハンドラを定義する場合を除いて（[Multimedia I/O](@ref) 参照）、新たに[`display()`](@ref)メソッドを定義**すべきではありません**。
+しかし、新しいマルチメディアディスプレイハンドラを定義する場合を除いて（[Multimedia I/O](@ref) 参照）、新たに[`display()`](@ref)メソッドを定義 **すべきではありません** 。
 
 
 さらに、`show`メソッドを他のMIMEタイプ向けに定義して、対応している環境（例えばIJulia）では、オブジェクトをよりリッチな表示（HTML、画像など）にすることもできます。
-たとえば、`Polar`書式付きのHTML表示を定義して、上付き文字と斜体を使うには、次のようにします。
+たとえば、`Polar`オブジェクトに対して書式付きのHTML表示を定義し、上付き文字と斜体を使うには、次のようにします。
 
 
 ```jldoctest polartype
@@ -2389,7 +2391,7 @@ display, but you can call `show` manually to get HTML output if you want:
 -->
 ```
 
-`Polar`オブジェクトは、対応する環境ではHTMLを使用して自動的に表示されますが、必要なら手動で`show`を呼び出して、HTML出力することもできます。
+`Polar`オブジェクトは、対応している環境ではHTMLを使用して自動的に表示されますが、必要なら手動で`show`を呼び出して、HTML出力することもできます。
 
 
 ```jldoctest polartype
@@ -2411,6 +2413,12 @@ representation](@ref)) which takes the square of a specific instance of our `Pol
 -->
 ```
 
+経験から言うと、一行の`show`メソッドは、表示されたオブジェクトを生成する、Juliaとして有効な式を、表示すべきです。
+この`show`メソッドが、中置演算子を含む時、たとえば、乗法の演算子(`*`)が上述の`Polar`の一行の`show`メソッドに表れる時は、
+別のオブジェクトの一部として印刷される場合は、正しく解析されないかもしれません。
+この事例として、式オブジェクト([プログラムの表現](@ref)を参照)で`polar`型の具体的なインスタンスの二乗を考えます。
+
+
 
 ```jldoctest polartype
 julia> a = Polar(3, 4.0)
@@ -2430,6 +2438,11 @@ z::Polar, indent::Int, precedence::Int)`, which is called internally by the expr
 printing:
 -->
 ```
+`^`は`*`より優先順位が高いため、([演算子の優先順位と結合則(@ref)参照])、この式は`a^2`を忠実に表現していません。
+`(3.0 * 1xp(4.0im)) ^ 2`になるはずです。
+この問題を解決するために、独自のメソッド`Base.show_unquoted(io::IO,z::Polar, indent::Int, precedence::Int)`を作ります。
+これは表示の際に、内部的に式オブジェクトから呼びされます。
+
 
 ```jldoctest polartype
 julia> function Base.show_unquoted(io::IO, z::Polar, ::Int, precedence::Int)
@@ -2455,6 +2468,10 @@ omit them when printing:
 -->
 ```
 
+上で定義されたメソッドは、呼び出す演算子の優先順位が乗法以上の時に、括弧を付け足します。
+この検査によって、括弧なしでも、正しく解析される時は省略して表示できます。
+
+
 ```jldoctest polartype
 julia> :($a + 2)
 :(3.0 * exp(4.0im) + 2)
@@ -2473,6 +2490,10 @@ when the `:compact` property is set to `true`, falling back to the long
 representation if the property is `false` or absent:
 -->
 ```
+場合によっては、文脈によって`show`メソッドの挙動を調整できると有益なことがあります。
+これは、[`IOContext`](@ref)型によって実現可能で、ラップしたIOストリームと一緒に文脈の特性の受け渡しができます。
+例えば、`:compact`プロパティを`true`にすると、短い表現になり、`false`や指定なしだと、かわりに長い表現になるというように`show`メソッドを定義することができます。
+
 
 ```jldoctest polartype
 julia> function Base.show(io::IO, z::Polar)
@@ -2491,6 +2512,8 @@ object with the `:compact` property set. In particular, this is the case when pr
 arrays with multiple columns (where horizontal space is limited):
 -->
 ```
+この新しい簡潔な表現は、`:compact`プロパティを持つ`IOContext`をIOストリームとして渡した時に利用可能です。
+特に、配列を何段かで表示し、（水平方向の幅が制限されている）時に役立ちます。
 
 
 ```jldoctest polartype
@@ -2508,6 +2531,7 @@ See the [`IOContext`](@ref) documentation for a list of common properties which 
 to adjust printing.
 -->
 ```
+[`IOContext`](@ref)の文書では、表示の調整に利用できる共通のプロパティのリストを参照できます。
 
 `[](## "Value types")
 ## "値型"
@@ -2528,7 +2552,7 @@ for cases where you don't need a more elaborate hierarchy.
 -->
 ```
 
-Juliaでは、`true` や `false`のような**値**によって、ディスパッチすることができません。
+Juliaでは、`true` や `false`のような **値** によって、ディスパッチすることができません。
 しかし、パラメータ型に対してはディスパッチができて、その型パラメータとして「プレーンビット」値（型、シンボル、整数、浮動小数点数、タプルなど）を使うことができます。
 よくある例として、`Array{T,N}`で使われる次元のパラメータがあり、この場合`T`は型（ [`Float64`](@ref)など）ですが、`N`はただの`Int`型です。
 

@@ -138,4 +138,5 @@
 ,in-place,その場で,
 ,bit type,プリミティブ型,bit typeはver0.6以降primitive typeに改名したため
 ,saliet,目立った,
-,umbrella type,包括型,
+,rule of thumb,経験から言うと,
+,specific,具体的な,
