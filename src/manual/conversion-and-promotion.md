@@ -11,8 +11,9 @@ types and apply it to functions besides built-in mathematical operators. Traditi
 languages fall into two camps with respect to promotion of arithmetic arguments:
 -->
 ```
-Juliaには、[整数と浮動小数点数](@ref)、[算術処理と基本的な関数](@ref)、[型](@ref man-types)、[メソッド](@ref)、その他のさまざまな章に記述されているように、算術演算子の引数を共通の型に昇格するシステムが備わっています。
-この章では、この昇格システムが動作するしくみや、昇格システムを新しい型に拡張して標準装備の算術演算子や関数でも動作させる方法について説明します。通常、プログラミング言語は算術演算の引数がどのように昇格するかによって、2つの陣営に分類されています。
+[整数と浮動小数点数](@ref)、[算術処理と基本的な関数](@ref)、[型](@ref man-types)、[メソッド](@ref)、その他のさまざまなセクションに記述しているように、Juliaには算術演算子の引数を共通の型に昇格するシステムが備わっています。
+このセクションでは、この昇格システムが動作するしくみや、昇格システムを新しい型に拡張して、組込みの算術演算子や関数でも動作させる方法について説明します。
+従来、プログラミング言語は算術演算の引数がどのように昇格するかによって、2つの陣営に分類されています。
 
 
 ```@raw html
@@ -29,8 +30,12 @@ Juliaには、[整数と浮動小数点数](@ref)、[算術処理と基本的な
     part of specifications and implementations for such languages.
 -->
 ```
- *  **標準装備の算術型と演算子の自動昇格** ほとんどの言語では、標準装備の数値型が、`+`、 `-`、`*`、`/`などの中置記法の算術演算子の被演算子として使われるときは、自動的に共通の型に昇格してから、演算結果が生成されます。少し例を挙げると、 C、Java、Perl、Pythonなどはすべて、`1 + 1.5`の合計を、浮動小数点値の`2.5`として正しく計算することができますが、`+`の被演算子の一方は整数です。こういうシステムは便利であり、通常はプログラマにはまったく見えないように慎重に設計されています。このような式を書くときに昇格が起こっていると意識する人はほとんどいませんが、コンパイラやインタプリタは、足し算を行う前に変換を必ずおこないます。整数と浮動小数点数はそのままでは足せないからです。このような自動変換の複雑な規則は、必然的にこの陣営の言語では仕様や実装の一部となります。
-
+  *  **組込みの数値型や算術演算子の自動昇格** 
+  ほとんどの言語では、組込みの数値型が、`+`、 `-`、`*`、`/`などの中置記法の算術演算の被演算子として使われるときは、自動的に共通の型に昇格してから、計算結果が算出されます。
+  少し例を挙げると、 C、Java、Perl、Pythonなどはすべて、`1 + 1.5`の合計を、浮動小数点値の`2.5`として正しく計算することができますが、`+`の被演算子の一方は整数です。
+  こういうシステムは便利であり、通常はプログラマには、ほとんど見えないように慎重に設計されています。
+  このような式を書くときに昇格が起こっていると意識する人はほとんどいませんが、コンパイラやインタプリタは、足し算を行う前に変換を必ずおこないます。
+  整数と浮動小数点数はそのままでは足せないからです。このような自動変換の複雑な規則は、必然的にこの陣営の言語では仕様や実装の一部となります。
 
 ```@raw html
 <!--
@@ -45,10 +50,12 @@ Juliaには、[整数と浮動小数点数](@ref)、[算術処理と基本的な
 -->
 ```
 
-   * **非自動昇格**この陣営にはAdaとMLなどの非常に「厳密」な静的に型付けされた言語があります。こういった言語では、すべての変換をプログラマが明示的に指定する必要があります。したがって、例に挙げた`1 + 1.5`という式は、AdaやMLでは共にコンパイルエラーになります。これを避けるには`real(1) + 1.5`のように書いて、足し算を実行する前に整数`1`を浮動小数点数に明示的に変換する必要があります。しかし、常に明示的に変換しなければならないのは不便なので、Adaでさえもある程度の自動変換が行われます。整数リテラルは期待されるように整数型に自動的に昇格され、浮動小数点リテラルも同様に適切な浮動小数点型に昇格されます。
+   * **非自動昇格**この陣営にはAdaとMLなどの非常に「厳密」な静的に型付けされた言語があります。こういった言語では、すべての変換をプログラマが明示的に指定する必要があります。したがって、例に挙げた`1 + 1.5`という式は、AdaやMLでは共にコンパイルエラーが生じます。これを避けるには`real(1) + 1.5`のように書いて、足し算を実行する前に整数`1`を浮動小数点数に明示的に変換する必要があります。しかし、常に明示的に変換しなければならないのは不便なので、Adaでさえもある程度の自動変換が行われます。整数リテラルは想定通り整数型に自動的に昇格され、浮動小数点リテラルも同様に適切な浮動小数点型に昇格されます。
 
 
 
+```@raw html
+<!--
 In a sense, Julia falls into the "no automatic promotion" category: mathematical operators are
 just functions with special syntax, and the arguments of functions are never automatically converted.
 However, one may observe that applying mathematical operations to a wide variety of mixed argument
@@ -61,14 +68,18 @@ promotion rules, and then invoke a specialized implementation of the operator in
 the resulting values, now of the same type. User-defined types can easily participate in this
 promotion system by defining methods for conversion to and from other types, and providing a handful
 of promotion rules defining what types they should promote to when mixed with other types.
+-->
+```
 
+ある意味、Juliaは「非自動昇格」の陣営に分類されるでしょう。
 Juliaでは、算術演算子は特殊な構文を持つ関数に過ぎず、関数の引数は決して自動的に変換されません。
-その意味では、Juliaは「非自動昇格」の陣営に分類されるでしょう。
-しかし、様々な型の混合した引数に算術演算を適用することは、多相的な多重ディスパッチの極端な事例に過ぎません。これは型によるディスパッチをおこなうJuliaのシステムに非常に適しています。
-算術演算における被演算子の「自動」昇格は、特殊な適用がおきただけです。Juliaには、算術演算子を全捕捉するディスパッチ規則が事前に定義されており、被演算子の型の組み合わせに対して特化した実装が存在しないときに呼び出されます。
-この全捕捉規則は、まずユーザーが定義できる昇格規則を利用してすべての被演算子を共通の型に昇格し、こうして同一の型となった演算結果の型に特化した演算子の実装を呼び出します。
+しかし、様々な型の混合した引数に算術演算を適用することは、多相的な多重ディスパッチの極端な事例に過ぎません。
+これは型によるディスパッチをおこなうJuliaのシステムに非常に適しています。
+算術演算でおこる被演算子の「自動」昇格は、特殊な適用がおこるだけです。
+Juliaには、算術演算子を全捕捉するディスパッチ規則が事前に定義されており、被演算子の型の組み合わせに対して特化した実装が存在しないときに呼び出されます。
+この全捕捉規則は、まずユーザーの定義可能な昇格規則を利用してすべての被演算子を共通の型に昇格し、こうして同一となった型に特化した演算子の実装を呼び出し、演算結果を算出します。
 ユーザーの定義した型もこの昇格システムに簡単に追加できます。
-ユーザー定義型に対して、他の型との変換メソッドを相互に定義し、他の型が混在する場合にどの型に昇格するかを定義する少数の昇格規則を決めてやればいいのです。
+ユーザー定義型に対して、他の型と相互に変換するメソッドを定義し、他の型が混在する場合にどの型に昇格するかを定義する少数の昇格規則を決めてやればいいのです。
 
 
 `[](## Conversion)
@@ -89,10 +100,17 @@ a value to convert to that type. The returned value is the value converted to an
 The simplest way to understand this function is to see it in action:
 -->
 ```
-値をさまざまな型に変換するのは、`convert`関数です。
+
+特定の型`T`の値を得る標準的な方法は、型のコンストラクタ`T(x)`を呼び出すことです。
+しかし、値をある型から別の型へ、プログラマが明示的に指定しなくても、便利に変換できる場合があります。
+例として、配列に値を代入する場合があります。
+`A`が`Vector{Float64}`の時、`A[1] = 2`という式は、自動的に値`2`を`Int`から`Float64`に変換し、その結果を配列に格納します。
+これは、関数`convert`を通じて行われます。
+
+
 この`convert`関数は通常、2つの引数をとります。1番目は型オブジェクトで、2番目はその型に変換される値です。
 戻り値は指定された型のインスタンスに変換された値です。
-この関数を理解する最も簡単な方法は、実際の動作を確認することです。
+この関数を理解する最も簡単な方法は、実際の動作を見ることです。
 
 
 ```jldoctest
@@ -131,7 +149,8 @@ Conversion isn't always possible, in which case a no method error is thrown indi
 doesn't know how to perform the requested conversion:
 -->
 ```
-変換は常に可能であるとは限りません。そんな時は、ノーメソッドエラーが投げられて、`convert`関数は要求された変換の実行方法を知らないことを通知します。
+変換は常に可能であるとは限りません。
+そんな時は、メソッドがないことを示すエラーが投げられ、`convert`関数が要求された変換の実行方法を知らないことを通知します。
 
 
 ```jldoctest
@@ -149,13 +168,20 @@ of numbers, and only a very limited subset of them are. Therefore in Julia the d
 function must be used to perform this operation, making it more explicit.
 -->
 ```
-言語の中には文字列を解析して数値とみなしたり、書式付きの数値を変換して文字列とみなしたりするものがありますが、（多くの動的言語では自動的に変換が行われます）、Juliaはそうではありません。文字列の中には数値として解析できるものもありますが、ほとんどの文字列は数値としては妥当な表現ではなく、非常に限られた一部のみです。そのため、Juliaでは、こういった操作は、専用の関数`parse()` を使って明示的に行う必要があります。
+
+言語の中には文字列を解析して数値とみなしたり、書式付きの数値を変換して文字列とみなしたりするものがありますが、
+（多くの動的言語では自動的に変換までもが行われます）、Juliaはそうではありません。
+文字列の中には数値として解析できるものもありますが、ほとんどの文字列は数値の有効な表現ではなく、
+非常に限られた一部が当てはまるだけです。
+そのため、Juliaでは、こういった操作は、専用の関数`parse()` を使って明示的に行う必要があります。
 
 
 `[](### When is `convert` called?)
 ### `変換`が呼ばれるのはいつ?
 
 
+```@raw html
+<!--
 The following language constructs call `convert`:
 
   * Assigning to an array converts to the array's element type.
@@ -164,10 +190,24 @@ The following language constructs call `convert`:
   * Assigning to a variable with a declared type (e.g. `local x::T`) converts to that type.
   * A function with a declared return type converts its return value to that type.
   * Passing a value to `ccall` converts it to the corresponding argument type.
+-->
+```
+
+以下のような言語の構文では`convert`が呼び出されます。
+
+  * 配列を配列の要素の型に変換して代入する。
+  * オブジェクトのフィールドを宣言したフィールドの型に変換して代入する。
+  * `new`を使ったオブジェクトの生成で宣言したオブジェクトの型に変換する。
+  * 変数の代入で型を宣言し(例えば `local x::T`) その型に変換する。
+  * 関数で戻り値の型を宣言し、戻り値をその型に変換する。
+  * `ccall`に値を渡し、対応する引数の型に変換する。
+
 
 `[](### Conversion vs. Construction)
 ### 変換 vs. 生成
 
+```@raw html
+<!--
 Note that the behavior of `convert(T, x)` appears to be nearly identical to `T(x)`.
 Indeed, it usually is.
 However, there is a key semantic difference: since `convert` can be called implicitly,
@@ -178,24 +218,53 @@ It is also usually lossless; converting a value to a different type and back aga
 should result in the exact same value.
 
 There are four general kinds of cases where constructors differ from `convert`:
+-->
+```
+注意点があります。
+`convert(T, x)`の挙動は`T(x)`とほとんど同じで、実際に大抵の場合同じです。
+しかし、セマンティック上の重要な違いがあります。
+`convert`は暗黙裏に呼び出されるので、このメソッドの使用は、「安全」で「驚かせない」場合のみに制限されます。
+`convert`は、基本的には同じ種類の表現どうしの間で変換を行います。
+（例えば、数字の異なる表現や文字列の異なるエンコーディングなど）
+また、通常は損失は起こりません。別の型に変換してから元に戻すと元の値ちょうど等しい値に戻ります。
+
+コンストラクタと`convert`が異なる４種類の一般の場合があります。
+
 
 `[](#### Constructors for types unrelated to their arguments)
 #### 引数と無関係な型のコンストラクタ
 
+```@raw html
+<!--
 Some constructors don't implement the concept of "conversion".
 For example, `Timer(2)` creates a 2-second timer, which is not really a
 "conversion" from an integer to a timer.
+-->
+```
+コンストラクタの中には、「変換」という概念を実装していないものがあります。
+例えば、`Timer(2)`は２秒のタイマーを生成し、実際に整数をタイマーに「変換する」わけではありません。
+
 
 `[](#### Mutable collections)
 #### 可変コレクション
 
+```@raw html
+<!--
 `convert(T, x)` is expected to return the original `x` if `x` is already of type `T`.
 In contrast, if `T` is a mutable collection type then `T(x)` should always make a new
 collection (copying elements from `x`).
+-->
+```
+
+`convert(T, x)`は`x`が既に型`T`である時、元の`x`を返しますが、
+`T`が可変コレクションの場合、`T`は常に新しいコレクションを生成します。（`x`の要素をコピーします）
+
 
 `[](#### Wrapper types)
 #### ラッパー型
 
+```@raw html
+<!--
 For some types which "wrap" other values, the constructor may wrap its argument inside
 a new object even if it is already of the requested type.
 For example `Some(x)` wraps `x` to indicate that a value is present (in a context
@@ -204,16 +273,34 @@ However, `x` itself might be the object `Some(y)`, in which case the result is
 `Some(Some(y))`, with two levels of wrapping.
 `convert(Some, x)`, on the other hand, would just return `x` since it is already
 a `Some`.
+-->
+```
+他の値を「ラップする」型では、コンストラクタは引数を新しいオブジェクトの中にラップします。
+引数が既に要求された型であった場合でさえもです。
+例えば、`Some(x)`は`x`をラップし、値が存在することを（結果が`Some`か`nothing`になるという文脈で）示します。
+しかし、`x`自体が`Some(y)`出会った場合、結果は`Some(Some(y))`となり、二重にラップされます。
+一方`convert(Some, x)`は単なる`x`を返します。`x`が既に`Some`だったからです。
+
+
 
 `[](#### Constructors that don't return instances of their own type)
 #### 自身と同じ型のインスタンスを返さないコンストラクタ
 
+```@raw html
+<!--
 In *very rare* cases it might make sense for the constructor `T(x)` to return
 an object not of type `T`.
 This could happen if a wrapper type is its own inverse (e.g. `Flip(Flip(x)) === x`),
 or to support an old calling syntax for backwards compatibility when a library is
 restructured.
 But `convert(T, x)` should always return a value of type `T`.
+-->
+```
+**非常に稀に** コンストラクタ`T(x)`が型が`T`ではないオブジェクトを正常であっても返す場合があります。
+これは、ラッパーの型が自身の逆写像(つまり`Flip(Flip(x)) === x`)だったり、
+ライブラリが再構成された時に、後方互換性のために、古い構文が呼び出しに対応したりする場合に起こります。
+しかし、`convert(T, x)`は常に型`T`の値を返します。
+
 
 `[](### Defining New Conversions)
 ### 新しい変換の定義
