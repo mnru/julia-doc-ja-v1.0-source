@@ -316,8 +316,10 @@ constructor.
 Such a definition might look like this:
 -->
 ```
-
-新しく変換を定義するには、`convert()`に新たなメソッドを加えるだけです。それがすべてです。たとえば、実数をブール値に変換するメソッドは次のとおりです。
+新しい型を定義する時は、まず、すべての型を生成する方法を、コンストラクタとして定義すべきです。
+暗黙の変換が有用だとわかり、コンストラクタが上記の「安全」の条件を満たす時は`convert`メソッドを追加しても構いません。
+普通は、メソッドはとても単純です。適切なコンストラクタを呼ぶだけでいいからです。
+そういった定義は、こんな感じになります。
 
 
 ```julia
@@ -341,8 +343,7 @@ already know its value without referring to an argument name.
 最初の引数の構文に注目してください。
 `::`という記号の前にあるはずの引数名は省略され、型だけが指定されています。
 これはJuliaの関数の構文で、引数の型は指定するけれども、引数の値は関数本体でまったく使わない時に用います。
-この例では、型はシングルトンであるため、その値を関数本体内で使う理由がありません。
-このメソッドを呼び出すと、数値を1や0と比較して、真偽値を決定します。
+この例では、型はシングルトンであるため、引数の名前で参照しなくてもその値がわかります。
 
 ```@raw html
 <!--
@@ -352,22 +353,41 @@ For example, this definition states that it's valid to `convert` any `Number` ty
 any other by calling a 1-argument constructor:
 -->
 ```
+ある種の抽象型のインスタンスすべては、デフォルトでは「十分似ている」とみなされて、
+JuliaのBaseライブラリの中で普遍的な`convert`が定義されています。
+例えば、任意の`Number`型から他の`Number`型への有効な`convert`の定義を、
+１引数のコンストラクタを呼び出すことによって行っています。
+
 
 
 ```julia
 convert(::Type{T}, x::Number) where {T<:Number} = T(x)
 ```
 
+```@raw html
+<!--
 This means that new `Number` types only need to define constructors, since this
 definition will handle `convert` for them.
 An identity conversion is also provided to handle the case where the argument is
 already of the requested type:
+-->
+```
+
+これが意味するのは、新しい`Number`型にはコンストラクタを定義するだけ良いということです。
+`convert`の定義が扱うのは、コンストラクタだけだからです。
+恒等変換も引数がすでに要望される型である時に扱えます。
+
 
 ```julia
 convert(::Type{T}, x::T) where {T<:Number} = x
 ```
 
+```@raw html
+<!--
 Similar definitions exist for `AbstractString`, `AbstractArray`, and `AbstractDict`.
+-->
+```
+同様の定義が`AbstractString`、`AbstractArray`、`AbstractDict`に存在します。
 
 `[](## Promotion)
 ## 昇格
