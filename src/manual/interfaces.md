@@ -1,12 +1,25 @@
-# Interfaces
+`[](# Interfaces)
+# インターフェイス
 
+```@raw html
+<!--
 A lot of the power and extensibility in Julia comes from a collection of informal interfaces.
  By extending a few specific methods to work for a custom type, objects of that type not only
 receive those functionalities, but they are also able to be used in other methods that are written
 to generically build upon those behaviors.
+-->
+```
 
-## [Iteration](@id man-interface-iteration)
+Juliaの力と拡張性は手軽なインターフェースの集まりに由来します。
+特定のメソッドを独自の型でも動作するように拡張すると、その型のオブジェクトで動作するだけでなく、
+汎化的に記述された他のメソッドから利用することができます。
 
+
+`[](## [Iteration](@id man-interface-iteration))
+## [イテレーション](@id man-interface-iteration)
+
+```@raw html
+<!--
 | Required methods               |                        | Brief description                                                                     |
 |:------------------------------ |:---------------------- |:------------------------------------------------------------------------------------- |
 | `iterate(iter)`                |                        | Returns either a tuple of the first item and initial state or [`nothing`](@ref) if empty        |
@@ -30,6 +43,11 @@ to generically build upon those behaviors.
 | `HasEltype()`                                | `eltype(IterType)` |
 | `EltypeUnknown()`                            | (*none*)           |
 
+-->
+```
+
+```@raw html
+<!--
 Sequential iteration is implemented by the [`iterate`](@ref) function. Instead
 of mutating objects as they are iterated over, Julia iterators may keep track
 of the iteration state externally from the object. The return value from iterate
@@ -39,6 +57,20 @@ and is generally considered an implementation detail private to the iterable obj
 
 Any object that defines this function is iterable and can be used in the [many functions that rely upon iteration](@ref lib-collections-iteration).
 It can also be used directly in a [`for`](@ref) loop since the syntax:
+-->
+```
+
+順次実行される繰返し処理は、[`start()`](@ref), [`done()`](@ref), [`next()`] (@ref) のメソッドをつかって実装されています。
+Juliaでは、繰返し処理の状態の追跡は、この3つのメソッドを使ってオブジェクトの外部から行われ、処理の行われるオブジェクトには変更を加えません。
+この`start(iter)`メソッドは、イテラブルオブジェクト`iter`の初期状態を返し、
+その状態は`done(iter, state)`、`next(iter, state)`と順に渡されます。
+`done(iter, state)`は残りの要素があるかどうかを検査し、`next(iter, state)`は現在の要素と更新された`state`オブジェクトを含むタプルを返します。
+`state`オブジェクトは何でも構いませんが、通常はイテラブルオブジェクト内でプライベートな実装の詳細を示すものでしょう。
+
+これらの3つのメソッドが定義されたオブジェクトはすべてイテラブルであり、[繰返しを使う多数の関数]（@ ref lib-collections-iteration）で使用できます。
+また以下のような構文で`for`ループ内で直接使用することもできます。
+
+
 
 ```julia
 for i in iter   # or  "for i = iter"
@@ -46,7 +78,13 @@ for i in iter   # or  "for i = iter"
 end
 ```
 
+```@raw html
+<!--
 is translated into:
+-->
+```
+
+上記の構文は以下のように変換されます。
 
 ```julia
 next = iterate(iter)
@@ -57,7 +95,12 @@ while next !== nothing
 end
 ```
 
+```@raw html
+<!--
 A simple example is an iterable sequence of square numbers with a defined length:
+-->
+```
+簡単な例は、イテラブルな長さの決まった平方数の数列です。
 
 ```jldoctest squaretype
 julia> struct Squares
@@ -67,8 +110,15 @@ julia> struct Squares
 julia> Base.iterate(S::Squares, state=1) = state > S.count ? nothing : (state*state, state+1)
 ```
 
+```@raw html
+<!--
 With only [`iterate`](@ref) definition, the `Squares` type is already pretty powerful.
 We can iterate over all the elements:
+-->
+```
+[`iterate`](@ref) の定義だけでも、`Squares`型はすでにかなり強力です。
+すべての要素に対する繰り返し処理を実行できます。
+
 
 ```jldoctest squaretype
 julia> for i in Squares(7)
@@ -83,9 +133,15 @@ julia> for i in Squares(7)
 49
 ```
 
+```@raw html
+<!--
 We can use many of the builtin methods that work with iterables,
 like [`in`](@ref), or [`mean`](@ref) and [`std`](@ref) from the
 `Statistics` standard library module:
+-->
+```
+[`in()`](@ref), [`mean()`](@ref), [`std()`](@ref) のような多くの組込みのメソッドがイテラブルオブジェクトで動作します。
+
 
 ```jldoctest squaretype
 julia> 25 in Squares(10)
@@ -100,11 +156,20 @@ julia> std(Squares(100))
 3024.355854282583
 ```
 
+```@raw html
+<!--
 There are a few more methods we can extend to give Julia more information about this iterable
 collection.  We know that the elements in a `Squares` sequence will always be `Int`. By extending
 the [`eltype`](@ref) method, we can give that information to Julia and help it make more specialized
 code in the more complicated methods. We also know the number of elements in our sequence, so
 we can extend [`length`](@ref), too:
+-->
+```
+さらに、対象とするイテラブルコレクションに関する詳しい情報を与えるために、拡張して使うメソッドがJuliaにはいくつかあります。
+`Squares`の数列の要素は常に`Int`であることがわかっています。
+ [`eltype()`](@ref)メソッドを拡張して、この情報をJuliaに渡すと、もっと複雑なメソッドでも、もっと型に特化したコードを作成するのに役立てることができます。
+シーケンスの要素数もわかっているので[`length()`](@ref)も拡張することもできます。
+
 
 ```jldoctest squaretype
 julia> Base.eltype(::Type{Squares}) = Int # Note that this is defined for the type
@@ -112,8 +177,16 @@ julia> Base.eltype(::Type{Squares}) = Int # Note that this is defined for the ty
 julia> Base.length(S::Squares) = S.count
 ```
 
+```@raw html
+<!--
 Now, when we ask Julia to [`collect`](@ref) all the elements into an array it can preallocate a `Vector{Int}`
 of the right size instead of blindly [`push!`](@ref)ing each element into a `Vector{Any}`:
+-->
+```
+
+ここまでくれば、Juliaで、 すべての要素を[`collect()`](@ref) を使って配列化する際に、
+`Vector{Int}`のように 正しいサイズに事前に割り当てることができます。[`push!`](@ref)を使って盲目的に各要素を`Vector{Any}`におしこまなくてもよいのです。
+
 
 ```jldoctest squaretype
 julia> collect(Squares(4))
@@ -124,9 +197,17 @@ julia> collect(Squares(4))
  16
 ```
 
+```@raw html
+<!--
 While we can rely upon generic implementations, we can also extend specific methods where we know
 there is a simpler algorithm. For example, there's a formula to compute the sum of squares, so
 we can override the generic iterative version with a more performant solution:
+-->
+```
+
+汎化的な実装のまま使うこともできますが、もっと単純なアルゴリズムがあると分かっている場合は、特化したメソッドに拡張することもできます。
+たとえば、平方和を算出する公式があれば、汎化的な繰返しをもっと効率的な解法で上書きすることができます。
+
 
 ```jldoctest squaretype
 julia> Base.sum(S::Squares) = (n = S.count; return n*(n+1)*(2n+1)÷6)
@@ -135,17 +216,30 @@ julia> sum(Squares(1803))
 1955361914
 ```
 
+```@raw html
+<!--
 This is a very common pattern throughout Julia Base: a small set of required methods
 define an informal interface that enable many fancier behaviors. In some cases, types will want
 to additionally specialize those extra behaviors when they know a more efficient algorithm can
 be used in their specific case.
+-->
+```
 
+これは、Julia標準ライブラリ全体に非常によくあるパターンです。
+少数の必須メソッドによって仮実装のインターフェイスが定義され、多くの便利な動作が利用可能となっています。
+もっと効率的なアルゴリズムを使用できる場合には、さらに型に特化させてその動作を行うことができます。
+
+```@raw html
+<!--
 It is also often useful to allow iteration over a collection in *reverse order*
 by iterating over [`Iterators.reverse(iterator)`](@ref).  To actually support
 reverse-order iteration, however, an iterator
 type `T` needs to implement `iterate` for `Iterators.Reverse{T}`.
 (Given `r::Iterators.Reverse{T}`, the underling iterator of type `T` is `r.itr`.)
 In our `Squares` example, we would implement `Iterators.Reverse{Squares}` methods:
+-->
+```
+
 
 ```jldoctest squaretype
 julia> Base.iterate(rS::Iterators.Reverse{Squares}, state=rS.itr.count) = state < 1 ? nothing : (state*state, state-1)
@@ -158,18 +252,33 @@ julia> collect(Iterators.reverse(Squares(4)))
   1
 ```
 
-## Indexing
+`[](## Indexing)
+## インデックスづけ
 
+```@raw html
+<!--
 | Methods to implement | Brief description                |
 |:-------------------- |:-------------------------------- |
 | `getindex(X, i)`     | `X[i]`, indexed element access   |
 | `setindex!(X, v, i)` | `X[i] = v`, indexed assignment   |
 | `firstindex(X)`      | The first index                  |
 | `lastindex(X)`        | The last index, used in `X[end]` |
+-->
+```
 
+
+```@raw html
+<!--
 For the `Squares` iterable above, we can easily compute the `i`th element of the sequence by squaring
 it.  We can expose this as an indexing expression `S[i]`. To opt into this behavior, `Squares`
 simply needs to define [`getindex`](@ref):
+-->
+```
+
+上記の`Squares`イテラブルでは、数列の`i`番目は、2乗すれば簡単に算出できます。
+`S[i]`というインデックス式で、これを公開することができます。
+`Squares` に[`getindex()`](@ref) を定義すればいいだけです。
+
 
 ```jldoctest squaretype
 julia> function Base.getindex(S::Squares, i::Int)
@@ -181,8 +290,14 @@ julia> Squares(100)[23]
 529
 ```
 
+```@raw html
+<!--
 Additionally, to support the syntax `S[end]`, we must define [`lastindex`](@ref) to specify the last
 valid index. It is recommended to also define [`firstindex`](@ref) to specify the first valid index:
+-->
+```
+さらに、`S[end]`構文を使えるようにするには、[`endof()`](@ref)を定義して有効な最後尾のインデックスを指定する必要があります。
+
 
 ```jldoctest squaretype
 julia> Base.firstindex(S::Squares) = 1
@@ -193,9 +308,18 @@ julia> Squares(23)[end]
 529
 ```
 
+```@raw html
+<!--
 Note, though, that the above *only* defines [`getindex`](@ref) with one integer index. Indexing with
 anything other than an `Int` will throw a [`MethodError`](@ref) saying that there was no matching method.
 In order to support indexing with ranges or vectors of `Int`s, separate methods must be written:
+-->
+```
+
+ただし、上記は [`getindex()`](@ref) を1つの整数インデックスで**のみ**定義していることに注意してください。
+`Int`以外のものを使ってインデックスを使うと [`MethodError`](@ref) を投げて、適合するメソッドが存在しないというメッセージが表示されるでしょう。
+範囲や`Int`のベクトルに対してインデックスをつかう場合は、別のメソッドを記述する必要があります。
+
 
 ```jldoctest squaretype
 julia> Base.getindex(S::Squares, i::Number) = S[convert(Int, i)]
@@ -209,12 +333,22 @@ julia> Squares(10)[[3,4.,5]]
  25
 ```
 
+```@raw html
+<!--
 While this is starting to support more of the [indexing operations supported by some of the builtin types](@ref man-array-indexing),
 there's still quite a number of behaviors missing. This `Squares` sequence is starting to look
 more and more like a vector as we've added behaviors to it. Instead of defining all these behaviors
 ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref).
+-->
+```
 
-## [Abstract Arrays](@id man-interface-array)
+[一部の組込みの型で可能なインデックス操作]（@ ref man-array-indexing）をがけっこう使えるようになりましたが、依然として動作しないものが多くあります。
+この`Squares`シーケンスに、もっと動作を加えると、ますますベクトルのように見えます。
+これらの動作はすべてを自前で定義しなくても、正式な [`AbstractArray`](@ref)のサブタイプとして定義することができます。
+
+
+`[](## [Abstract Arrays](@id man-interface-array))
+## [抽象配列](@id man-interface-array)
 
 | Methods to implement                            |                                        | Brief description                                                                     |
 |:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
@@ -238,10 +372,19 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 | `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`   | Return a mutable array with the specified indices `inds` (see below)                  |
 | `Base.similar(T::Union{Type,Function}, inds)`   | `T(Base.to_shape(inds))`               | Return an array similar to `T` with the specified indices `inds` (see below)          |
 
+```@raw html
+<!--
 If a type is defined as a subtype of `AbstractArray`, it inherits a very large set of rich behaviors
 including iteration and multidimensional indexing built on top of single-element access.  See
 the [arrays manual page](@ref man-multi-dim-arrays) and the [Julia Base section](@ref lib-arrays) for more supported methods.
+-->
+```
+`AbstractArray`のサブタイプとして定義された型は、多様な動作を数多く継承していて、反復処理や、1要素アクセスをもとに構築された多次元インデックスなどが利用できます。
+その他の利用可能なメソッドについては、[多次元配列のマニュアルページ]（@ ref man-multi-dim-arrays）と[標準ライブラリの配列のセクション]（@ ref lib-arrays）を参照してください。
 
+
+```@raw html
+<!--
 A key part in defining an `AbstractArray` subtype is [`IndexStyle`](@ref). Since indexing is
 such an important part of an array and often occurs in hot loops, it's important to make both
 indexing and indexed assignment as efficient as possible.  Array data structures are typically
@@ -250,7 +393,12 @@ defined in one of two ways: either it most efficiently accesses its elements usi
  These two modalities are identified by Julia as `IndexLinear()` and `IndexCartesian()`.
  Converting a linear index to multiple indexing subscripts is typically very expensive, so this
 provides a traits-based mechanism to enable efficient generic code for all array types.
+-->
+```
 
+
+```@raw html
+<!--
 This distinction determines which scalar indexing methods the type must define. `IndexLinear()`
 arrays are simple: just define `getindex(A::ArrayType, i::Int)`.  When the array is subsequently
 indexed with a multidimensional set of indices, the fallback `getindex(A::AbstractArray, I...)()`
@@ -262,6 +410,15 @@ library module, only supports two dimensions, so it just defines
 
 Returning to the sequence of squares from above, we could instead define it as a subtype of an
 `AbstractArray{Int, 1}`:
+-->
+```
+この`IndexStyle`の違いによって、どのスカラーインデックスのメソッドを型に対して定義しなければならないかが決定します。
+`IndexLinear()`の配列は単純で、`getindex(A::ArrayType, i::Int)`を定義するだけです。
+配列が多次元で複数のインデックスによってインデックス付けされている場合、補助的な関数の`getindex(A::AbstractArray, I...)()` はインデックスを線形インデックスに効率的に変換し、前述のメソッドを呼び出します。
+一方、`IndexCartesian()` の配列は、`ndims(A)`、`Int`の指定によって利用可能となる次元すべてに対して、メソッドを定義する必要があります。
+たとえば、標準装備の`SparseMatrixCSC`型は2次元しか利用可能ではないため、`getindex(A::SparseMatrixCSC, i::Int, j::Int)()`だけを定義しています。`setindex!()`に関しても同様です。
+
+
 
 ```jldoctest squarevectype
 julia> struct SquaresVector <: AbstractArray{Int, 1}
@@ -275,10 +432,18 @@ julia> Base.IndexStyle(::Type{<:SquaresVector}) = IndexLinear()
 julia> Base.getindex(S::SquaresVector, i::Int) = i*i
 ```
 
+```@raw html
+<!--
 Note that it's very important to specify the two parameters of the `AbstractArray`; the first
 defines the [`eltype`](@ref), and the second defines the [`ndims`](@ref). That supertype and those three
 methods are all it takes for `SquaresVector` to be an iterable, indexable, and completely functional
 array:
+-->
+```
+`AbstractArray`の2つのパラメータの指定は、非常に重要であることに注意してください。
+1番目は[`eltype()`](@ref) を定義し、2番目は[`ndims()`](@ref)を定義します。
+このスーパータイプと3つのメソッドのすべてによって、`SquaresVector`はループとインデックスによるアクセスが可能になり、完全に機能する配列となります。
+
 
 ```jldoctest squarevectype
 julia> s = SquaresVector(4)
@@ -308,8 +473,13 @@ julia> sin.(s)
  -0.2879033166650653
 ```
 
+```@raw html
+<!--
 As a more complicated example, let's define our own toy N-dimensional sparse-like array type built
 on top of [`Dict`](@ref):
+-->
+```
+
 
 ```jldoctest squarevectype
 julia> struct SparseArray{T,N} <: AbstractArray{T,N}
@@ -330,9 +500,14 @@ julia> Base.getindex(A::SparseArray{T,N}, I::Vararg{Int,N}) where {T,N} = get(A.
 julia> Base.setindex!(A::SparseArray{T,N}, v, I::Vararg{Int,N}) where {T,N} = (A.data[I] = v)
 ```
 
+```@raw html
+<!--
 Notice that this is an `IndexCartesian` array, so we must manually define [`getindex`](@ref) and [`setindex!`](@ref)
 at the dimensionality of the array. Unlike the `SquaresVector`, we are able to define [`setindex!`](@ref),
 and so we can mutate the array:
+-->
+```
+
 
 ```jldoctest squarevectype
 julia> A = SparseArray(Float64, 3, 3)
@@ -354,11 +529,16 @@ julia> A[:] = 1:length(A); A
  3.0  6.0  9.0
 ```
 
+```@raw html
+<!--
 The result of indexing an `AbstractArray` can itself be an array (for instance when indexing by
 an `AbstractRange`). The `AbstractArray` fallback methods use [`similar`](@ref) to allocate an `Array`
 of the appropriate size and element type, which is filled in using the basic indexing method described
 above. However, when implementing an array wrapper you often want the result to be wrapped as
 well:
+-->
+```
+
 
 ```jldoctest squarevectype
 julia> A[1:2,:]
@@ -367,11 +547,16 @@ julia> A[1:2,:]
  2.0  5.0  8.0
 ```
 
+```@raw html
+<!--
 In this example it is accomplished by defining `Base.similar{T}(A::SparseArray, ::Type{T}, dims::Dims)`
 to create the appropriate wrapped array. (Note that while `similar` supports 1- and 2-argument
 forms, in most case you only need to specialize the 3-argument form.) For this to work it's important
 that `SparseArray` is mutable (supports `setindex!`). Defining `similar`, `getindex` and
 `setindex!` for `SparseArray` also makes it possible to [`copy`](@ref) the array:
+-->
+```
+
 
 ```jldoctest squarevectype
 julia> copy(A)
@@ -381,8 +566,12 @@ julia> copy(A)
  3.0  6.0  9.0
 ```
 
+```@raw html
+<!--
 In addition to all the iterable and indexable methods from above, these types can also interact
 with each other and use most of the methods defined in Julia Base for `AbstractArrays`:
+-->
+```
 
 ```jldoctest squarevectype
 julia> A[SquaresVector(3)]
@@ -395,12 +584,18 @@ julia> sum(A)
 45.0
 ```
 
+```@raw html
+<!--
 If you are defining an array type that allows non-traditional indexing (indices that start at
 something other than 1), you should specialize [`axes`](@ref). You should also specialize [`similar`](@ref)
 so that the `dims` argument (ordinarily a `Dims` size-tuple) can accept `AbstractUnitRange` objects,
 perhaps range-types `Ind` of your own design. For more information, see
 [Arrays with custom indices](@ref man-custom-indices).
+-->
+```
 
+
+`[](## [Strided Arrays](@id man-interface-strided-arrays))
 ## [Strided Arrays](@id man-interface-strided-arrays)
 
 | Methods to implement                            |                                        | Brief description                                                                     |
@@ -410,6 +605,8 @@ perhaps range-types `Ind` of your own design. For more information, see
 | **Optional methods**                            | **Default definition**                 | **Brief description**                                                                 |
 | `stride(A, i::Int)`                             |     `strides(A)[i]`                                   | Return the distance in memory (in number of elements) between adjacent elements in dimension k.    |
 
+```@raw html
+<!--
 A strided array is a subtype of `AbstractArray` whose entries are stored in memory with fixed strides.
 Provided the element type of the array is compatible with BLAS, a strided array can utilize BLAS and LAPACK routines
 for more efficient linear algebra routines.  A typical example of a user-defined strided array is one
@@ -419,6 +616,9 @@ Warning: do not implement these methods if the underlying storage is not actuall
 may lead to incorrect results or segmentation faults.
 
 Here are some examples to demonstrate which type of arrays are strided and which are not:
+-->
+```
+
 ```julia
 1:5   # not strided (there is no storage associated with this array.)
 Vector(1:5)  # is strided with strides (1,)
@@ -432,6 +632,7 @@ V = view(A, [1,2,4], :)   # is not strided, as the spacing between rows is not f
 
 
 
+`[](## [Customizing broadcasting](@id man-interfaces-broadcasting))
 ## [Customizing broadcasting](@id man-interfaces-broadcasting)
 
 | Methods to implement | Brief description |
@@ -449,15 +650,27 @@ V = view(A, [1,2,4], :)   # is not strided, as the spacing between rows is not f
 | `Base.Broadcast.broadcasted(f, args...)` | Override the default lazy behavior within a fused expression |
 | `Base.Broadcast.instantiate(bc::Broadcasted{DestStyle})` | Override the computation of the lazy broadcast's axes |
 
+```@raw html
+<!--
 [Broadcasting](@ref) is triggered by an explicit call to `broadcast` or `broadcast!`, or implicitly by
 "dot" operations like `A .+ b` or `f.(x, y)`. Any object that has [`axes`](@ref) and supports
 indexing can participate as an argument in broadcasting, and by default the result is stored
 in an `Array`. This basic framework is extensible in three major ways:
+-->
+```
 
+
+```@raw html
+<!--
 * Ensuring that all arguments support broadcast
 * Selecting an appropriate output array for the given set of arguments
 * Selecting an efficient implementation for the given set of arguments
+-->
+```
 
+
+```@raw html
+<!--
 Not all types support `axes` and indexing, but many are convenient to allow in broadcast.
 The [`Base.broadcastable`](@ref) function is called on each argument to broadcast, allowing
 it to return something different that supports `axes` and indexing. By
@@ -470,28 +683,44 @@ types themselves, functions, special singletons like [`missing`](@ref) and [`not
 `collect(Base.broadcastable(x)) == collect(x)`. A notable exception is `AbstractString`;
 strings are special-cased to behave as scalars for the purposes of broadcast even though
 they are iterable collections of their characters (see [Strings](@ref) for more).
+-->
+```
 
+
+```@raw html
+<!--
 The next two steps (selecting the output array and implementation) are dependent upon
 determining a single answer for a given set of arguments. Broadcast must take all the varied
 types of its arguments and collapse them down to just one output array and one
 implementation. Broadcast calls this single answer a "style." Every broadcastable object
 each has its own preferred style, and a promotion-like system is used to combine these
 styles into a single answer — the "destination style".
+-->
+```
 
+
+`[](### Broadcast Styles)
 ### Broadcast Styles
 
+```@raw html
+<!--
 `Base.BroadcastStyle` is the abstract type from which all broadcast styles are derived. When used as a
 function it has two possible forms, unary (single-argument) and binary. The unary variant states
 that you intend to implement specific broadcasting behavior and/or output type, and do not wish to
 rely on the default fallback [`Broadcast.DefaultArrayStyle`](@ref).
 
 To override these defaults, you can define a custom `BroadcastStyle` for your object:
+-->
+```
+
 
 ```julia
 struct MyStyle <: Broadcast.BroadcastStyle end
 Base.BroadcastStyle(::Type{<:MyType}) = MyStyle()
 ```
 
+```@raw html
+<!--
 In some cases it might be convenient not to have to define `MyStyle`, in which case you can
 leverage one of the general broadcast wrappers:
 
@@ -500,11 +729,15 @@ leverage one of the general broadcast wrappers:
   - `Base.BroadcastStyle(::Type{<:MyType}) = Broadcast.ArrayStyle{MyType}()` is preferred
     if `MyType` is an `AbstractArray`.
   - For `AbstractArrays` that only support a certain dimensionality, create a subtype of `Broadcast.AbstractArrayStyle{N}` (see below).
+-->
+```
+
 
 When your broadcast operation involves several arguments, individual argument styles get
 combined to determine a single `DestStyle` that controls the type of the output container.
 For more details, see [below](@ref writing-binary-broadcasting-rules).
 
+`[](### Selecting an appropriate output array)
 ### Selecting an appropriate output array
 
 The broadcast style is computed for every broadcasting operation to allow for
@@ -589,6 +822,7 @@ julia> a .+ [5,10]
  13  14
 ```
 
+`[](### [Extending broadcast with custom implementations](@id extending-in-place-broadcast))
 ### [Extending broadcast with custom implementations](@id extending-in-place-broadcast)
 
 In general, a broadcast operation is represented by a lazy `Broadcasted` container that holds onto
@@ -632,6 +866,7 @@ For example, the following definition supports the negation of ranges:
 broadcasted(::DefaultArrayStyle{1}, ::typeof(-), r::OrdinalRange) = range(-first(r), step=-step(r), length=length(r))
 ```
 
+`[](### [Extending in-place broadcasting](@id extending-in-place-broadcast))
 ### [Extending in-place broadcasting](@id extending-in-place-broadcast)
 
 In-place broadcasting can be supported by defining the appropriate `copyto!(dest, bc::Broadcasted)`
@@ -658,6 +893,7 @@ methods that specialize on `DestStyle`.
 Similarly, you can completely override out-of-place broadcasting with a `copy(::Broadcasted)`
 method.
 
+`[](#### Working with `Broadcasted` objects)
 #### Working with `Broadcasted` objects
 
 In order to implement such a `copy` or `copyto!`, method, of course, you must
@@ -670,6 +906,7 @@ ways of doing so:
 * Iterating over the `CartesianIndices` of the `axes(::Broadcasted)` and using
   indexing with the resulting `CartesianIndex` object to compute the result.
 
+`[](### [Writing binary broadcasting rules](@id writing-binary-broadcasting-rules))
 ### [Writing binary broadcasting rules](@id writing-binary-broadcasting-rules)
 
 The precedence rules are defined by binary `BroadcastStyle` calls:
