@@ -1,5 +1,8 @@
-# [Multi-dimensional Arrays](@id man-multi-dim-arrays)
+# [多次元配列]](@id man-multi-dim-arrays)
+`[](# [Multi-dimensional Arrays](@id man-multi-dim-arrays))
 
+```@raw html
+<!--
 Julia, like most technical computing languages, provides a first-class array implementation. Most
 technical computing languages pay a lot of attention to their array implementation at the expense
 of other containers. Julia does not treat arrays in any special way. The array library is implemented
@@ -11,7 +14,22 @@ on implementing a custom array type.
 An array is a collection of objects stored in a multi-dimensional grid. In the most general case,
 an array may contain objects of type `Any`. For most computational purposes, arrays should contain
 objects of a more specific type, such as [`Float64`](@ref) or [`Int32`](@ref).
+-->
+```
+大抵の技術計算用の言語と同様に、Juliaでは、第一級の配列の実装が利用可能です。
+ほとんどの技術計算用の言語は、他のコンテナをないがしろにして配列の実装に注力していますが、
+Juliaでは配列を特別扱いしません。
+配列のライブラリは、ほぼJuliaだけで完全に実装されており、他のJuliaで書かれたコードと同様に、コンパイラがパフォーマンスをだせるようになっています。
+また、`AbstractArray`を継承すれば、独自の配列の型を定義することも可能です。
+配列に対する独自の型の実装の詳細については、[マニュアルのAbstractArrayインタフェースに関する部分]（@ ref man-interface-array）を参照してください。
 
+配列は、多次元グリッドに格納されたオブジェクトのコレクションです。
+大抵の一般的な場合には、配列には`Any`型のオブジェクトが含まれていてもかまいません。
+しかし殆どの計算用途には、配列は、[`Float64`](@ref) や[`Int32`](@ref)のように型を特定すべきです。
+
+
+```@raw html
+<!--
 In general, unlike many other technical computing languages, Julia does not expect programs to
 be written in a vectorized style for performance. Julia's compiler uses type inference and generates
 optimized code for scalar array indexing, allowing programs to be written in a style that is convenient
@@ -28,9 +46,22 @@ Callees must make explicit copies to ensure that they don't modify inputs that
 they don't intend to change. Many non- mutating functions are implemented by
 calling a function of the same name with an added `!` at the end on an explicit
 copy of the input, and returning that copy.
+-->
+```
+他の多くの技術計算用の言語とは異なり、Juliaでは通常、パフォーマンスをあげたいからといって、プログラムをベクトル化したスタイルで書く必要はありません。
+Juliaのコンパイラは型推論を使用し、配列のスカラインデックスによる参照に最適化されたコードを生成するので、便利で読みやすいスタイルで書いても、パフォーマンスを犠牲にすることなく、少ないメモリで使用することができます。
 
-## Basic Functions
+Juliaでは、すべての関数の引数は参照渡しです。技術計算用の言語のなかには配列を値渡しするものもあり、便利な場合も多いです。
+Juliaでは、関数が入力用の配列に加えた変更を、親関数から参照できます。
+Juliaの配列ライブラリはすべて、ライブラリ関数が入力を変更しないことを、保証しています。
+ユーザーのコードも同様の動作をさせる必要がある場合は、変更してもよい入力のコピーを作成するよう注意してください。
 
+
+`[](## Basic Functions)
+## 基本的な関数
+
+```@raw html
+<!--
 | Function               | Description                                                                      |
 |:---------------------- |:-------------------------------------------------------------------------------- |
 | [`eltype(A)`](@ref)    | the type of the elements contained in `A`                                        |
@@ -43,15 +74,45 @@ copy of the input, and returning that copy.
 | [`eachindex(A)`](@ref) | an efficient iterator for visiting each position in `A`                          |
 | [`stride(A,k)`](@ref)  | the stride (linear index distance between adjacent elements) along dimension `k` |
 | [`strides(A)`](@ref)   | a tuple of the strides in each dimension                                         |
+-->
+```
 
-## Construction and Initialization
+ 関数                   | 説明                       　　　　　　　　                    |
+| :--------------------- | :------------------------------------------------------------|
+| [`eltype(A)`](@ref)    | `A`に含まれる要素の型。                  　　　　　　           |
+| [`length(A)`](@ref)    | `A`の要素の数                             　　　　　　　       |
+| [`ndims(A)`](@ref)     | `A`の次元の数         　　　　　　　                           |
+| [`size(A)`](@ref)      | `A`の次元を保持するタプル            　　　　　                    |
+| [`size(A,n)`](@ref)    | 次元`n`に沿った `A`のサイズ            　　　　                |
+| [`indices(A)`](@ref)   | `A`の妥当なインデックスを表すタプル              　　           |
+| [`indices(A,n)`](@ref) | 次元`n`の `A`の妥当なインデックスを表す範囲          　　　     |
+| [`eachindex(A)`](@ref) | `A`の各位置を走査する効率的なイテレータ                      　　　　     |
+| [`stride(A,k)`](@ref)  | 次元`k`に沿ったストライド(隣接する要素間の線形インデックスの距離) |
+| [`strides(A)`](@ref)   | 各次元のストライドのタプル                             　　　  |
 
+
+
+`[](## Construction and Initialization)
+## 生成と初期化
+
+```@raw html
+<!--
 Many functions for constructing and initializing arrays are provided. In the following list of
 such functions, calls with a `dims...` argument can either take a single tuple of dimension sizes
 or a series of dimension sizes passed as a variable number of arguments. Most of these functions
 also accept a first input `T`, which is the element type of the array. If the type `T` is
 omitted it will default to [`Float64`](@ref).
+-->
+```
 
+配列の生成と初期化用に多くの関数が用意されています。
+下記の関数のリストにある、引数に`dims...`を使う関数呼び出しは、次元のサイズを表す1個のタプル、または可変引数で渡される次元サイズの列かのいずれかを取ることができます。
+これらの関数のほとんどは、配列の要素型である`T`を入力の最初に受けとります。
+型`T`が省略された場合、デフォルト の[`Float64`](@ref)になります。
+
+
+```@raw html
+<!--
 | Function                           | Description                                                                                                                                                                                                                                  |
 |:---------------------------------- |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`Array{T}(undef, dims...)`](@ref)             | an uninitialized dense [`Array`](@ref)                                                                                                                                                                                                              |
@@ -71,13 +132,55 @@ omitted it will default to [`Float64`](@ref).
 | [`fill!(A, x)`](@ref)                          | fill the array `A` with the value `x`                                                                                                                                                                                                        |
 | [`fill(x, dims...)`](@ref)                     | an `Array` filled with the value `x`                                                                                                                                                                                                         |
 
-[^1]: *iid*, independently and identically distributed.
+-->
+```
+| 関数                          | 説明                                                                                                                                                                                                                                  |
+| :--------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`Array{T}(dims...)`](@ref)        | 初期化されていない密な [`Array`](@ref)                                                                                                                                                                                                       |
+| [`zeros(T, dims...)`](@ref)        | すべてが0の `配列`                                                                                                                                                                                                                       |
+| [`zeros(A)`](@ref)                 | 要素の型やシェイプが`A`である、すべてが同じ型の0である配列                                                                                                                                                                      |
+| [`ones(T, dims...)`](@ref)         | すべてが1の `配列`                                                                                                                                                                                                                       |
+| [`ones(A)`](@ref)                  |  要素の型やシェイプが`A`である、すべてが同じ型の1である配列                                                                                                                                                                       |
+| [`trues(dims...)`](@ref)           | すべての値が`true`である[`BitArray`](@ref)                                                                                                                                                                                                  |
+| [`trues(A)`](@ref)                 | すべての値が`true`でシェイプが`A`と同じ`BitArray`                                                                                                                                       |
+| [`falses(dims...)`](@ref)          | すべての値が`false`である`BitArray`                                                                                                                                                                                                         |
+| [`falses(A)`](@ref)                | すべての値が`false`でシェイプが`A`と同じ`BitArray`                                                                                                                                                                               |
+| [`reshape(A, dims...)`](@ref)      | `A`と同じデータだが次元の違う配列                                                                                                                                                                      |
+| [`copy(A)`](@ref)                  | `A`をコピーする                                                                                                                                                                                                                                     |
+| [`deepcopy(A)`](@ref)              | `A`をコピーする（再帰的にその要素もコピーする）                                                                                                                                               |
+| [`similar(A, T, dims...)`](@ref)   | `A`(密・疎など)と型が同じだが初期化されていない配列で、要素の型や次元が指定されたもの。2番目と3番目の引数は共に省略可能で、省略した時のデフォルト値は`A`の要素の型と次元になる。 |
+| [`reinterpret(T, A)`](@ref)        | `A`とバイナリデータが同じだが、要素の型が`T`である配列                                                                                                                                                          |
+| [`rand(T, dims...)`](@ref)         | 半開区間``[0, 1)``で独立同分布、一様分布の乱数の`配列`                                                                                                                                       |
+| [`randn(T, dims...)`](@ref)        | 独立同分布、標準正規分布の乱数の`配列`                                                                                                                                        |
+| [`eye(T, n)`](@ref)                | `n`×`n` の単位行列                                                                                                                                                                                                                   |
+| [`eye(T, m, n)`](@ref)             | `m`×`n` の単位行列                                                                                                                                                                                                                       |
+| [`linspace(start, stop, n)`](@ref) | `start`から`stop`まで`n`個の要素が等間隔にある範囲                                                                                                                                                                                 |
+| [`fill!(A, x)`](@ref)              | 配列`A`を値`x`で埋める                                                                                                                                                                                                        |
+| [`fill(x, dims...)`](@ref)         | 値が`x`で埋まった`配列`                                                     
 
+
+
+```@raw html
+<!--
+[^1]: *iid*, independently and identically distributed.
+-->
+```
+
+[^1]: *iid*, 独立同分布
+
+```@raw html
+<!--
 The syntax `[A, B, C, ...]` constructs a 1-d array (vector) of its arguments. If all
 arguments have a common [promotion type](@ref conversion-and-promotion) then they get
 converted to that type using [`convert`](@ref).
 
 To see the various ways we can pass dimensions to these constructors, consider the following examples:
+-->
+```
+構文`[A, B, C, ...]`では、引数からなる1次元配列（ベクトル）を生成します。
+すべての引数が共通の[昇格した型](@ref conversion-and-promotion)を持つ場合、引数は`convert()`を使用してその型に変換されます。
+
+
 ```jldoctest
 julia> zeros(Int8, 2, 2)
 2×2 Array{Int8,2}:
@@ -96,17 +199,42 @@ julia> zeros((2, 2))
 ```
 Here, `(2, 2)` is a [`Tuple`](@ref).
 
-## Concatenation
+`[](## Concatenation)
+## 連結
 
+```@raw html
+<!--
 Arrays can be constructed and also concatenated using the following functions:
+-->
+```
 
+配列は、以下の関数を使用して生成・連結することもできます。
+
+```@raw html
+<!--
 | Function                    | Description                                     |
 |:--------------------------- |:----------------------------------------------- |
 | [`cat(A...; dims=k)`](@ref) | concatenate input arrays along dimension(s) `k` |
 | [`vcat(A...)`](@ref)        | shorthand for `cat(A...; dims=1)`               |
 | [`hcat(A...)`](@ref)        | shorthand for `cat(A...; dims=2)`               |
+-->
+```
 
+| 関数                   | 説明                                          |
+| :--------------------- | :------------------------------------------- |
+| [`cat(k, A...)`](@ref) | 入力した n次元の配列を次元kに沿って連結する      |
+| [`vcat(A...)`](@ref)   | `cat(1, A...)`の簡略表記                      |
+| [`hcat(A...)`](@ref)   | `cat(2, A...)`の簡略表記                      |
+
+```@raw html
+<!--
 Scalar values passed to these functions are treated as 1-element arrays. For example,
+-->
+```
+
+これらの関数に渡されるスカラー値は、1要素の配列として扱われます。
+
+
 ```jldoctest
 julia> vcat([1, 2], 3)
 3-element Array{Int64,1}:
@@ -119,16 +247,39 @@ julia> hcat([1 2], 3)
  1  2  3
 ```
 
+```@raw html
+<!--
 The concatenation functions are used so often that they have special syntax:
+-->
+```
+連結関数はよく使用されるので、特殊構文も存在します。
 
+
+
+```@raw html
+<!--
 | Expression        | Calls             |
 |:----------------- |:----------------- |
 | `[A; B; C; ...]`  | [`vcat`](@ref)  |
 | `[A B C ...]`     | [`hcat`](@ref)  |
 | `[A B; C D; ...]` | [`hvcat`](@ref) |
+-->
+```
+| 式                | 関数呼び出し        |
+| :---------------- | :---------------- |
+| `[A; B; C; ...]`  | [`vcat()`](@ref)  |
+| `[A B C ...]`     | [`hcat()`](@ref)  |
+| `[A B; C D; ...]` | [`hvcat()`](@ref) |
 
+
+```@raw html
+<!--
 [`hvcat`](@ref) concatenates in both dimension 1 (with semicolons) and dimension 2 (with spaces).
 Consider these examples of this syntax:
+-->
+```
+[`hvcat()`](@ref) は次元１（セミコロンを使う）と次元２（空白を使う）の両方向に連結します。
+
 ```jldoctest
 julia> [[1; 2]; [3, 4]]
 4-element Array{Int64,1}:
@@ -147,14 +298,26 @@ julia> [[1 2]; [3 4]]
  3  4
 ```
 
-## Typed array initializers
+`[](## Typed array initializers)
+## 型つき配列の初期化
 
+```@raw html
+<!--
 An array with a specific element type can be constructed using the syntax `T[A, B, C, ...]`. This
 will construct a 1-d array with element type `T`, initialized to contain elements `A`, `B`, `C`,
 etc. For example, `Any[x, y, z]` constructs a heterogeneous array that can contain any values.
 
 Concatenation syntax can similarly be prefixed with a type to specify the element type of the
 result.
+-->
+```
+`T[A, B, C, ...]`という構文を使うと、要素の型を指定して配列を生成できます。
+この時、要素の型が`T`の1次元配列が生成され、要素が`A`, `B`, `C`などと初期化されます。
+例えば`Any[x, y, z]`とすると、任意の値を含むことができる型の不均質な配列が生成されます。
+
+連結構文にも同様に型の接頭辞を付けて、演算結果に対して要素の型を指定することができます。
+
+
 
 ```jldoctest
 julia> [[1 2] [3 4]]
@@ -166,7 +329,8 @@ julia> Int8[[1 2] [3 4]]
  1  2  3  4
 ```
 
-## Comprehensions
+`[](## Comprehensions)
+## 内包表記
 
 Comprehensions provide a general and powerful way to construct arrays. Comprehension syntax is
 similar to set construction notation in mathematics:
@@ -214,7 +378,8 @@ the result in single precision by writing:
 Float32[ 0.25*x[i-1] + 0.5*x[i] + 0.25*x[i+1] for i=2:length(x)-1 ]
 ```
 
-## Generator Expressions
+`[](## Generator Expressions)
+## ジェネレーター式
 
 Comprehensions can also be written without the enclosing square brackets, producing an object
 known as a generator. This object can be iterated to produce values on demand, instead of allocating
@@ -277,7 +442,8 @@ julia> [(i,j) for i=1:3 for j=1:i if i+j == 4]
  (3, 1)
 ```
 
-## [Indexing](@id man-array-indexing)
+`[](## [Indexing](@id man-array-indexing))
+## [インデックスづけ](@id man-array-indexing)
 
 The general syntax for indexing into an n-dimensional array A is:
 
@@ -408,7 +574,8 @@ julia> searchsorted(a, 3)
 3:2
 ```
 
-## Assignment
+`[](## Assignment)
+## 代入
 
 The general syntax for assigning values in an n-dimensional array A is:
 
@@ -457,7 +624,8 @@ julia> x
   3   6  -9
 ```
 
-## [Supported index types](@id man-supported-index-types)
+`[](## [Supported index types](@id man-supported-index-types))
+## [対応しているインデックスの型](@id man-supported-index-types)
 
 In the expression `A[I_1, I_2, ..., I_n]`, each `I_k` may be a scalar index, an
 array of scalar indices, or an object that represents an array of scalar
@@ -520,7 +688,8 @@ julia> A[:, 3]
  17
 ```
 
-### Cartesian indices
+`[](### Cartesian indices)
+### 直積のインデックス
 
 The special `CartesianIndex{N}` object represents a scalar index that behaves
 like an `N`-tuple of integers spanning multiple dimensions.  For example:
@@ -594,7 +763,8 @@ julia> A[CartesianIndex.(axes(A, 1), axes(A, 2)), :]
     `end` keyword to represent the last index of a dimension. Do not use `end`
     in indexing expressions that may contain either `CartesianIndex` or arrays thereof.
 
-### Logical indexing
+`[](### Logical indexing)
+### 論理インデックスづけ
 
 Often referred to as logical indexing or indexing with a logical mask, indexing
 by a boolean array selects elements at the indices where its values are `true`.
@@ -636,7 +806,8 @@ julia> x[mask]
  16
 ```
 
-## Iteration
+`[](## Iteration)
+## イテレーション
 
 The recommended ways to iterate over a whole array are
 
@@ -673,7 +844,8 @@ i = CartesianIndex(3, 2)
 In contrast with `for i = 1:length(A)`, iterating with [`eachindex`](@ref) provides an efficient way to
 iterate over any array type.
 
-## Array traits
+`[](## Array traits)
+## 配列のトレイト
 
 If you write a custom [`AbstractArray`](@ref) type, you can specify that it has fast linear indexing using
 
@@ -684,7 +856,8 @@ Base.IndexStyle(::Type{<:MyArray}) = IndexLinear()
 This setting will cause `eachindex` iteration over a `MyArray` to use integers. If you don't
 specify this trait, the default value `IndexCartesian()` is used.
 
-## Array and Vectorized Operators and Functions
+`[](## Array and Vectorized Operators and Functions)
+## 配列とベクトル化した演算子・関数
 
 The following operators are supported for arrays:
 
@@ -715,7 +888,8 @@ Also notice the difference between `max.(a,b)`, which [`broadcast`](@ref)s [`max
 elementwise over `a` and `b`, and [`maximum(a)`](@ref), which finds the largest value within
 `a`. The same relationship holds for `min.(a,b)` and `minimum(a)`.
 
-## Broadcasting
+`[](## Broadcasting)
+## ブロードキャスト
 
 It is sometimes useful to perform element-by-element binary operations on arrays of different
 sizes, such as adding a vector to each column of a matrix. An inefficient way to do this would
@@ -780,7 +954,8 @@ julia> string.(1:3, ". ", ["First", "Second", "Third"])
  "3. Third"
 ```
 
-## Implementation
+`[](## Implementation)
+## 実装
 
 The base array type in Julia is the abstract type [`AbstractArray{T,N}`](@ref). It is parametrized by
 the number of dimensions `N` and the element type `T`. [`AbstractVector`](@ref) and [`AbstractMatrix`](@ref) are

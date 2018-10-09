@@ -18,7 +18,7 @@
   * [Modules](@ref)
   * [Documentation](@ref)
   * [Metaprogramming](@ref)
-  * [Multi-dimensional Arrays](@ref man-multi-dim-arrays)
+  * [多次元配列](@ref man-multi-dim-arrays)
   * [Missing Values](@ref missing)
   * [Networking and Streams](@ref)
   * [並列コンピューティング](@ref)
