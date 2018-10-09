@@ -11,7 +11,7 @@ to generically build upon those behaviors.
 ```
 
 Juliaの力と拡張性は手軽なインターフェースの集まりに由来します。
-特定のメソッドを独自の型でも動作するように拡張すると、その型のオブジェクトで動作するだけでなく、
+独自の型に対して特定のインターフェイスのメソッドが動作するように拡張すると、その型のオブジェクトで動作するだけでなく、
 汎化的に記述された他のメソッドから利用することができます。
 
 
@@ -46,6 +46,31 @@ Juliaの力と拡張性は手軽なインターフェースの集まりに由来
 -->
 ```
 
+| 必須メソッド               |                        | 概説                                                                     |
+|:------------------------------ |:---------------------- |:------------------------------------------------------------------------------------- |
+| `iterate(iter)`                |                        | 最初のアイテムのタプルと初期状態を返すか、空の時は[`nothing`](@ref)を返す  |
+| `iterate(iter, state)`         |                        | 次のアイテムと次の状態を返すか、残りのアイテムがないときは`nothing`を返す|
+         |
+| **重要な追加可能なメソッド** | **デフォルトのメソッド** | **概説**                                                                 |
+| `iteratorsize(IterType)`       | `HasLength()`          | `HasLength()`, `HasShape{N}()`, `IsInfinite()`,  `SizeUnknown()` の中で適切なもの一つ|
+| `iteratoreltype(IterType)`     | `HasEltype()`          | `EltypeUnknown()`と`HasEltype()`のどちらか適切のもの                              |
+| `eltype(IterType)`             | `Any`                  | `iterate()` が返すタプルの最初のエントリーの型|
+| `length(iter)`                 | (*undefined*)          | アイテムの数(既知の場合)                                                         |
+| `size(iter, [dim])`         | (*undefined*)          | 各次元のアイテムの数(既知の場合)                                           |
+
+| `iteratorsize(IterType)`の戻り値 | 必要なメソッド                           |
+|:------------------------------------------ |:------------------------------------------ |
+| `HasLength()`                              | `length(iter)`                             |
+| `HasShape{N}()`                               | `length(iter)`と`size(iter, [dim])` |
+| `IsInfinite()`                             | (*none*)                                   |
+| `SizeUnknown()`                            | (*none*)                                   |
+
+|  `iteratoreltype(IterType)`の戻り値  |必要なメソッド  |
+|:-------------------------------------------- |:------------------ |
+| `HasEltype()`                                | `eltype(IterType)` |
+| `EltypeUnknown()`                            | (*none*)           |
+
+
 ```@raw html
 <!--
 Sequential iteration is implemented by the [`iterate`](@ref) function. Instead
@@ -60,9 +85,9 @@ It can also be used directly in a [`for`](@ref) loop since the syntax:
 -->
 ```
 
-順次実行される繰返し処理は、[`start()`](@ref), [`done()`](@ref), [`next()`] (@ref) のメソッドをつかって実装されています。
-Juliaでは、繰返し処理の状態の追跡は、この3つのメソッドを使ってオブジェクトの外部から行われ、処理の行われるオブジェクトには変更を加えません。
-この`start(iter)`メソッドは、イテラブルオブジェクト`iter`の初期状態を返し、
+順次実行される反復処理は、 [`iterate`](@ref)関数によって実装されています。
+Juliaでは、反復処理の状態の追跡は、この3つのメソッドを使ってオブジェクトの外部から行い、反復の対象となるオブジェクトを変更するのではありません。
+iterateの戻り値は常に
 その状態は`done(iter, state)`、`next(iter, state)`と順に渡されます。
 `done(iter, state)`は残りの要素があるかどうかを検査し、`next(iter, state)`は現在の要素と更新された`state`オブジェクトを含むタプルを返します。
 `state`オブジェクトは何でも構いませんが、通常はイテラブルオブジェクト内でプライベートな実装の詳細を示すものでしょう。
