@@ -163,7 +163,7 @@ like [`in`](@ref), or [`mean`](@ref) and [`std`](@ref) from the
 `Statistics` standard library module:
 -->
 ```
-[`in()`](@ref)など多くの組込みのメソッドが利用可能で、さらに`Statistics`標準ライブラリモジュールを使うと [`mean()`](@ref)や[`std()`](@ref)も利用できます。
+[`in`](@ref)など多くの組込みのメソッドが利用可能で、さらに`Statistics`標準ライブラリモジュールを使うと [`mean`](@ref)や[`std`](@ref)も利用できます。
 
 
 ```jldoctest squaretype
@@ -190,8 +190,8 @@ we can extend [`length`](@ref), too:
 ```
 さらに、対象とするイテラブルコレクションに関する詳しい情報を与えるために、拡張して使うメソッドがJuliaにはいくつかあります。
 `Squares`の数列の要素は常に`Int`であることがわかっています。
- [`eltype()`](@ref)メソッドを拡張して、この情報をJuliaに渡すと、もっと複雑なメソッドでも、もっと型に特化したコードを作成するのに役立てることができます。
-シーケンスの要素数もわかっているので[`length()`](@ref)も拡張することもできます。
+ [`eltype`](@ref)メソッドを拡張して、この情報をJuliaに渡すと、もっと複雑なメソッドでも、もっと型に特化したコードを作成するのに役立てることができます。
+シーケンスの要素数もわかっているので[`length`](@ref)も拡張することもできます。
 
 
 ```jldoctest squaretype
