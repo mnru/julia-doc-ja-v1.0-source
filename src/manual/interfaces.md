@@ -87,13 +87,11 @@ It can also be used directly in a [`for`](@ref) loop since the syntax:
 
 順次実行される反復処理は、 [`iterate`](@ref)関数によって実装されています。
 Juliaでは、反復処理の状態の追跡は、この3つのメソッドを使ってオブジェクトの外部から行い、反復の対象となるオブジェクトを変更するのではありません。
-iterateの戻り値は常に
-その状態は`done(iter, state)`、`next(iter, state)`と順に渡されます。
-`done(iter, state)`は残りの要素があるかどうかを検査し、`next(iter, state)`は現在の要素と更新された`state`オブジェクトを含むタプルを返します。
-`state`オブジェクトは何でも構いませんが、通常はイテラブルオブジェクト内でプライベートな実装の詳細を示すものでしょう。
+iterateの戻り値は、通常は値と状態のタプルですが、要素が残っていない場合は`nothing`を返します。
+次の反復の際に、`state`オブジェクトが反復の関数に戻され、`state`イテラブルオブジェクトのプライベートな実装の詳細だとみなされます。
 
-これらの3つのメソッドが定義されたオブジェクトはすべてイテラブルであり、[繰返しを使う多数の関数]（@ ref lib-collections-iteration）で使用できます。
-また以下のような構文で`for`ループ内で直接使用することもできます。
+この関数が定義されたオブジェクトはすべてイテラブルであり、[反復に依存した多数の関数]（@ ref lib-collections-iteration）で使用できます。
+また以下のような構文で [`for`](@ref)ループ内で直接使用することもできます。
 
 
 
@@ -165,7 +163,7 @@ like [`in`](@ref), or [`mean`](@ref) and [`std`](@ref) from the
 `Statistics` standard library module:
 -->
 ```
-[`in()`](@ref), [`mean()`](@ref), [`std()`](@ref) のような多くの組込みのメソッドがイテラブルオブジェクトで動作します。
+[`in()`](@ref)など多くの組込みのメソッドが利用可能で、さらに`Statistics`標準ライブラリモジュールを使うと [`mean()`](@ref)や[`std()`](@ref)も利用できます。
 
 
 ```jldoctest squaretype
