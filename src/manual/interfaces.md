@@ -50,7 +50,6 @@ Juliaの力と拡張性は手軽なインターフェースの集まりに由来
 |:------------------------------ |:---------------------- |:------------------------------------------------------------------------------------- |
 | `iterate(iter)`                |                        | 最初のアイテムのタプルと初期状態を返すか、空の時は[`nothing`](@ref)を返す  |
 | `iterate(iter, state)`         |                        | 次のアイテムと次の状態を返すか、残りのアイテムがないときは`nothing`を返す|
-         |
 | **重要な追加可能なメソッド** | **デフォルトのメソッド** | **概説** |                                                                |
 | `iteratorsize(IterType)`       | `HasLength()`          | `HasLength()`, `HasShape{N}()`, `IsInfinite()`,  `SizeUnknown()` の中で適切なもの一つ|
 | `iteratoreltype(IterType)`     | `HasEltype()`          | `EltypeUnknown()`と`HasEltype()`のどちらか適切のもの                              |
