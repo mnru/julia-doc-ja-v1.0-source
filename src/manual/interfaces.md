@@ -10,9 +10,9 @@ to generically build upon those behaviors.
 -->
 ```
 
-Juliaの力と拡張性は仮のインターフェースの集まりに由来します。
-独自の型に対して特定のインターフェイスのメソッドが動作するように拡張すると、その型のオブジェクトで動作するだけでなく、
-汎化的に記述された他のメソッドから利用することができます。
+Juliaは具象化されていない部分の残ったインターフェースの集まりによって、力と拡張性を得ています。
+独自の型に特化して拡張すると、その型のオブジェクトは直接拡張した機能が使えるだけでなく、
+汎用的に記述されたメソッドにもその機能が組み込まれて利用することができます。
 
 
 `[](## [Iteration](@id man-interface-iteration))
@@ -122,7 +122,7 @@ end
 A simple example is an iterable sequence of square numbers with a defined length:
 -->
 ```
-簡単な例は、イテラブルな長さの決まった平方数の数列です。
+簡単な例は、長さの決まった平方数のイテラブルな数列です。
 
 ```jldoctest squaretype
 julia> struct Squares
@@ -227,8 +227,8 @@ we can override the generic iterative version with a more performant solution:
 -->
 ```
 
-汎化的な実装のまま使うこともできますが、もっと単純なアルゴリズムがあると分かっている場合は、特化したメソッドに拡張することもできます。
-たとえば、平方和を算出する公式があれば、汎化的な反復をもっと効率的な解法で上書きすることができます。
+汎化した実装のまま使うこともできますが、もっと単純なアルゴリズムがあると分かっている場合は、特化したメソッドに拡張することもできます。
+たとえば、平方和を算出する公式があれば、汎化した反復をもっと効率的な解法で上書きすることができます。
 
 
 ```jldoctest squaretype
@@ -248,7 +248,7 @@ be used in their specific case.
 ```
 
 これは、JuliaのBaseライブラリ全体に非常によくあるパターンです。
-少数の必須メソッドによって仮のインターフェイスが定義され、多くの便利な動作が利用可能となっています。
+少数の必須メソッドに対して具象化されていない部分の残ったインターフェイスが定義され、多くの便利な動作が利用可能となっています。
 もっと効率的なアルゴリズムを使用できる場合には、さらに型に特化させてその動作を行うことができます。
 
 ```@raw html
@@ -372,6 +372,8 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 `[](## [Abstract Arrays](@id man-interface-array))
 ## [抽象配列](@id man-interface-array)
 
+```@raw html
+<!--
 | Methods to implement                            |                                        | Brief description                                                                     |
 |:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
 | `size(A)`                                       |                                        | Returns a tuple containing the dimensions of `A`                                      |
@@ -393,6 +395,31 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 | `axes(A)`                                    | `map(OneTo, size(A))`                  | Return the `AbstractUnitRange` of valid indices                                       |
 | `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`   | Return a mutable array with the specified indices `inds` (see below)                  |
 | `Base.similar(T::Union{Type,Function}, inds)`   | `T(Base.to_shape(inds))`               | Return an array similar to `T` with the specified indices `inds` (see below)          |
+-->
+```
+
+| 実装すべきメソッド                            |                                          | 概説                                                                     |
+|:----------------------------------------------- |:---------------------------------------- |:------------------------------------------------------------------------------------- |
+| `size(A)`                                       |                                          | `A`の次元を含むタプルを返す                                      |
+| `getindex(A, i::Int)`                           |                                          | ( `IndexLinear`)線形スカラインデックスによる参照                                              |
+| `getindex(A, I::Vararg{Int, N})`                |                                          | ( `IndexCartesian`,`N = ndims(A)`) N次元のスカラインデックスにによる参照                |
+| `setindex!(A, v, i::Int)`                       |                                          | ( `IndexLinear`) 線形スカラインデックスによる代入                                           |
+| `setindex!(A, v, I::Vararg{Int, N})`            |                                          | ( `IndexCartesian`, `N = ndims(A)`) N次元のスカラインデックスによる代入       |
+| **省略可能なメソッド**                            | **デフォルトの定義**                   | **概説**                                                                 |
+| `IndexStyle(::Type)`                            | `IndexCartesian()`                       |  `IndexLinear()` と `IndexCartesian()`のどちらかを返す。下記参照      |
+| `getindex(A, I...)`                             | スカラーの  `getindex()`による定義  | [多次元で非スカラーのインデックスによる参照](@ref man-array-indexing)                    |
+| `setindex!(A, I...)`                            | スカラーの `setindex!()`による定義 | [多次元で非スカラーのインデックスによる代入](@ref man-array-indexing)          |
+| `start()`/`next()`/`done()`                     | スカラーの `getindex()`による定義  | 繰返し                                                                             |
+| `length(A)`                                     | `prod(size(A))`                          | 要素の数                                                                    |
+| `similar(A)`                                    | `similar(A, eltype(A), size(A))`         | 同形・同要素型の可変配列を返す                          |
+| `similar(A, ::Type{S})`                         | `similar(A, S, size(A))`                 | 同形・指定要素型の可変配列を返す|
+| `similar(A, dims::NTuple{Int})`                 | `similar(A, eltype(A), dims)`            | 同要素型でサイズ**dims**の可変配列を返す |
+| `similar(A, ::Type{S}, dims::NTuple{Int})`      | `Array{S}(dims)`                         | 指定形・指定要素型の可変配列を返す|
+| **通常とは異なるインデックス**                     | **デフォルトの定義**                   | **概説**                                                                 |
+| `indices(A)`                                    | `map(OneTo, size(A))`                    | 妥当なインデックスの`AbstractUnitRange`を返す                                       |
+| `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`     | `inds`で指定したインデックスの可変配列を返す (下記参照)                  |
+| `Base.similar(T::Union{Type,Function}, inds)`   | `T(Base.to_shape(inds))`                 | `inds`で指定したインデックスの`T`と同様な可変配列を返す (下記参照)          |
+
 
 ```@raw html
 <!--
