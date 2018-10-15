@@ -16,7 +16,7 @@ Juliaの力と拡張性は仮のインターフェースの集まりに由来し
 
 
 `[](## [Iteration](@id man-interface-iteration))
-## [イテレーション](@id man-interface-iteration)
+## [反復](@id man-interface-iteration)
 
 ```@raw html
 <!--
