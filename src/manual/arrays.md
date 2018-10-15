@@ -1,4 +1,4 @@
-# [多次元配列]](@id man-multi-dim-arrays)
+# [多次元配列](@id man-multi-dim-arrays)
 `[](# [Multi-dimensional Arrays](@id man-multi-dim-arrays))
 
 ```@raw html
@@ -19,8 +19,8 @@ objects of a more specific type, such as [`Float64`](@ref) or [`Int32`](@ref).
 大抵の技術計算用の言語と同様に、Juliaでは、第一級の配列の実装が利用可能です。
 ほとんどの技術計算用の言語は、他のコンテナをないがしろにして配列の実装に注力していますが、
 Juliaでは配列を特別扱いしません。
-配列のライブラリは、ほぼJuliaだけで完全に実装されており、他のJuliaで書かれたコードと同様に、コンパイラがパフォーマンスをだせるようになっています。
-また、`AbstractArray`を継承すれば、独自の配列の型を定義することも可能です。
+配列のライブラリは、ほぼJuliaだけで完全に実装されており、他のJuliaで書かれたコードと同様に、コンパイラがパフォーマンスをだせるようにしています。
+また、`AbstractArray`を継承して、独自の配列の型を定義することも可能です。
 配列に対する独自の型の実装の詳細については、[マニュアルのAbstractArrayインタフェースに関する部分]（@ ref man-interface-array）を参照してください。
 
 配列は、多次元グリッドに格納されたオブジェクトのコレクションです。
