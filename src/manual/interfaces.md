@@ -418,8 +418,8 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 || `length(A)`                                     | `prod(size(A))`                          | 要素の数                                                                    |
 | `similar(A)`                                    | `similar(A, eltype(A), size(A))`         | 同形・同要素型の可変配列を返す                          |
 | `similar(A, ::Type{S})`                         | `similar(A, S, size(A))`                 | 同形・指定要素型の可変配列を返す|
-| `similar(A, dims::NTuple{Int})`                 | `similar(A, eltype(A), dims)`            | 同要素型でサイズ**dims**の可変配列を返す |
-| `similar(A, ::Type{S}, dims::NTuple{Int})`      | `Array{S}(dims)`                         | 指定形・指定要素型の可変配列を返す|
+| `similar(A,  dims::Dims)`                 | `similar(A, eltype(A), dims)`            | 同要素型でサイズ**dims**の可変配列を返す |
+| `similar(A, ::Type{S},  dims::Dims)`      | `Array{S}(undef, dims)`                         | 指定形・指定要素型の可変配列を返す|
 | **通常とは異なるインデックス**                     | **デフォルトの定義**                   | **概説**                                                                 |
 | `indices(A)`                                    | `map(OneTo, size(A))`                    | 妥当なインデックスの`AbstractUnitRange`を返す                                       |
 | `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`     | `inds`で指定したインデックスの可変配列を返す (下記参照)                  |
