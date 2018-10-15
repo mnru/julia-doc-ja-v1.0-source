@@ -601,7 +601,7 @@ is used in the promotion process.
 
 後者の場合、昇格後の型は[`BigInt`](@ref)になります。
 というのも`BigInt`だけが、任意の精度の整数演算に対して整数を保持する大きさを持つの唯一の型だからです。
-`promote_rule(::Type{A}, ::Type{B})`と `promote_rule(::Type{B}, ::Type{A})`の両方を定義する必要はない点に注意してください。`promote_rule`は、昇格の処理の際に、対称性を前提として使われます。
+`promote_rule(::Type{A}, ::Type{B})`と `promote_rule(::Type{B}, ::Type{A})`の両方を定義する必要はない点に注意してください。`promote_rule`は、対称性を暗黙の前提として昇格の処理を行います。
 
 
 ```@raw html
@@ -612,7 +612,7 @@ to `promote` should be promoted. Thus, if one wants to know, in absence of actua
 type a collection of values of certain types would promote to, one can use `promote_type`:
 -->
 ```
-`promote_rule`関数を構成要素として、`promote_type`という第２の関数を定義します。
+`promote_rule`関数を基にして、`promote_type`という第２の関数を定義します。
 `promote_type`関数は、任意の数の型オブジェクトを引数にとり、これらの値の共通の型を返します。
 この型が`promote`関数が引数を昇格後にとる型となります。
 したがって、実際の値がなくても、`promote_type`を使えば、型の決まった値の集合が昇格するとどんな型になるかを調べることができます。
