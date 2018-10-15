@@ -287,6 +287,11 @@ julia> collect(Iterators.reverse(Squares(4)))
 | `lastindex(X)`        | The last index, used in `X[end]` |
 -->
 ```
+| 実装すべきメソッド | 概説                |
+|:-------------------- |:-------------------------------- |
+| `getindex(X, i)`     | `X[i]`, インデックスによる要素の参照   |
+| `setindex!(X, v, i)` | `X[i] = v`,  インデックスによる代入   |
+| `endof(X)`           | インデックスの最後尾,  `X[end]`で使われる |
 
 
 ```@raw html
@@ -389,8 +394,8 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 | `length(A)`                                     | `prod(size(A))`                        | Number of elements                                                                    |
 | `similar(A)`                                    | `similar(A, eltype(A), size(A))`       | Return a mutable array with the same shape and element type                           |
 | `similar(A, ::Type{S})`                         | `similar(A, S, size(A))`               | Return a mutable array with the same shape and the specified element type             |
-| `similar(A, dims::NTuple{Int})`                 | `similar(A, eltype(A), dims)`          | Return a mutable array with the same element type and size *dims*                     |
-| `similar(A, ::Type{S}, dims::NTuple{Int})`      | `Array{S}(undef, dims)`               | Return a mutable array with the specified element type and size                       |
+| `similar(A,  dims::Dims)`                 | `similar(A, eltype(A), dims)`          | Return a mutable array with the same element type and size *dims*                     |
+| `similar(A, ::Type{S},  dims::Dims)`      | `Array{S}(undef, dims)`               | Return a mutable array with the specified element type and size                       |
 | **Non-traditional indices**                     | **Default definition**                 | **Brief description**                                                                 |
 | `axes(A)`                                    | `map(OneTo, size(A))`                  | Return the `AbstractUnitRange` of valid indices                                       |
 | `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`   | Return a mutable array with the specified indices `inds` (see below)                  |
@@ -407,10 +412,10 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 | `setindex!(A, v, I::Vararg{Int, N})`            |                                          | ( `IndexCartesian`, `N = ndims(A)`) N次元のスカラインデックスによる代入       |
 | **省略可能なメソッド**                            | **デフォルトの定義**                   | **概説**                                                                 |
 | `IndexStyle(::Type)`                            | `IndexCartesian()`                       |  `IndexLinear()` と `IndexCartesian()`のどちらかを返す。下記参照      |
-| `getindex(A, I...)`                             | スカラーの  `getindex()`による定義  | [多次元で非スカラーのインデックスによる参照](@ref man-array-indexing)                    |
-| `setindex!(A, I...)`                            | スカラーの `setindex!()`による定義 | [多次元で非スカラーのインデックスによる代入](@ref man-array-indexing)          |
-| `start()`/`next()`/`done()`                     | スカラーの `getindex()`による定義  | 繰返し                                                                             |
-| `length(A)`                                     | `prod(size(A))`                          | 要素の数                                                                    |
+| `getindex(A, I...)`                             | スカラーの  `getindex()`を使った定義  | [多次元で非スカラーのインデックスによる参照](@ref man-array-indexing)                    |
+| `setindex!(A, I...)`                            | スカラーの `setindex!()`を使った定義 | [多次元で非スカラーのインデックスによる代入](@ref man-array-indexing)          |
+| `iterate`                                       | スカラーの  `getindex()`を使った定義  | 繰り返し                                                                             |
+|| `length(A)`                                     | `prod(size(A))`                          | 要素の数                                                                    |
 | `similar(A)`                                    | `similar(A, eltype(A), size(A))`         | 同形・同要素型の可変配列を返す                          |
 | `similar(A, ::Type{S})`                         | `similar(A, S, size(A))`                 | 同形・指定要素型の可変配列を返す|
 | `similar(A, dims::NTuple{Int})`                 | `similar(A, eltype(A), dims)`            | 同要素型でサイズ**dims**の可変配列を返す |
