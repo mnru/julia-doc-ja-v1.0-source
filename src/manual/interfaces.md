@@ -343,7 +343,7 @@ In order to support indexing with ranges or vectors of `Int`s, separate methods 
 -->
 ```
 
-ただし、上記は [`getindex()`](@ref) を1つの整数インデックスで**のみ**定義していることに注意してください。
+ただし、上記の定義は [`getindex`](@ref) を1つの整数インデックス**のみ**であることに注意してください。
 `Int`以外のものを使ってインデックスを使うと [`MethodError`](@ref) を投げて、適合するメソッドが存在しないというメッセージが表示されるでしょう。
 範囲や`Int`のベクトルに対してインデックスをつかう場合は、別のメソッドを記述する必要があります。
 
@@ -435,7 +435,7 @@ the [arrays manual page](@ref man-multi-dim-arrays) and the [Julia Base section]
 -->
 ```
 `AbstractArray`のサブタイプとして定義された型は、多様な動作を数多く継承していて、反復処理や、1要素のアクセスから構築された多次元インデックスなどが利用できます。
-その他の利用可能なメソッドについては、[多次元配列のマニュアルページ]（@ ref man-multi-dim-arrays）と[標準ライブラリの配列のセクション]（@ ref lib-arrays）を参照してください。
+その他の利用可能なメソッドについては、[配列のマニュアルページ]（@ ref man-multi-dim-arrays）と[JuliaのBaseライブラリのセクション]（@ ref lib-arrays）を参照してください。
 
 
 ```@raw html
@@ -452,10 +452,10 @@ provides a traits-based mechanism to enable efficient generic code for all array
 ```
 `AbstractArray`のサブタイプの定義で重要な部分は[`IndexStyle`](@ref) です。
 インデックスは配列の重要な部分であり、頻繁にループで使わわれるため、インデックスによる参照と代入をできる限り効率的に行うことは重要です。
-配列のデータ構造は、通常、２つの手法のいずれかが定義に採用されます。
+配列のデータ構造の定義には、通常、２つの手法のいずれかが採用されます。
 一方は、インデックス（線形インデックス）をただ一つ使用して要素にアクセスする最も効率のよい手法で、もう一方は、本質的にはすべての次元に対してインデックスを指定して要素にアクセスする手法です。
-これらの2つのモードは、Juliaでは`IndexLinear()`と`IndexCartesian()`によって同定されます。
-線形インデックスを多重インデックスの添字に変換するのは、通常非常にコストがかかるので、`IndexStyle`ごとにトレイトに基づくメカニズムを使って、すべての配列の型に対して効率的で汎化的なコードを可能にするメカニズムが備わっています。
+これらの2つのモードは、Juliaでは`IndexLinear()`と`IndexCartesian()`として表わされます。
+線形インデックスを多重インデックスの添字に変換するのは、通常非常にコストがかかるので、トレイトに基づくしくみによって、すべての配列の型に汎化した効率的なコードが可能になっています。
 
 
 
@@ -474,7 +474,7 @@ Returning to the sequence of squares from above, we could instead define it as a
 `AbstractArray{Int, 1}`:
 -->
 ```
-この`IndexStyle`の違いによって、どのスカラーインデックスのメソッドを型に対して定義しなければならないかが決定します。
+この違いによって、どのスカラーインデックスのメソッドを型に対して定義しなければならないかが決定します。
 `IndexLinear()`の配列は単純で、`getindex(A::ArrayType, i::Int)`を定義するだけです。
 配列が多次元で複数のインデックスによってインデックス付けされている場合、補助的な関数の`getindex(A::AbstractArray, I...)()` はインデックスを線形インデックスに効率的に変換し、前述のメソッドを呼び出します。
 一方、`IndexCartesian()` の配列は、`ndims(A)`、`Int`の指定によって利用可能となる次元すべてに対して、メソッドを定義する必要があります。
