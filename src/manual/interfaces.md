@@ -434,7 +434,7 @@ including iteration and multidimensional indexing built on top of single-element
 the [arrays manual page](@ref man-multi-dim-arrays) and the [Julia Base section](@ref lib-arrays) for more supported methods.
 -->
 ```
-`AbstractArray`のサブタイプとして定義された型は、多様な動作を数多く継承していて、反復処理や、1要素アクセスをもとに構築された多次元インデックスなどが利用できます。
+`AbstractArray`のサブタイプとして定義された型は、多様な動作を数多く継承していて、反復処理や、1要素のアクセスから構築された多次元インデックスなどが利用できます。
 その他の利用可能なメソッドについては、[多次元配列のマニュアルページ]（@ ref man-multi-dim-arrays）と[標準ライブラリの配列のセクション]（@ ref lib-arrays）を参照してください。
 
 
@@ -450,6 +450,13 @@ defined in one of two ways: either it most efficiently accesses its elements usi
 provides a traits-based mechanism to enable efficient generic code for all array types.
 -->
 ```
+`AbstractArray`のサブタイプの定義で重要な部分は[`IndexStyle`](@ref) です。
+インデックスは配列の重要な部分であり、頻繁にループで使わわれるため、インデックスによる参照と代入をできる限り効率的に行うことは重要です。
+配列のデータ構造は、通常、２つの手法のいずれかが定義に採用されます。
+一方は、インデックス（線形インデックス）をただ一つ使用して要素にアクセスする最も効率のよい手法で、もう一方は、本質的にはすべての次元に対してインデックスを指定して要素にアクセスする手法です。
+これらの2つのモードは、Juliaでは`IndexLinear()`と`IndexCartesian()`によって同定されます。
+線形インデックスを多重インデックスの添字に変換するのは、通常非常にコストがかかるので、`IndexStyle`ごとにトレイトに基づくメカニズムを使って、すべての配列の型に対して効率的で汎化的なコードを可能にするメカニズムが備わっています。
+
 
 
 ```@raw html
