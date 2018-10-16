@@ -85,9 +85,10 @@ It can also be used directly in a [`for`](@ref) loop since the syntax:
 ```
 
 順次実行される反復処理は、 [`iterate`](@ref)関数によって実装されています。
-Juliaでは、反復処理の状態の追跡は、このメソッドを使ってオブジェクトの外部から行い、反復の対象となるオブジェクトを変更するのではありません。
+Juliaでは、反復処理の状態の追跡は、このメソッドを使ってオブジェクトの外部から行い、反復の対象となるオブジェクトを変更するわけではありません。
 iterateの戻り値は、通常は値と状態のタプルですが、要素が残っていない場合は`nothing`を返します。
-次の反復の際に、`state`オブジェクトが反復の関数に戻され、`state`イテラブルオブジェクトのプライベートな実装の詳細だとみなされます。
+次の反復の際に、`state`オブジェクトが反復の関数に渡されます。
+`state`オブジェクトは、イテラブルオブジェクト内部の実装の詳細をあらわしていると一般には考えられています。
 
 この関数が定義されたオブジェクトはすべてイテラブルであり、[反復に依存した多数の関数]（@ ref lib-collections-iteration）で使用できます。
 また以下のような構文で [`for`](@ref)ループ内で直接使用することもできます。
@@ -303,7 +304,7 @@ simply needs to define [`getindex`](@ref):
 ```
 
 上記の`Squares`イテラブルでは、数列の`i`番目は、2乗すれば簡単に算出できます。
-`S[i]`というインデックス式で、これを公開することができます。
+`S[i]`というインデックスを使った式で、表すことができます。
 `Squares` に[`getindex()`](@ref) を定義すればいいだけです。
 
 
@@ -455,8 +456,7 @@ provides a traits-based mechanism to enable efficient generic code for all array
 配列のデータ構造の定義には、通常、２つの手法のいずれかが採用されます。
 一方は、インデックス（線形インデックス）をただ一つ使用して要素にアクセスする最も効率のよい手法で、もう一方は、本質的にはすべての次元に対してインデックスを指定して要素にアクセスする手法です。
 これらの2つのモードは、Juliaでは`IndexLinear()`と`IndexCartesian()`として表わされます。
-線形インデックスを多重インデックスの添字に変換するのは、通常非常にコストがかかるので、トレイトに基づくしくみによって、すべての配列の型に汎化した効率的なコードが可能になっています。
-
+線形インデックスを多重インデックスの添字に変換するのは、通常非常にコストがかかるので、トレイトに基づいたしくみによって、すべての配列の型に汎化した効率的なコードが可能になっています。
 
 
 ```@raw html
@@ -474,12 +474,13 @@ Returning to the sequence of squares from above, we could instead define it as a
 `AbstractArray{Int, 1}`:
 -->
 ```
-この違いによって、どのスカラーインデックスのメソッドを型に対して定義しなければならないかが決定します。
+この違いによって、どのスカラーインデックスのメソッドを型に対して定義しなければならないかが決まります。
 `IndexLinear()`の配列は単純で、`getindex(A::ArrayType, i::Int)`を定義するだけです。
-配列が多次元で複数のインデックスによってインデックス付けされている場合、補助的な関数の`getindex(A::AbstractArray, I...)()` はインデックスを線形インデックスに効率的に変換し、前述のメソッドを呼び出します。
+配列が多次元で複数のインデックスによってインデックス付けされている場合、補足的な`getindex(A::AbstractArray, I...)()` はインデックスを線形インデックスに効率的に変換し、前述のメソッドを呼び出します。
 一方、`IndexCartesian()` の配列は、`ndims(A)`、`Int`の指定によって利用可能となる次元すべてに対して、メソッドを定義する必要があります。
-たとえば、標準装備の`SparseMatrixCSC`型は2次元しか利用可能ではないため、`getindex(A::SparseMatrixCSC, i::Int, j::Int)()`だけを定義しています。`setindex!()`に関しても同様です。
+たとえば、組込みの[`SparseMatrixCSC`](@ref)型は2次元しか利用可能ではないため、`getindex(A::SparseMatrixCSC, i::Int, j::Int)()`だけを定義しています。[`setindex!`](@ref)に関しても同様です。
 
+上記の二乗の数列に戻ると、代わりに`AbstractArray{Int, 1}`のサブタイプとして定義することができます。
 
 
 ```jldoctest squarevectype
@@ -502,9 +503,9 @@ methods are all it takes for `SquaresVector` to be an iterable, indexable, and c
 array:
 -->
 ```
-`AbstractArray`の2つのパラメータの指定は、非常に重要であることに注意してください。
-1番目は[`eltype()`](@ref) を定義し、2番目は[`ndims()`](@ref)を定義します。
-このスーパータイプと3つのメソッドのすべてによって、`SquaresVector`はループとインデックスによるアクセスが可能になり、完全に機能する配列となります。
+`AbstractArray`で指定する2つのパラメータは、非常に重要であることに注意してください。
+1番目は[`eltype`](@ref) を定義し、2番目は[`ndims`](@ref)を定義します。
+このスーパータイプと3つのメソッドのすべてによって、`SquaresVector`は反復とインデックスによるアクセスが可能になり、完全に機能する配列となります。
 
 
 ```jldoctest squarevectype
@@ -542,6 +543,8 @@ on top of [`Dict`](@ref):
 -->
 ```
 
+より複雑な例として、N次元で疎なおもちゃのような配列型を[`Dict`](@ref)を使って定義しましょう。
+
 
 ```jldoctest squarevectype
 julia> struct SparseArray{T,N} <: AbstractArray{T,N}
@@ -569,6 +572,9 @@ at the dimensionality of the array. Unlike the `SquaresVector`, we are able to d
 and so we can mutate the array:
 -->
 ```
+これは`IndexCartesian`の配列なので、 [`getindex`](@ref) と[`setindex!`](@ref) を次元ごとに手動で定義する必要がある点に注意してください。
+`SquaresVector`配列とは違って、[`setindex!`](@ref)を定義できるので、配列を更新することができます：
+
 
 
 ```jldoctest squarevectype
@@ -600,6 +606,10 @@ above. However, when implementing an array wrapper you often want the result to 
 well:
 -->
 ```
+`AbstractArray`をインデックス参照した結果自体が配列になることもあります（たとえば、`AbstractRange`を使ってインデックス参照した場合など）。
+`AbstractArray`の補足メソッドは、[`similar`](@ref) を使って妥当な要素の型とサイズの`配列`をメモリの割り当てを行い、上述した基本的なインデックスのメソッドを使ってを値を埋めていきます。
+しかし、配列のラッパーが実装されているときには、当然、結果も同様にラップしたくなることはよくあるでしょう。
+
 
 
 ```jldoctest squarevectype
@@ -618,6 +628,10 @@ that `SparseArray` is mutable (supports `setindex!`). Defining `similar`, `getin
 `setindex!` for `SparseArray` also makes it possible to [`copy`](@ref) the array:
 -->
 ```
+この例では`Base.similar{T}(A::SparseArray, ::Type{T}, dims::Dims)`を定義して、適切にラップされた配列を作成しています。
+（`similar`は引数が1個や2個の場合も対応していますが、必要になるのは、ほとんどの場合、3個の場合に特化している点に注意してください。）
+これが動作するには`SparseArray`が可変（`setindex!`を利用可能）であることが重要です。
+`similar`、`getindex`、`setindex!`を`SparseArray`に定義すると、配列を [`copy`](@ref)することが可能になります。
 
 
 ```jldoctest squarevectype
@@ -634,6 +648,8 @@ In addition to all the iterable and indexable methods from above, these types ca
 with each other and use most of the methods defined in Julia Base for `AbstractArrays`:
 -->
 ```
+上記のすべての反復可能・インデックス可能なメソッドのほかにも、これらの型は相互に利用することができ、Baseライブラリで定義されている`AbstractArrays`向けのメソッドをほとんど利用できます。
+
 
 ```jldoctest squarevectype
 julia> A[SquaresVector(3)]
@@ -656,6 +672,9 @@ perhaps range-types `Ind` of your own design. For more information, see
 -->
 ```
 
+通常ではない（1以外から始まる)インデックスを使うには、[`axes`](@ref)を特化させる必要があります。
+また引数の`dims`（通常は`Dims`のサイズのタプル）が`AbstractUnitRange`オブジェクト、おそらく独自設計の範囲型である`Ind`を受けとれるようにするには、[`similar`](@ref)を特化する必要があります。
+詳細については、[独自インデックスの配列](@ref man-custom-indices)を参照してください。
 
 `[](## [Strided Arrays](@id man-interface-strided-arrays))
 ## [Strided Arrays](@id man-interface-strided-arrays)
