@@ -2,6 +2,8 @@
 
 とりあえずひとりで訳してます
 
+ころころ訳を変えているので、概要の把握には[こちら](https://github.com/bicycle1885/Julia-Tutorial)
+を参照されたほうがいいと思います
 
 [公開場所](https://mnru.github.io/julia-doc-ja-v1.0/)
 [ソース](https://github.com/mnru/julia-doc-ja-v1.0-source)
