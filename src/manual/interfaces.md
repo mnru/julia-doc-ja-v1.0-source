@@ -677,14 +677,26 @@ perhaps range-types `Ind` of your own design. For more information, see
 詳細については、[独自インデックスの配列](@ref man-custom-indices)を参照してください。
 
 `[](## [Strided Arrays](@id man-interface-strided-arrays))
-## [Strided Arrays](@id man-interface-strided-arrays)
+## [ストライド配列](@id man-interface-strided-arrays)
 
+```@raw html
+<!--
+| 実装すべきメソッド                           |                                        | 簡単な説明                                                                     |
+|:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
+| `strides(A)`                             |                                        | Return the distance in memory (in number of elements) between adjacent elements in each dimension as a tuple. If `A` is an `AbstractArray{T,0}`, this should return an empty tuple.    |
+| `Base.unsafe_convert(::Type{Ptr{T}}, A)`        |                                        | Return the native address of an array.                                            |
+| **Optional methods**                            | **Default definition**                 | **Brief description**                                                                 |
+| `stride(A, i::Int)`                             |     `strides(A)[i]`                                   | Return the distance in memory (in number of elements) between adjacent elements in dimension k.    |
+
+-->
+```
 | Methods to implement                            |                                        | Brief description                                                                     |
 |:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
 | `strides(A)`                             |                                        | Return the distance in memory (in number of elements) between adjacent elements in each dimension as a tuple. If `A` is an `AbstractArray{T,0}`, this should return an empty tuple.    |
 | `Base.unsafe_convert(::Type{Ptr{T}}, A)`        |                                        | Return the native address of an array.                                            |
 | **Optional methods**                            | **Default definition**                 | **Brief description**                                                                 |
 | `stride(A, i::Int)`                             |     `strides(A)[i]`                                   | Return the distance in memory (in number of elements) between adjacent elements in dimension k.    |
+
 
 ```@raw html
 <!--
