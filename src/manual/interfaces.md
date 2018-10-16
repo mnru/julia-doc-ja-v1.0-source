@@ -248,8 +248,8 @@ be used in their specific case.
 ```
 
 これは、JuliaのBaseライブラリ全体に非常によくあるパターンです。
-少数の必須メソッドに対して具象化されていない部分の残ったインターフェイスが定義され、多くの便利な動作が利用可能となっています。
-もっと効率的なアルゴリズムを使用できる場合には、さらに型に特化させてその動作を行うことができます。
+少数の必須メソッドに対して定義をおこなうと、具象化されていない部分の残ったインターフェイスが多くの便利な動作するようになります。
+さらに特別な場合に効率的なアルゴリズムを使用できる場合には、さらに特化させた挙動にすることができます。
 
 ```@raw html
 <!--
@@ -421,7 +421,8 @@ ourselves, we can officially define it as a subtype of an [`AbstractArray`](@ref
 | `similar(A,  dims::Dims)`                 | `similar(A, eltype(A), dims)`            | 同要素型でサイズ**dims**の可変配列を返す |
 | `similar(A, ::Type{S},  dims::Dims)`      | `Array{S}(undef, dims)`                         | 指定形・指定要素型の可変配列を返す|
 | **通常とは異なるインデックス**                     | **デフォルトの定義**                   | **概説**                                                                 |
-| `indices(A)`                                    | `map(OneTo, size(A))`                    | 妥当なインデックスの`AbstractUnitRange`を返す                                       |
+| `axes(A)`                                    | `map(OneTo, size(A))`                  | 有効なインデックスの`AbstractUnitRange`を返す                                      |
+
 | `Base.similar(A, ::Type{S}, inds::NTuple{Ind})` | `similar(A, S, Base.to_shape(inds))`     | `inds`で指定したインデックスの可変配列を返す (下記参照)                  |
 | `Base.similar(T::Union{Type,Function}, inds)`   | `T(Base.to_shape(inds))`                 | `inds`で指定したインデックスの`T`と同様な可変配列を返す (下記参照)          |
 
