@@ -681,7 +681,7 @@ perhaps range-types `Ind` of your own design. For more information, see
 
 ```@raw html
 <!--
-| 実装すべきメソッド                           |                                        | 簡単な説明                                                                     |
+| Methods to implement                            |                                        | Brief description                                                                     |
 |:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
 | `strides(A)`                             |                                        | Return the distance in memory (in number of elements) between adjacent elements in each dimension as a tuple. If `A` is an `AbstractArray{T,0}`, this should return an empty tuple.    |
 | `Base.unsafe_convert(::Type{Ptr{T}}, A)`        |                                        | Return the native address of an array.                                            |
@@ -690,11 +690,11 @@ perhaps range-types `Ind` of your own design. For more information, see
 
 -->
 ```
-| Methods to implement                            |                                        | Brief description                                                                     |
+| 実装すべきメソッド                           |                                        | 簡単な説明                                                                     |
 |:----------------------------------------------- |:-------------------------------------- |:------------------------------------------------------------------------------------- |
 | `strides(A)`                             |                                        | Return the distance in memory (in number of elements) between adjacent elements in each dimension as a tuple. If `A` is an `AbstractArray{T,0}`, this should return an empty tuple.    |
 | `Base.unsafe_convert(::Type{Ptr{T}}, A)`        |                                        | Return the native address of an array.                                            |
-| **Optional methods**                            | **Default definition**                 | **Brief description**                                                                 |
+| **省略可能なメソッド**                            | **デフォルトの定義**                 | **簡単な説明**                                                                 |
 | `stride(A, i::Int)`                             |     `strides(A)[i]`                                   | Return the distance in memory (in number of elements) between adjacent elements in dimension k.    |
 
 
@@ -711,6 +711,14 @@ may lead to incorrect results or segmentation faults.
 Here are some examples to demonstrate which type of arrays are strided and which are not:
 -->
 ```
+ストライド配列は `AbstractArray`のサブタイプで、各要素が、メモリ中で決まったストライドで格納されます。
+配列の各要素の型がBLASと互換性がある場合、ストライド配列に、線形代数用の効率的なアルゴリズムを持つBLASやLAPACKのルーチンを利用できます。
+ユーザー定義のストライド配列の典型例として、標準的な`Array`に付加的な構造を加えてラップする、というものがあります。
+
+警告：基になる格納先が実際にはストライドではない場合、こういったメソッドを実装しないでください。
+間違った結果やセグメントの障害につながるかもしれないからです。
+
+配列でストライドのあるもの・ないものを示す例をいくつか挙げます。
 
 ```julia
 1:5   # not strided (there is no storage associated with this array.)
@@ -726,7 +734,26 @@ V = view(A, [1,2,4], :)   # is not strided, as the spacing between rows is not f
 
 
 `[](## [Customizing broadcasting](@id man-interfaces-broadcasting))
-## [Customizing broadcasting](@id man-interfaces-broadcasting)
+## [独自のブロードキャスト](@id man-interfaces-broadcasting)
+
+```@raw html
+<!--
+| Methods to implement | Brief description |
+|:-------------------- |:----------------- |
+| `Base.BroadcastStyle(::Type{SrcType}) = SrcStyle()` | Broadcasting behavior of `SrcType` |
+| `Base.similar(bc::Broadcasted{DestStyle}, ::Type{ElType})` | Allocation of output container |
+| **Optional methods** | | |
+| `Base.BroadcastStyle(::Style1, ::Style2) = Style12()` | Precedence rules for mixing styles |
+| `Base.broadcast_axes(x)` | Declaration of the indices of `x` for broadcasting purposes (defaults to [`axes(x)`](@ref)) |
+| `Base.broadcastable(x)` | Convert `x` to an object that has `axes` and supports indexing |
+| **Bypassing default machinery** | |
+| `Base.copy(bc::Broadcasted{DestStyle})` | Custom implementation of `broadcast` |
+| `Base.copyto!(dest, bc::Broadcasted{DestStyle})` | Custom implementation of `broadcast!`, specializing on `DestStyle` |
+| `Base.copyto!(dest::DestType, bc::Broadcasted{Nothing})` | Custom implementation of `broadcast!`, specializing on `DestType` |
+| `Base.Broadcast.broadcasted(f, args...)` | Override the default lazy behavior within a fused expression |
+| `Base.Broadcast.instantiate(bc::Broadcasted{DestStyle})` | Override the computation of the lazy broadcast's axes |
+-->
+```
 
 | Methods to implement | Brief description |
 |:-------------------- |:----------------- |
@@ -743,6 +770,7 @@ V = view(A, [1,2,4], :)   # is not strided, as the spacing between rows is not f
 | `Base.Broadcast.broadcasted(f, args...)` | Override the default lazy behavior within a fused expression |
 | `Base.Broadcast.instantiate(bc::Broadcasted{DestStyle})` | Override the computation of the lazy broadcast's axes |
 
+
 ```@raw html
 <!--
 [Broadcasting](@ref) is triggered by an explicit call to `broadcast` or `broadcast!`, or implicitly by
@@ -751,6 +779,12 @@ indexing can participate as an argument in broadcasting, and by default the resu
 in an `Array`. This basic framework is extensible in three major ways:
 -->
 ```
+[ブロードキャスト]　(@ref)は明示的に`broadcast`や`broadcast!`を呼び出したり、暗黙的に`A .+ b` や`f.(x, y)`などのドット演算を
+行ったときに、発動します。
+ [`axes`](@ref)を持ち、インデックスに対応しているオブジェクトは、ブロードキャストに引数として参加することができます。
+デフォルトでは結果は`配列`に格納されます。
+この基本的なフレームワークは主に３つの主要な方法によって拡張可能です。
+
 
 
 ```@raw html
@@ -760,6 +794,10 @@ in an `Array`. This basic framework is extensible in three major ways:
 * Selecting an efficient implementation for the given set of arguments
 -->
 ```
+
+* すべての引数がブロードキャストに対応していることを保証する
+* 与えられた引数の組に対して適切な出力の配列を選択する
+* 与えられた引数の組に対して効率的な実装を選択する
 
 
 ```@raw html
