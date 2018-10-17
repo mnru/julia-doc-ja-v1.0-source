@@ -36,4 +36,4 @@
 ,[Program representation],プログラムの表現
 ,[`IOContext`],
 ,[Operator Precedence and Associativity],演算子の優先順位と結合則
-インターフェイス,[Broadcasting],ブロードキャスティング
+インターフェイス,[Broadcasting],ブロードキャスト
