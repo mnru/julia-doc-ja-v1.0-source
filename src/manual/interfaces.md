@@ -755,7 +755,7 @@ V = view(A, [1,2,4], :)   # is not strided, as the spacing between rows is not f
 -->
 ```
 
-| Methods to implement | Brief description |
+| 実装すべきメソッド | 簡単な説明 |
 |:-------------------- |:----------------- |
 | `Base.BroadcastStyle(::Type{SrcType}) = SrcStyle()` | Broadcasting behavior of `SrcType` |
 | `Base.similar(bc::Broadcasted{DestStyle}, ::Type{ElType})` | Allocation of output container |
@@ -816,6 +816,15 @@ strings are special-cased to behave as scalars for the purposes of broadcast eve
 they are iterable collections of their characters (see [Strings](@ref) for more).
 -->
 ```
+すべての型が`axes`やインデックスに対応しているわけではないですが、多くでブロードキャストに便利に使えます。
+[`Base.broadcastable`](@ref)関数は各引数をブロードキャストのために呼び出した際に少し違っていても `axes`とインデックスに対応しているものを返します。デフォルトでは、すべての`AbstractArray`や`Number`の場合、恒等写像になります。これらはすでに`axes`とインデックスに対応しているからです。
+少数の型（また型に限らず、関数、[`missing`](@ref)や[`nothing`](@ref)などの特殊なシングルトン、日付など)に対しては、
+`Base.broadcastable`は引数を`Ref`によってラップし、ブロードキャストに対応できるように0次元の"scalar"として動作するようにします。
+独自の型対しても同様に、その形に対して`Base.broadcastable`を特化させる定義ができますが、`collect(Base.broadcastable(x)) == collect(x)`
+が成り立つよう、慣習に従うべきです。
+主な例外として、`AbstractString`があります。
+文字列はその文字に対するイテラブルなコレクションですが、ブロードキャストの際にスカラーとしてふるまう特殊なケースです。
+(詳細は[文字列](@ref)を参照のこと)
 
 
 ```@raw html
