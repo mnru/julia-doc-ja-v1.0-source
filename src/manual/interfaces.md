@@ -823,7 +823,7 @@ they are iterable collections of their characters (see [Strings](@ref) for more)
 独自の型対しても同様に、その形に対して`Base.broadcastable`を特化させる定義ができますが、`collect(Base.broadcastable(x)) == collect(x)`
 が成り立つよう、慣習に従うべきです。
 主な例外として、`AbstractString`があります。
-文字列はその文字に対するイテラブルなコレクションですが、ブロードキャストの際にスカラーとしてふるまう特殊なケースです。
+文字列は文字に対するイテラブルなコレクションですが、ブロードキャストの際にスカラーとしてふるまう特殊なケースです。
 (詳細は[文字列](@ref)を参照のこと)
 
 
@@ -837,10 +837,14 @@ each has its own preferred style, and a promotion-like system is used to combine
 styles into a single answer — the "destination style".
 -->
 ```
+次の2つの段階(出力する配列と実装の選択)は、引数から決まる単一の解によって変わります。
+ブロードキャストは型の変更を受けた引数すべてをとり、ただ一つの出力配列と実装に落とし込みます。
+ブロードキャストでは、この一つの解を"スタイル"と呼びます。
+各ブロードキャスト可能なオブジェクトには好みのスタイルがあり、昇格のような仕組みで、これらを結合した解である"目的のスタイル"が出されます。
 
 
 `[](### Broadcast Styles)
-### Broadcast Styles
+### ブロードキャスト　スタイル
 
 ```@raw html
 <!--
@@ -852,7 +856,8 @@ rely on the default fallback [`Broadcast.DefaultArrayStyle`](@ref).
 To override these defaults, you can define a custom `BroadcastStyle` for your object:
 -->
 ```
-
+抽象型の`Base.BroadcastStyle`からすべてのブロードキャストスタイルが派生します。
+関数としては、単項（1個の引数）と二項の2つの形式で利用できます。
 
 ```julia
 struct MyStyle <: Broadcast.BroadcastStyle end
