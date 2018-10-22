@@ -840,7 +840,7 @@ styles into a single answer — the "destination style".
 次の2つの段階(出力する配列と実装の選択)は、引数から決まる単一の解によって変わります。
 ブロードキャストは型の変更を受けた引数すべてをとり、ただ一つの出力配列と実装に落とし込みます。
 ブロードキャストでは、この一つの解を"スタイル"と呼びます。
-各ブロードキャスト可能なオブジェクトには好みのスタイルがあり、昇格のような仕組みで、これらを結合した解である"目的のスタイル"が出されます。
+各ブロードキャスト可能なオブジェクトには好みのスタイルがあり、昇格のような仕組みで、単一の解である"目的のスタイル"結合します。
 
 
 `[](### Broadcast Styles)
@@ -857,7 +857,13 @@ To override these defaults, you can define a custom `BroadcastStyle` for your ob
 -->
 ```
 抽象型の`Base.BroadcastStyle`からすべてのブロードキャストスタイルが派生します。
-関数としては、単項（1個の引数）と二項の2つの形式で利用できます。
+単項（1個の引数）と二項の2つの関数の形式で利用できます。
+単項の場合は特定のブをロードキャスト及び/または出力型を想定し、デフォルトの補足である [`Broadcast.DefaultArrayStyle`](@ref)に
+頼らないことを望んでいます。
+
+このデフォルトをオーバーライドするとオブジェクトに独自のBroadcastStyle`を定義できます。
+
+
 
 ```julia
 struct MyStyle <: Broadcast.BroadcastStyle end
@@ -877,23 +883,42 @@ leverage one of the general broadcast wrappers:
 -->
 ```
 
+独自の `MyStyle`を定義する必要もなく、汎用のブロードキャストのラッパーを便利に利用できる場合があります。
 
+  - `Base.BroadcastStyle(::Type{<:MyType}) = Broadcast.Style{MyType}()` は任意の型に対して利用できます。
+  - `Base.BroadcastStyle(::Type{<:MyType}) = Broadcast.ArrayStyle{MyType}()` は、`MyType` が`AbstractArray`の時に好んで使われます。
+  - 特定の次元の直積にだけ対応している`AbstractArrays`の場合は、Broadcast.AbstractArrayStyle{N}`のサブタイプを生成します (後述)。
+
+
+```@raw html
+<!--
 When your broadcast operation involves several arguments, individual argument styles get
 combined to determine a single `DestStyle` that controls the type of the output container.
 For more details, see [below](@ref writing-binary-broadcasting-rules).
+-->
+```
+
 
 `[](### Selecting an appropriate output array)
-### Selecting an appropriate output array
+### 出力配列の選択
 
+```@raw html
+<!--
 The broadcast style is computed for every broadcasting operation to allow for
 dispatch and specialization. The actual allocation of the result array is
 handled by `similar`, using the Broadcasted object as its first argument.
+-->
+```
 
 ```julia
 Base.similar(bc::Broadcasted{DestStyle}, ::Type{ElType})
 ```
 
+```@raw html
+<!--
 The fallback definition is
+-->
+```
 
 ```julia
 similar(bc::Broadcasted{DefaultArrayStyle{N}}, ::Type{ElType}) where {N,ElType} =
