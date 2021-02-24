@@ -54,7 +54,7 @@ command:
 変数`ans`には、表示非表示にかかわらず、一番最後に評価された式の値が、束縛されます。
 変数`ans`が束縛されるのは対話セッション中のみで、他の方法で実行される場合は、束縛されません。
 
-ソースファイル`file.jl`中に書かれた式をを評価するには、`include("file.jl")`と書きます。
+ソースファイル`file.jl`中に書かれた式を評価するには、`include("file.jl")`と書きます。
 
 ファイル中のコードを非対話的に実行するには、そのファイルをコマンド`julia`の第1引数として指定します。
 
@@ -252,5 +252,5 @@ A curated list of useful learning resources to help new users get started can be
 -->
 ```
 
- 新規ユーザーが初めて見るのに役立つ精選された学習資料のリストが、
- JuliaのWebサイトの[学習](https://julialang.org/learning/)ページにあります。
+新規ユーザーが初めて見るのに役立つ精選された学習資料のリストが、
+JuliaのWebサイトの[学習](https://julialang.org/learning/)ページにあります。
