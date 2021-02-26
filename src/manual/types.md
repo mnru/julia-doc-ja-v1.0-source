@@ -1279,7 +1279,7 @@ in place of `T`, it can be applied as a constructor accordingly:
 -->
 ```
 
-（同等の定義として、`function norm{T<:Real}(p::Point{T})`や、`function norm(p::Point{T} where T<:Real)`があります。（[全合併型](@ref) を参照。）
+（同等の定義として、`function norm(p::Point{T} where T<:Real)`や、`function norm(p::Point{T}) where T<:Real`があります。（[全合併型](@ref) を参照。）
 
 より多くの例については、後の [メソッド](@ref) で説明します。
 
