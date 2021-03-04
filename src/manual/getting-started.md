@@ -252,5 +252,5 @@ A curated list of useful learning resources to help new users get started can be
 -->
 ```
 
- 新規ユーザーが初めて見るのに役立つ精選された学習資料のリストが、
- JuliaのWebサイトの[学習](https://julialang.org/learning/)ページにあります。
+新規ユーザーが初めて見るのに役立つ精選された学習資料のリストが、
+JuliaのWebサイトの[学習](https://julialang.org/learning/)ページにあります。
