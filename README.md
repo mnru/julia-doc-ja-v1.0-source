@@ -14,6 +14,6 @@
 [ver1.1-1.3和訳](https://github.com/kyokke/julialang-doc-ja)
 
 
-[原文](hhttps://docs.julialang.org/en/v1/)
+[原文](https://docs.julialang.org/en/v1/)
 [中国語訳](http://docs.juliacn.com/latest/)
 [韓国語訳](https://juliakorea.github.io/ko/latest/)
